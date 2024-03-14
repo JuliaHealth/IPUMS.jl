@@ -18,6 +18,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/TheCedarPrince/IPUMS.jl",
-    devbranch="main",
+    repo="github.com/JuliaHealth/IPUMS.jl",
+    push_preview = true,
+    devbranch="main"
 )
