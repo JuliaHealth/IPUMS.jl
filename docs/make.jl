@@ -7,10 +7,13 @@ makedocs(;
     modules=[IPUMS],
     authors="TheCedarPrince <jacobszelko@gmail.com> and contributors",
     sitename="IPUMS.jl",
+    repo = "https://github.com/JuliaHealth/IPUMS.jl/blob/{commit}{path}#L{line}",
     format=Documenter.HTML(;
-        canonical="https://TheCedarPrince.github.io/IPUMS.jl",
-        edit_link="main",
+        prettyurls = get(ENV, "CI", "false") == "true",
+        canonical = "https://JuliaHealth.github.io/IPUMS.jl",
+        edit_link="dev",
         assets=String[],
+        footer = "Created by [Jacob Zelko](https://jacobzelko.com). [License](https://github.com/JuliaHealth/OMOPCDMCohortCreator.jl/blob/main/LICENSE)",
     ),
     pages=[
         "Home" => "index.md",
