@@ -1,0 +1,16 @@
+name = "IPUMS"
+uuid = "51d1f77e-d457-4c14-a89d-9ed71839f38d"
+authors = ["TheCedarPrince <jacobszelko@gmail.com> and Krishna Bhogaonker"]
+version = "0.0.1"
+
+[deps]
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
