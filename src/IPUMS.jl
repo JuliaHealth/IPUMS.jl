@@ -1,5 +1,8 @@
 module IPUMS
 
+import Base:
+    @kwdef
+
 using DataFrames
 using HTTP
 
