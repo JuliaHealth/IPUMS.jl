@@ -17,7 +17,7 @@
     - year::String
     - geographicLevel::String
     - extent::String
-    - basis::Int64
+    - basis::String
     - sequence::Int64
 """
 Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
@@ -25,7 +25,7 @@ Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
     year::Union{Nothing, String} = nothing
     geographicLevel::Union{Nothing, String} = nothing
     extent::Union{Nothing, String} = nothing
-    basis::Union{Nothing, Int64} = nothing
+    basis::Union{Nothing, String} = nothing
     sequence::Union{Nothing, Int64} = nothing
 
     function Shapefile(name, year, geographicLevel, extent, basis, sequence, )
@@ -39,7 +39,7 @@ Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
     end
 end # type Shapefile
 
-const _property_types_Shapefile = Dict{Symbol,String}(Symbol("name")=>"String", Symbol("year")=>"String", Symbol("geographicLevel")=>"String", Symbol("extent")=>"String", Symbol("basis")=>"Int64", Symbol("sequence")=>"Int64", )
+const _property_types_Shapefile = Dict{Symbol,String}(Symbol("name")=>"String", Symbol("year")=>"String", Symbol("geographicLevel")=>"String", Symbol("extent")=>"String", Symbol("basis")=>"String", Symbol("sequence")=>"Int64", )
 OpenAPI.property_type(::Type{ Shapefile }, name::Symbol) = Union{Nothing,eval(Base.Meta.parse(_property_types_Shapefile[name]))}
 
 function check_required(o::Shapefile)
