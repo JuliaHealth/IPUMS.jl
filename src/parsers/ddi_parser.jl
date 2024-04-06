@@ -154,7 +154,6 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     dcml_vec = parse.(Int64, [v.content for v in dcml_nodes])
     vartype_vec = [v.content for v in vartype_nodes]
     varinterval_vec = [v.content for v in varinterval_nodes]
-    @show varinterval_vec
 
     for i=1:length(name_nodes)
         
