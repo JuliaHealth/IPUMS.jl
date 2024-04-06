@@ -13,7 +13,8 @@ module IPUMS
         Client
     using TimeZones
     using URIs
-
+    using EzXML
+    
     include("structs.jl")
     include("constants.jl")
     include("helpers.jl")
