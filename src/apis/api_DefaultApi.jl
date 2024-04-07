@@ -213,19 +213,7 @@ Return: DatasetFull, OpenAPI.Clients.ApiResponse
 """
 function metadata_nhgis_datasets_dataset_get(_api::DefaultApi, dataset::String, version::String; _mediaType=nothing)
     _ctx = _oacinternal_metadata_nhgis_datasets_dataset_get(_api, dataset, version; _mediaType=_mediaType)
-    println(_ctx |> OpenAPI.Clients.prep_args)
-    println(_ctx)
-    resource_path = replace(_ctx.resource, "{format}"=>"json")
-    for (k,v) in _ctx.path
-        esc_v = _ctx.escape_path_params ? escapeuri(v) : v
-        resource_path = replace(resource_path, "{$k}"=>esc_v)
-    end
-    # append query params if needed
-    if !isempty(_ctx.query)
-        resource_path = string(URIs.URI(URIs.URI(resource_path); query=escapeuri(_ctx.query)))
-    end
-    HTTP.request(_ctx.method, resource_path, _ctx.header)
-    # return OpenAPI.Clients.exec(_ctx)
+    return OpenAPI.Clients.exec(_ctx)
 end
 
 function metadata_nhgis_datasets_dataset_get(_api::DefaultApi, response_stream::Channel, dataset::String, version::String; _mediaType=nothing)
