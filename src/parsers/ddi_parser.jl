@@ -1,28 +1,4 @@
 
-@kwdef mutable struct DDIVariable
-    name::String = ""
-    position_start::Int64 = 9999
-    position_end::Int64 = 9999
-    position_width::Int64 = 9999 
-    labl::String = ""
-    txt::String = ""
-    dcml::Int64 = 9999
-    vartype::String = ""
-end
-
-@kwdef mutable struct DDIInfo
-    filepath::String
-    conditions::String = ""
-    citation::String = ""
-    ipums_project::String = ""
-    extract_notes::String = ""
-    extract_date::String = ""
-    variable_info::Vector{DDIVariable} = DDIVariable[]
-    _xml_doc::EzXML.Document = EzXML.XMLDocument()
-    _ns::String = ""
-end
-
-
 
 #=
 
@@ -47,17 +23,27 @@ VAR_TYPE_XPATH = "/x:codeBook/x:dataDscr/x:var/x:varFormat/@type"
 VAR_INTERVAL_XPATH = "/x:codeBook/x:dataDscr/x:var/@intrvl"
 VAR_CATEGORY_XPATH = "/x:codeBook/x:dataDscr/x:var/x:catgry"
 
-
-
 """
-    parse_ddi(filepath)
+    parse_ddi(filepath::String)
 
-Parses a valid IPUMs DDI XML file and returns a DDIInfo object.
+Parses a valid IPUMs DDI XML file and returns a DDIInfo object containing 
+the IPUMs extract metadata. 
 
+### Arguments
+
+- `filepath::String` -- A string containing the path to the IPUMS DDI XML file. 
+
+### Returns
+
+A DDIInfo object that contains all of the file-level and variable-level 
+metadata for the IPUMs extract.
 
 # Examples
+
+Let's assume we have an extract DDI file named `my_extract.xml`
 ```julia-repl
-julia> parse_ddi("test_extract.xml")
+julia> typeof(parse_ddi("my_extract.xml"))
+IPUMS.DDIInfo
 ```
 """
 function parse_ddi(filepath::String)
@@ -80,7 +66,7 @@ function parse_ddi(filepath::String)
     ns = EzXML.namespace(ddifile.root)
     
     ddi = DDIInfo(filepath=filepath, _xml_doc=ddifile, _ns=ns)
-    #ns = EzXML.namespace(doc.root)
+
     _read_ddi_and_parse_extract_level_metadata!(ddi)
     
     # get variables metadata from file
@@ -115,7 +101,22 @@ function _check_that_file_exists(fname::String)
     end
 end
 
+"""
+    _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
 
+This is an internal function and not meant for the public API. This function 
+parses the DDI XML file and captures the file-level metadata.
+
+### Arguments
+
+- `ddi::DDIInfo` - A `DDIInfo` object that will retain all of the parsed metadata.
+
+### Returns
+
+The function return the original `DDIInfo` object with updated data in the 
+attributes.
+
+"""
 function _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
 
     xmlroot = ddi._xml_doc.root
@@ -129,7 +130,24 @@ function _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
 
 end
 
+"""
+    _get_var_metadata_from_ddi!(ddi::DDIInfo)
 
+This is an internal function and not meant for the public API. This function
+    iterates over the variable nodes in the DDI XML file nodes. The data
+    from each variable node is collected in a `DDIVariable` object, and a 
+    vector of those `DDIVariable` object is save in the `DDIInfo` object.
+
+### Arguments
+
+- `ddi::DDIInfo` - A `DDIInfo` object that will retain all of the parsed metadata.
+
+### Returns
+
+The function return the original `DDIInfo` object with updated data in the 
+attributes.
+
+"""
 function _get_var_metadata_from_ddi!(ddi::DDIInfo)
 
     xmlroot = ddi._xml_doc.root
@@ -178,9 +196,10 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
                             position_end=endpos_vec[i],
                             position_width=width_vec[i],
                             labl=labl_vec[i],
-                            txt=txt_vec[i],
+                            desc=txt_vec[i],
                             dcml=dcml_vec[i],
-                            vartype=vartype_vec[i])
+                            vartype=vartype_vec[i],
+                            varinterval=varinterval_vec[i])
         push!(var_vector, dv)
     end
 
