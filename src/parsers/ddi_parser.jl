@@ -1,28 +1,5 @@
 
 
-#=
-
-Set of XPaths for variables in DDI (.xml) files
-
-=#
-
-EXTRACT_CONDITIONS = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:conditions"
-EXTRACT_CITATION = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:citReq"
-EXTRACT_IPUMS_PROJECT = "/x:codeBook/x:stdyDscr/x:citation/x:serStmt/x:serName"
-EXTRACT_NOTES = "/x:codeBook/x:stdyDscr/x:notes"
-EXTRACT_DATE = "/x:codeBook/x:stdyDscr/x:citation/x:prodStmt/x:prodDate/@date"
-
-VAR_NAME_XPATH = "/x:codeBook/x:dataDscr/x:var/@name"
-VAR_STARTPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@StartPos"
-VAR_ENDPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@EndPos"
-VAR_WIDTH_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@width"
-VAR_LABL_XPATH = "/x:codeBook/x:dataDscr/x:var/x:labl"
-VAR_TXT_XPATH = "/x:codeBook/x:dataDscr/x:var/x:txt"
-VAR_DCML_XPATH = "/x:codeBook/x:dataDscr/x:var/@dcml"
-VAR_TYPE_XPATH = "/x:codeBook/x:dataDscr/x:var/x:varFormat/@type"
-VAR_INTERVAL_XPATH = "/x:codeBook/x:dataDscr/x:var/@intrvl"
-VAR_CATEGORY_XPATH = "/x:codeBook/x:dataDscr/x:var/x:catgry"
-
 """
     parse_ddi(filepath::String)
 
@@ -48,10 +25,10 @@ IPUMS.DDIInfo
 """
 function parse_ddi(filepath::String)
 
-    # check to make sure file is xml and not zip
+    # check to make sure the provided file is an xml file.
     
-    _check_that_file_is_xml(filepath)
-
+    #_check_that_file_is_xml(filepath)
+    splitext(filepath)[2] != ".xml" && ArgumentError("The DDI file: $filepath should be an XML file.")
     # check to make sure file exists
 
     _check_that_file_exists(filepath)

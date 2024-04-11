@@ -13,4 +13,5 @@ end
     ddi = parse_ddi("testdata/cps_00157.xml")
     @test ddi.extract_date == "2023-07-10"
     @test ddi.variable_info[1].position_end == 4
+    @test_throws ArgumentError parse_ddi("testdata/cps_00157.dat.gz")
 end

@@ -1,6 +1,6 @@
 name = "IPUMS"
 uuid = "51d1f77e-d457-4c14-a89d-9ed71839f38d"
-authors = ["TheCedarPrince <jacobszelko@gmail.com> and Krishna Bhogaonker"]
+authors = ["TheCedarPrince <jacobszelko@gmail.com> and Krishna Bhogaonker <cyclotomiq@gmail.com>"]
 version = "0.0.1"
 
 [deps]
