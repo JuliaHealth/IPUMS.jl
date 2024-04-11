@@ -28,7 +28,7 @@ function parse_ddi(filepath::String)
     # check to make sure the provided file is an xml file.
     
     #_check_that_file_is_xml(filepath)
-    splitext(filepath)[2] != ".xml" && ArgumentError("The DDI file: $filepath should be an XML file.")
+    splitext(filepath)[2] != ".xml" && throw(ArgumentError("The DDI file: $filepath should be an XML file."))
     # check to make sure file exists
 
     _check_that_file_exists(filepath)
