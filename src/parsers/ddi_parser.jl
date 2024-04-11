@@ -26,16 +26,12 @@ IPUMS.DDIInfo
 function parse_ddi(filepath::String)
 
     # check to make sure the provided file is an xml file.
-    
-    #_check_that_file_is_xml(filepath)
     splitext(filepath)[2] != ".xml" && throw(ArgumentError("The DDI file: $filepath should be an XML file."))
+    
     # check to make sure file exists
-
-    _check_that_file_exists(filepath)
+    !isfile(filepath) && throw(ArgumentError("The specified file: $filepath does not exist."))
     
     # QUESTION: check if file has multiple files -- then have to handle that
-    
-    # check_if_multiple_files_in_extract() # needed or not ?
     
     # read xml file and parse extract level metadata
     
@@ -52,19 +48,6 @@ function parse_ddi(filepath::String)
     # TODO determine final output format. For now I return the object.    
 
     return ddi
-
-end
-
-
-function _check_that_file_is_xml(fname::String)
-    
-    extension = fname[findlast(==('.'), fname)+1:end]
-
-    if extension == "xml"
-        return true
-    else
-        ArgumentError("The DDI file should be in XML format.")
-    end
 
 end
 
@@ -150,6 +133,9 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     vartype_vec = [v.content for v in vartype_nodes]
     varinterval_vec = [v.content for v in varinterval_nodes]
 
+    # This loop iterates over each variable and adjusts the description of 
+    # discrete variables to -> integer variables. This notation is used later 
+    # when loading the data.
     for i=1:length(name_nodes)
         
         if (vartype_vec[i] == "numeric") && (varinterval_vec[i] == "discrete") && (width_vec[i] < 10)
@@ -166,6 +152,9 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     catgry_vec = [v.content for v in catgry_nodes]
     #@show catgry_vec
 
+    # This loop creates DDIVariable objects for each variable in the dataset, 
+    # and pushes those objects into a vector. We will later use this information
+    # when configuring the dataframe column names, datatypes, metadata, etc.
     var_vector = DDIVariable[]
     for i in 1:length(name_nodes)
         dv = DDIVariable(name=name_vec[i],
