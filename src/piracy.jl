@@ -20,6 +20,10 @@ function OpenAPI.from_json(a::Vector{IPUMS.Shapefile}, b)
     [IPUMS.Shapefile(s["name"], s["year"], s["geographicLevel"], s["extent"], s["basis"], s["sequence"]) for s in b["data"]]
 end
 
+function OpenAPI.from_json(a::Vector{IPUMS.DataExtract}, b)
+    [IPUMS.DataExtract(s["extractDefinition"], s["number"], s["status"], s["downloadLinks"]) for s in b["data"]]
+end
+
 function OpenAPI.from_json(a::IPUMS.DatasetFull, b::Dict{String, Any})
     DatasetFull(
         b["name"], 
