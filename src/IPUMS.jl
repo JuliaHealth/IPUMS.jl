@@ -8,9 +8,6 @@ module IPUMS
     using HTTP
     using JSON3
     using OpenAPI
-    using OpenAPI.Clients
-    import OpenAPI:
-        Client
     using TimeZones
     using URIs
 
@@ -31,31 +28,6 @@ module IPUMS
     include("apis/api_DefaultApi.jl")
     include("piracy.jl")
 
-    #=
-        export from_json
-        export DataExtract
-        export DataExtractDownloadLinks
-        export DataExtractExtractDefinition
-        export DataExtractPost
-        export DataExtractPostResponse
-        export DataTableFull
-        export DataTableFullVariablesInner
-        export DataTableSimple
-        export Dataset
-        export DatasetFull
-        export DatasetFullBreakdowns
-        export DatasetFullBreakdownsBreakdownValuesInner
-        export DatasetFullGeogLevelsInner
-        export DatasetSimple
-        export Error
-        export Shapefile
-        export TimeSeriesTable
-        export TimeSeriesTableFull
-        export TimeSeriesTableFullTimeSeriesInner
-        export TimeSeriesTableSimple
-    =# 
-
-    export Client
     export DefaultApi
 
 end
