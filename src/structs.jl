@@ -62,8 +62,8 @@ DDIVariable(
     labl::String = "", 
     desc::String = "", 
     dcml::Int64 = 9999, 
-    vartype::String = "",
-    varinterval::String = "",
+    var_dtype::DataType = String,
+    var_interval::String = "",
     category_labels::Union{Vector{Pair{Int64, String}}, Nothing} = nothing
     coder_instructions::Union{String, Nothing} = nothing
 )
@@ -92,9 +92,8 @@ is 9999.
 - `desc::String` - A longer description of the variable, including information 
                     about the use of the variable. 
 - `dcml::Int64` - Identifies the number of decimal points in the variable.
-- `vartype::String` - Indentifies whether the variable is a string type or numeric
-                    type.
-- `varinterval::String` - Identifies if a numeric variable is discrete or 
+- `var_dtype::DataType` - Indentifies the Julia data type of the variable.
+- `var_interval::String` - Identifies if a numeric variable is discrete or 
                     continuous. 
 - `category_labels::Union{Vector{Pair{Int64, String}}, Nothing}` - If a variable is 
                     categorical, then this is a vector of (key, value) pairs, where 
@@ -104,6 +103,7 @@ is 9999.
 - `coder_instructions::Union{String, Nothing}` - Contains any additional 
                     information about how the variable was coded and how it 
                     should be treated.
+
 # Returns
 
 - `DDIVariable` object specifying the metadata for each variable.
@@ -119,13 +119,13 @@ julia> DDIVariable(
     labl = "Survey year",
     desc = "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.",
     dcml = 0,
-    vartype = "numeric",
-    varinterval = "discrete",
+    var_dtype = String,
+    var_interval = "continuous",
     category_labels = nothing,
     coder_instructions = nothing
     )
 
-IPUMS.DDIVariable("YEAR", 1, 4, 4, "Survey year", "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.", 0, "numeric", "discrete", nothing, nothing)
+IPUMS.DDIVariable("YEAR", 1, 4, 4, "Survey year", "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.", 0, Int64, "continuous", nothing, nothing)
 ```
 
 # References
@@ -142,8 +142,8 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     labl::String = ""
     desc::String = ""
     dcml::Int64 = 9999
-    vartype::String = ""
-    varinterval::String = ""
+    var_dtype::DataType = String
+    var_interval::String = ""
     category_labels::Union{Vector{@NamedTuple{val::Int64, labl::String}}, Nothing} = nothing
     coder_instructions::Union{String, Nothing} = nothing
 end
@@ -161,6 +161,7 @@ DDIInfo(
     variable_info::Vector{DDIVariable} = DDIVariable[]
     _xml_doc::EzXML.Document = EzXML.XMLDocument()
     _ns::String = ""
+    data_summary::DataFrame = DataFrame()
 )
 ```
 
@@ -195,6 +196,9 @@ metadata information about individual IPUMs variables.
                                 representation of the DDI DOM for parsing.
 - `_ns::String` - An internal attribute to hold any namespaces used in the 
                     XML DOM.
+- `data_summary::DataFrame` - Contains a dataframe that holds summary information
+                    about the variables in the dataset, including variable names,
+                    data types, variable descriptions, and categorical information.
 
 # Returns
 
@@ -206,7 +210,7 @@ extracted from an IPUMs DDI (.xml) file.
 ```julia-repl
 julia> DDIInfo(filepath = "test_ddi.xml")
 
-IPUMS.DDIInfo("test_ddi.xml", "", "", "", "", "", DDIVariable[], EzXML.Document(EzXML.Node(<DOCUMENT_NODE@0x0000000003583590>)), "")
+IPUMS.DDIInfo("test_ddi.xml", "", "", "", "", "", DDIVariable[], EzXML.Document(EzXML.Node(<DOCUMENT_NODE@0x0000000003583590>)), "", DataFrame)
 ```
 
 # References
@@ -225,6 +229,7 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     variable_info::Vector{DDIVariable} = DDIVariable[]
     _xml_doc::EzXML.Document = EzXML.XMLDocument()
     _ns::String = ""
+    data_summary::DataFrame = DataFrame()
 end
 
 

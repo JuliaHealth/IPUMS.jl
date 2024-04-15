@@ -45,21 +45,10 @@ function parse_ddi(filepath::String)
     # get variables metadata from file
     _get_var_metadata_from_ddi!(ddi)
     
-    # TODO determine final output format. For now I return the object.    
-
     return ddi
 
 end
 
-
-function _check_that_file_exists(fname::String)
-
-    if isfile(fname)
-        return true
-    else
-        ArgumentError("The specified file does not exist.")
-    end
-end
 
 """
     _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
@@ -134,21 +123,20 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     varinterval_vec = [v.content for v in varinterval_nodes]
 
 
-    # This loop iterates over each variable and adjusts the description of 
-    # discrete variables to -> integer variables. This notation is used later 
-    # when loading the data.
+    # This loop iterates over each variable and identifies its datatype. 
+    # The notations coded in the original DDI file are somewhat ambiguous,
+    # and hence the datatype must be manually identified before data import.
+
+    var_dtype_vec = DataType[]
     for i in eachindex(name_nodes)
-        
-        if (vartype_vec[i] == "numeric") && (varinterval_vec[i] == "discrete") && (width_vec[i] < 10)
-            vartype_vec[i] = "integer"
+        if (vartype_vec[i] == "numeric") && (dcml_vec[i] == 0)
+            push!(var_dtype_vec, Int64)
         elseif vartype_vec[i] == "numeric"
-            vartype_vec[i] = "numeric"
-        else 
-            vartype_vec[i] = "character"
+            push!(var_dtype_vec, Float64)
+        else
+            push!(var_dtype_vec, String)
         end
     end
-
-
     # This loop iterates over all variables to find variables that are 
     # categorically coded, such as (1 => "Female", 2 => "Male"). For variables 
     # that are categorically coded, the `<catgry>` tag includes information on 
@@ -161,17 +149,17 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
         n = EzXML.findall("x:catgry", varnodes[i], ["x" => ns])
         if length(n) > 0
             catvalue_nodes = EzXML.findall("x:catgry/x:catValu", varnodes[i], ["x" => ns])
-            labl_nodes = EzXML.findall("x:catgry/x:labl", varnodes[i], ["x" => ns])
+            l_nodes = EzXML.findall("x:catgry/x:labl", varnodes[i], ["x" => ns])
             
+            # QUESTION: does this parse statement need a try...catch?
             catvalue_vec = parse.(Int64, [v.content for v in catvalue_nodes])
-            labl_vec = [v.content for v in labl_nodes]
-            push!(category_vec, [(val = catvalue_vec[i], labl = labl_vec[i]) for i=1:length(catvalue_vec)])
+            l_vec = [v.content for v in l_nodes]
+            push!(category_vec, [(val = catvalue_vec[i], labl = l_vec[i]) for i=1:length(catvalue_vec)])
         
         else
             push!(category_vec, nothing)
         end
     end
-
 
     # The `coder instructions <codInstr>` tag contains additional information 
     # on how a variable is coded and used. Not all variables have this tag. 
@@ -189,6 +177,12 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
             coder_instr_nodes = EzXML.findall("x:codInstr", varnodes[i], ["x" => ns])
             push!(coder_instr_vec, coder_instr_nodes[1].content)
             
+            # These 2 regex statements are taken directly from the IPUMSR R 
+            # package, starting on line 911 of the ddi_read.R file. There
+            # are 2 different regex statements that might match the unstructured 
+            # text, hence we match on both statements. If the first match succeeds
+            # we privilege it, otherwise we consider the second match.
+            
             matches = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex, coder_instr_nodes[1].content)]
             matches2 = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex2, coder_instr_nodes[1].content)]
             if (length(matches) > 0) && (!isnothing(category_vec[i]))
@@ -205,6 +199,15 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
         end
     end
 
+    # Prepare the metadata summary dataframe, to help display the results.
+    # Save that data summary to the DDIInfo object.
+    
+    categorical_vec = [ifelse(isnothing(r), "No" , "Yes") for r in category_vec]
+    summary_df = DataFrame([name_vec, labl_vec, var_dtype_vec, startpos_vec, 
+                            endpos_vec, categorical_vec], 
+                            [:name, :description, :datatype, :start_pos, 
+                            :end_pos, :categorical])
+    ddi.data_summary = summary_df
 
     # This loop creates DDIVariable objects for each variable in the dataset, 
     # and pushes those objects into a vector. We will later use this information
@@ -218,8 +221,8 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
                             labl=labl_vec[i],
                             desc=txt_vec[i],
                             dcml=dcml_vec[i],
-                            vartype=vartype_vec[i],
-                            varinterval=varinterval_vec[i],
+                            var_dtype=var_dtype_vec[i],
+                            var_interval=varinterval_vec[i],
                             category_labels=category_vec[i],
                             coder_instructions=coder_instr_vec[i])
         push!(var_vector, dv)
@@ -230,13 +233,25 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
 end
 
 
+"""
+    _string_to_num(x::SubString{String})
+
+This is an internal function and not meant for the public API. This function
+    takes a text string and returns only the numeric portion of the string. 
+    For example in the input is "Codes999999", the function will return an
+    Int64 with the value 999999.
+
+### Arguments
+
+- `x::SubString{String}` - A string that may contain some numeric data mixed with text.
+
+### Returns
+
+This function returns the numeric part of the string, coded as an Int64 datatype.
+
+"""
 function _string_to_num(x::SubString{String})
     n = [v.match for v in eachmatch(r"[0-9]+", x)][1]
     return parse(Int64, n)
 end
 
-
-function _string_to_num(x::Nothing)
-    @show "I hit nothing"
-    return nothing
-end

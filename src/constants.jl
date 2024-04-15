@@ -108,6 +108,7 @@ EXTRACT_DATE - The date that the extract was generated.
 
 Variable level XPATHs:
 
+VAR_NODE_LOCATION = The base nodes that correspond to each variable in the dataset. 
 VAR_NAME_XPATH = The name of the IPUMs variable.
 VAR_STARTPOS_XPATH = The start position (in text columns) of the variable in a fixed width file specification.
 VAR_ENDPOS_XPATH = The end position (in text columns) of the variable in a fixed width file specification.
@@ -122,23 +123,23 @@ VAR_CATEGORY_XPATH = A description of the category levels and corresponding nume
 
 =#
 
-EXTRACT_CONDITIONS = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:conditions"
-EXTRACT_CITATION = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:citReq"
-EXTRACT_IPUMS_PROJECT = "/x:codeBook/x:stdyDscr/x:citation/x:serStmt/x:serName"
-EXTRACT_NOTES = "/x:codeBook/x:stdyDscr/x:notes"
-EXTRACT_DATE = "/x:codeBook/x:stdyDscr/x:citation/x:prodStmt/x:prodDate/@date"
+const EXTRACT_CONDITIONS = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:conditions"
+const EXTRACT_CITATION = "/x:codeBook/x:stdyDscr/x:dataAccs/x:useStmt/x:citReq"
+const EXTRACT_IPUMS_PROJECT = "/x:codeBook/x:stdyDscr/x:citation/x:serStmt/x:serName"
+const EXTRACT_NOTES = "/x:codeBook/x:stdyDscr/x:notes"
+const EXTRACT_DATE = "/x:codeBook/x:stdyDscr/x:citation/x:prodStmt/x:prodDate/@date"
 
-VAR_NODE_LOCATION = "/x:codeBook/x:dataDscr/x:var"
-VAR_NAME_XPATH = "/x:codeBook/x:dataDscr/x:var/@name"
-VAR_STARTPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@StartPos"
-VAR_ENDPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@EndPos"
-VAR_WIDTH_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@width"
-VAR_LABL_XPATH = "/x:codeBook/x:dataDscr/x:var/x:labl"
-VAR_TXT_XPATH = "/x:codeBook/x:dataDscr/x:var/x:txt"
-VAR_DCML_XPATH = "/x:codeBook/x:dataDscr/x:var/@dcml"
-VAR_TYPE_XPATH = "/x:codeBook/x:dataDscr/x:var/x:varFormat/@type"
-VAR_INTERVAL_XPATH = "/x:codeBook/x:dataDscr/x:var/@intrvl"
-VAR_CATEGORY_XPATH = "/x:codeBook/x:dataDscr/x:var/x:catgry"
+const VAR_NODE_LOCATION = "/x:codeBook/x:dataDscr/x:var"
+const VAR_NAME_XPATH = "/x:codeBook/x:dataDscr/x:var/@name"
+const VAR_STARTPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@StartPos"
+const VAR_ENDPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@EndPos"
+const VAR_WIDTH_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@width"
+const VAR_LABL_XPATH = "/x:codeBook/x:dataDscr/x:var/x:labl"
+const VAR_TXT_XPATH = "/x:codeBook/x:dataDscr/x:var/x:txt"
+const VAR_DCML_XPATH = "/x:codeBook/x:dataDscr/x:var/@dcml"
+const VAR_TYPE_XPATH = "/x:codeBook/x:dataDscr/x:var/x:varFormat/@type"
+const VAR_INTERVAL_XPATH = "/x:codeBook/x:dataDscr/x:var/@intrvl"
+const VAR_CATEGORY_XPATH = "/x:codeBook/x:dataDscr/x:var/x:catgry"
 
 
 
