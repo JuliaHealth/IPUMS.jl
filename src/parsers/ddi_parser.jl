@@ -15,6 +15,9 @@ the IPUMs extract metadata.
 A `DDIInfo` object that contains all of the file-level and variable-level 
 metadata for the IPUMs extract.
 
+Please check the documentation for `DDIInfo` for more information about this 
+specific object.
+
 # Examples
 
 Let's assume we have an extract DDI file named `my_extract.xml`
