@@ -166,15 +166,15 @@ DDIInfo(
 ```
 
 A struct representing the metadata taken from an IPUMs extract. An IPUMs 
-extract contains both file-level metadata \-\- such as the date of export \-\- as well
-as variable level metadata \-\- such as the name and data type of a variable. 
+extract contains both file-level metadata (such as the date of export), as well
+as variable level metadata (such as the name and data type of a variable). 
 
 The `DDIInfo` object is not generally called directly. The `parse_ddi()` 
 function creates a `DDIinfo` object after successfully parsing a DDI 
 file from an IPUMs extract. 
 
 The `DDIInfo`
-object contain file level metadata. The `variable_info` field of the `DDIInfo` 
+object contains file level metadata. The `variable_info` field of the `DDIInfo` 
 object contains a vector of `DDIVariable` objects. `DDIVariable` objects contain
 metadata information about individual IPUMs variables.   
 
@@ -202,8 +202,7 @@ metadata information about individual IPUMs variables.
 
 # Returns
 
-- `DDIInfo` object that contains both file-level and variable-level metadata
-extracted from an IPUMs DDI (.xml) file. 
+- `DDIInfo` object that contains both file-level and variable-level metadata extracted from an IPUMs DDI (.xml) file. 
 
 # Example
 
