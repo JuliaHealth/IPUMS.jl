@@ -111,7 +111,7 @@ is 9999.
 # Example
 
 ```julia-repl
-julia> DDIVariable(
+julia> IPUMS.DDIVariable(
     name = "YEAR",
     position_start = 1,
     position_end = 4,
@@ -207,9 +207,9 @@ metadata information about individual IPUMs variables.
 # Example
 
 ```julia-repl
-julia> DDIInfo(filepath = "test_ddi.xml")
+julia> IPUMS.DDIInfo(filepath = "test_ddi.xml")
 
-IPUMS.DDIInfo("test_ddi.xml", "", "", "", "", "", DDIVariable[], EzXML.Document(EzXML.Node(<DOCUMENT_NODE@0x0000000003583590>)), "", DataFrame)
+IPUMS.DDIInfo("test_ddi.xml", "", "", "", "", "", IPUMS.DDIVariable[], EzXML.Document(EzXML.Node(<DOCUMENT_NODE@0x00000000034466d0>)), "", 0×0 DataFrame)
 ```
 
 # References
