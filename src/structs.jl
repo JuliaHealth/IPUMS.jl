@@ -72,7 +72,7 @@ DDIVariable(
 A struct representing individual variable/column metadata from an IPUMS extract
 file. This stuct is used for parsing the IPUMS datafile, which may be of fixed 
 width format, hence the `position_` fields. The default value for missing 
-strings is a space `" "`, while the default value for missing integer values 
+strings is an empty string `""`, while the default value for missing integer values 
 is 9999.
 
 
@@ -166,8 +166,8 @@ DDIInfo(
 ```
 
 A struct representing the metadata taken from an IPUMs extract. An IPUMs 
-extract contains both file-level metadata--such as the date of export--as well
-as variable level metadata--such as the name and data type of a variable. 
+extract contains both file-level metadata \-\- such as the date of export \-\- as well
+as variable level metadata \-\- such as the name and data type of a variable. 
 
 The `DDIInfo` object is not generally called directly. The `parse_ddi()` 
 function creates a `DDIinfo` object after successfully parsing a DDI 
