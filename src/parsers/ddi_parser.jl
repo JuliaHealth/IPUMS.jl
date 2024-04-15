@@ -133,10 +133,11 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     vartype_vec = [v.content for v in vartype_nodes]
     varinterval_vec = [v.content for v in varinterval_nodes]
 
+
     # This loop iterates over each variable and adjusts the description of 
     # discrete variables to -> integer variables. This notation is used later 
     # when loading the data.
-    for i=1:length(name_nodes)
+    for i in eachindex(name_nodes)
         
         if (vartype_vec[i] == "numeric") && (varinterval_vec[i] == "discrete") && (width_vec[i] < 10)
             vartype_vec[i] = "integer"
@@ -147,16 +148,69 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
         end
     end
 
-    # TODO get the Categorical Variable assignments to work
-    catgry_nodes = EzXML.findall(VAR_CATEGORY_XPATH, xmlroot, ["x" => ns])
-    catgry_vec = [v.content for v in catgry_nodes]
-    #@show catgry_vec
+
+    # This loop iterates over all variables to find variables that are 
+    # categorically coded, such as (1 => "Female", 2 => "Male"). For variables 
+    # that are categorically coded, the `<catgry>` tag includes information on 
+    # the categories and their corresponding numerical indices. 
+    # The loop saves this coding information to a vector of key, value pairs.
+
+    varnodes =  EzXML.findall(VAR_NODE_LOCATION, xmlroot, ["x" => ns])   
+    category_vec = Union{Vector{@NamedTuple{val::Int64, labl::String}}, Nothing}[]
+    for i in eachindex(varnodes)
+        n = EzXML.findall("x:catgry", varnodes[i], ["x" => ns])
+        if length(n) > 0
+            catvalue_nodes = EzXML.findall("x:catgry/x:catValu", varnodes[i], ["x" => ns])
+            labl_nodes = EzXML.findall("x:catgry/x:labl", varnodes[i], ["x" => ns])
+            
+            catvalue_vec = parse.(Int64, [v.content for v in catvalue_nodes])
+            labl_vec = [v.content for v in labl_nodes]
+            push!(category_vec, [(val = catvalue_vec[i], labl = labl_vec[i]) for i=1:length(catvalue_vec)])
+        
+        else
+            push!(category_vec, nothing)
+        end
+    end
+
+
+    # The `coder instructions <codInstr>` tag contains additional information 
+    # on how a variable is coded and used. Not all variables have this tag. 
+    # This loop iterates over all variables and saves the contents of the coder
+    # instructions tag to the array if it exists. If a variable is missing the 
+    # coder instructions tag, then `nothing` is saved to the array.
+
+    regex = r"^(?<val>[[:graph:]]+)(([[:blank:]]+[[:punct:]|=]+[[:blank:]])+)(?<lbl>.+)$"m
+    regex2 = r"^(?<val>[[:graph:]]+)(([[:blank:]]+[[:punct:]|=]+[[:blank:]])+)(?<lbl>.+)$"m
+    
+    coder_instr_vec = Union{String, Nothing}[]
+    for i in eachindex(varnodes)
+        n = EzXML.findall("x:codInstr", varnodes[i], ["x" => ns])
+        if length(n) > 0
+            coder_instr_nodes = EzXML.findall("x:codInstr", varnodes[i], ["x" => ns])
+            push!(coder_instr_vec, coder_instr_nodes[1].content)
+            
+            matches = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex, coder_instr_nodes[1].content)]
+            matches2 = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex2, coder_instr_nodes[1].content)]
+            if (length(matches) > 0) && (!isnothing(category_vec[i]))
+                append!(category_vec[i], matches)
+            elseif (length(matches) > 0) && (isnothing(category_vec[i]))
+                category_vec[i] = matches
+            elseif (length(matches2) > 0) && (!isnothing(category_vec[i]))
+                append!(category_vec[i], matches2) 
+            elseif (length(matches2) > 0) && (isnothing(category_vec[i]))
+                category_vec[i] = matches2
+            end
+        else 
+            push!(coder_instr_vec, nothing)
+        end
+    end
+
 
     # This loop creates DDIVariable objects for each variable in the dataset, 
     # and pushes those objects into a vector. We will later use this information
     # when configuring the dataframe column names, datatypes, metadata, etc.
     var_vector = DDIVariable[]
-    for i in 1:length(name_nodes)
+    for i in eachindex(name_nodes)
         dv = DDIVariable(name=name_vec[i],
                             position_start=startpos_vec[i],
                             position_end=endpos_vec[i],
@@ -165,10 +219,24 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
                             desc=txt_vec[i],
                             dcml=dcml_vec[i],
                             vartype=vartype_vec[i],
-                            varinterval=varinterval_vec[i])
+                            varinterval=varinterval_vec[i],
+                            category_labels=category_vec[i],
+                            coder_instructions=coder_instr_vec[i])
         push!(var_vector, dv)
     end
 
     ddi.variable_info = var_vector
 
+end
+
+
+function _string_to_num(x::SubString{String})
+    n = [v.match for v in eachmatch(r"[0-9]+", x)][1]
+    return parse(Int64, n)
+end
+
+
+function _string_to_num(x::Nothing)
+    @show "I hit nothing"
+    return nothing
 end

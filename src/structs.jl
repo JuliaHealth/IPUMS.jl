@@ -63,7 +63,9 @@ DDIVariable(
     desc::String = "", 
     dcml::Int64 = 9999, 
     vartype::String = "",
-    varinterval::String = ""
+    varinterval::String = "",
+    category_labels::Union{Vector{Pair{Int64, String}}, Nothing} = nothing
+    coder_instructions::Union{String, Nothing} = nothing
 )
 ```
 
@@ -94,7 +96,14 @@ is 9999.
                     type.
 - `varinterval::String` - Identifies if a numeric variable is discrete or 
                     continuous. 
-
+- `category_labels::Union{Vector{Pair{Int64, String}}, Nothing}` - If a variable is 
+                    categorical, then this is a vector of (key, value) pairs, where 
+                    the `key` is a numerical index and the `value` is the category 
+                    label, for example (1 => "category 1"). If a variable is not 
+                    categorical, then this attribute has a value of `nothing`.
+- `coder_instructions::Union{String, Nothing}` - Contains any additional 
+                    information about how the variable was coded and how it 
+                    should be treated.
 # Returns
 
 - `DDIVariable` object specifying the metadata for each variable.
@@ -111,11 +120,12 @@ julia> DDIVariable(
     desc = "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.",
     dcml = 0,
     vartype = "numeric",
-    varinterval = "discrete"
+    varinterval = "discrete",
+    category_labels = nothing,
+    coder_instructions = nothing
     )
 
-IPUMS.DDIVariable("YEAR", 1, 4, 4, "Survey year", "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.", 0, "numeric", "discrete")
-DDIVariable("IPUMS USA", "usa", "microdata", "", true, "")
+IPUMS.DDIVariable("YEAR", 1, 4, 4, "Survey year", "YEAR reports the year in which the survey was conducted.  YEARP is repeated on person records.", 0, "numeric", "discrete", nothing, nothing)
 ```
 
 # References
@@ -134,6 +144,8 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     dcml::Int64 = 9999
     vartype::String = ""
     varinterval::String = ""
+    category_labels::Union{Vector{@NamedTuple{val::Int64, labl::String}}, Nothing} = nothing
+    coder_instructions::Union{String, Nothing} = nothing
 end
 
 

@@ -128,6 +128,7 @@ EXTRACT_IPUMS_PROJECT = "/x:codeBook/x:stdyDscr/x:citation/x:serStmt/x:serName"
 EXTRACT_NOTES = "/x:codeBook/x:stdyDscr/x:notes"
 EXTRACT_DATE = "/x:codeBook/x:stdyDscr/x:citation/x:prodStmt/x:prodDate/@date"
 
+VAR_NODE_LOCATION = "/x:codeBook/x:dataDscr/x:var"
 VAR_NAME_XPATH = "/x:codeBook/x:dataDscr/x:var/@name"
 VAR_STARTPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@StartPos"
 VAR_ENDPOS_XPATH = "/x:codeBook/x:dataDscr/x:var/x:location/@EndPos"
