@@ -29,12 +29,10 @@ IPUMS.DDIInfo
 function parse_ddi(filepath::String)
 
     # check to make sure the provided file is an xml file.
-    splitext(filepath)[2] != ".xml" && throw(ArgumentError("The DDI file: $filepath should be an XML file."))
+    _check_that_file_is_xml(filepath)
     
     # check to make sure file exists
-    !isfile(filepath) && throw(ArgumentError("The specified file: $filepath does not exist."))
-    
-    # QUESTION: check if file has multiple files -- then have to handle that
+    _check_that_file_exists(filepath)
     
     # read xml file and parse extract level metadata
     
@@ -54,6 +52,59 @@ end
 
 
 """
+    _check_that_file_is_xml(filepath::String)
+
+This is an internal function and checks whether the provided file is an XML
+    file. All DDI files should be in XML format.
+
+### Arguments
+
+- `filepath::String` - A file path that the user wishes to parse. The file must be
+                    an XML file.
+
+### Returns
+
+The function returns nothing if the file is an XML file. If the file is not 
+    an XML file, then the function raises an `ArgumentError`.
+"""
+function _check_that_file_is_xml(filepath::String)
+    
+    extension = filepath[findlast(==('.'), filepath)+1:end]
+
+    if extension != "xml"
+        throw(ArgumentError("The DDI file: $filepath should be an XML file."))
+    else
+        return true
+    end
+
+end
+
+
+"""
+    _check_that_file_exists(filepath::String)
+
+This is an internal function and checks whether the provided file exists or not. 
+
+### Arguments
+
+- `filepath::String` - A file path that the user wishes to parse. The file must be
+                    an existing XML file.
+
+### Returns
+
+The function returns nothing if the file exists. If the file does not exist, 
+    then the function raises an `ArgumentError`.
+"""
+function _check_that_file_exists(filepath::String)
+
+    if !isfile(filepath)
+        throw(ArgumentError("The specified file: $filepath does not exist."))
+    else
+        return true
+    end
+end
+
+"""
     _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
 
 This is an internal function and not meant for the public API. This function 
@@ -67,7 +118,6 @@ parses the DDI XML file and captures the file-level metadata.
 
 The function return the original `DDIInfo` object with updated data in the 
 attributes.
-
 """
 function _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
 
