@@ -10,7 +10,8 @@ module IPUMS
     using OpenAPI
     using TimeZones
     using URIs
-
+    using EzXML
+    
     include("structs.jl")
     include("constants.jl")
     include("helpers.jl")
@@ -27,7 +28,8 @@ module IPUMS
     include("modelincludes.jl")
     include("apis/api_DefaultApi.jl")
     include("piracy.jl")
+    include("parsers/ddi_parser.jl")
 
     export DefaultApi
-
+    export parse_ddi
 end
