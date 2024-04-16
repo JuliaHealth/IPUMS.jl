@@ -3,8 +3,8 @@
 """
     parse_ddi(filepath::String)
 
-Parses a valid IPUMs DDI XML file and returns a `DDIInfo` object containing 
-the IPUMs extract metadata. 
+Parses a valid IPUMS DDI XML file and returns a `DDIInfo` object containing 
+the IPUMS extract metadata. 
 
 ### Arguments
 
@@ -13,7 +13,7 @@ the IPUMs extract metadata.
 ### Returns
 
 A `DDIInfo` object that contains all of the file-level and variable-level 
-metadata for the IPUMs extract.
+metadata for the IPUMS extract.
 
 Please check the documentation for `DDIInfo` for more information about this 
 specific object.

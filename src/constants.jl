@@ -100,16 +100,16 @@ file.
 
 Extract level XPATHs:
 
-EXTRACT_CONDITIONS - IPUMs conditions for fair and legal use of public data.
-EXTRACT_CITATION - Citation information for referencing IPUMs data
-EXTRACT_IPUMS_PROJECT - Name of the IPUMs project from which the data is taken, such as CPS, or DHS, etc.
+EXTRACT_CONDITIONS - IPUMS conditions for fair and legal use of public data.
+EXTRACT_CITATION - Citation information for referencing IPUMS data
+EXTRACT_IPUMS_PROJECT - Name of the IPUMS project from which the data is taken, such as CPS, or DHS, etc.
 EXTRACT_NOTES - User provided notes or additional miscellaneous information provided about the extract.
 EXTRACT_DATE - The date that the extract was generated.
 
 Variable level XPATHs:
 
 VAR_NODE_LOCATION = The base nodes that correspond to each variable in the dataset. 
-VAR_NAME_XPATH = The name of the IPUMs variable.
+VAR_NAME_XPATH = The name of the IPUMS variable.
 VAR_STARTPOS_XPATH = The start position (in text columns) of the variable in a fixed width file specification.
 VAR_ENDPOS_XPATH = The end position (in text columns) of the variable in a fixed width file specification.
 VAR_WIDTH_XPATH = The width postion (in text columns) of variable in a fixed width file specification. 

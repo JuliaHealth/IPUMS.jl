@@ -78,7 +78,7 @@ is 9999.
 
 # Keyword Arguments
 
-- `name::String` - Name of the variable, as per the column name of the IPUMs 
+- `name::String` - Name of the variable, as per the column name of the IPUMS 
                     extract file. This name is limited to 8 characters.
 - `position_start::Int64` - The starting position (in columns) of a variable 
                             in a fixed width file format.
@@ -98,7 +98,7 @@ is 9999.
 - `category_labels::Union{Vector{Pair{Int64, String}}, Nothing}` - If a variable is 
                     categorical, then this is a vector of (key, value) pairs, where 
                     the `key` is a numerical index and the `value` is the category 
-                    label, for example (1 => "category 1"). If a variable is not 
+                    label, for example `(1 => "category 1")`. If a variable is not 
                     categorical, then this attribute has a value of `nothing`.
 - `coder_instructions::Union{String, Nothing}` - Contains any additional 
                     information about how the variable was coded and how it 
@@ -165,26 +165,26 @@ DDIInfo(
 )
 ```
 
-A struct representing the metadata taken from an IPUMs extract. An IPUMs 
+A struct representing the metadata taken from an IPUMS extract. An IPUMS 
 extract contains both file-level metadata (such as the date of export), as well
 as variable level metadata (such as the name and data type of a variable). 
 
 The `DDIInfo` object is not generally called directly. The `parse_ddi()` 
 function creates a `DDIinfo` object after successfully parsing a DDI 
-file from an IPUMs extract. 
+file from an IPUMS extract. 
 
 The `DDIInfo`
 object contains file level metadata. The `variable_info` field of the `DDIInfo` 
 object contains a vector of `DDIVariable` objects. `DDIVariable` objects contain
-metadata information about individual IPUMs variables.   
+metadata information about individual IPUMS variables.   
 
 # Keyword Arguments
 
-- `filepath::String` -  File system path to the DDI (`.xml``) file.
-- `conditions::String` - IPUMs legal specification on the proper use of IPUMs 
+- `filepath::String` -  File system path to the DDI (`.xml`) file.
+- `conditions::String` - IPUMS legal specification on the proper use of IPUMS 
                             data.
-- `citation::String` - Information for the citation of IPUMs data.
-- `ipums_project::String` - Identifier for the IPUMs source of the extract 
+- `citation::String` - Information for the citation of IPUMS data.
+- `ipums_project::String` - Identifier for the IPUMS source of the extract 
                             data, such as `IPUMS CPS`, or `IPUMS USA`, etc. 
 - `extract_notes::String` - Additional clarifying information or user nodes 
                             about the extract. 
@@ -202,7 +202,7 @@ metadata information about individual IPUMs variables.
 
 # Returns
 
-- `DDIInfo` object that contains both file-level and variable-level metadata extracted from an IPUMs DDI (.xml) file. 
+- `DDIInfo` object that contains both file-level and variable-level metadata extracted from an IPUMS DDI (.xml) file. 
 
 # Example
 
@@ -230,9 +230,3 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     _ns::String = ""
     data_summary::DataFrame = DataFrame()
 end
-
-
-
-
-
-
