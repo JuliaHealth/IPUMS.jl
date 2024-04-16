@@ -4,9 +4,9 @@ All URIs are relative to *https://api.ipums.org*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**extracts_extract_number_get**](DefaultApi.md#extracts_extract_number_get) | **GET** /extracts/{extractNumber} | Get a specific data extract.
-[**extracts_get**](DefaultApi.md#extracts_get) | **GET** /extracts | Get a list of recent data extracts.
-[**extracts_post**](DefaultApi.md#extracts_post) | **POST** /extracts | Create a data extract
+[**extract_info**](DefaultApi.md#extract_info) | **GET** /extracts/{extractNumber} | Get a specific data extract.
+[**extract_list**](DefaultApi.md#extract_list) | **GET** /extracts | Get a list of recent data extracts.
+[**extract_submit**](DefaultApi.md#extract_submit) | **POST** /extracts | Create a data extract
 [**metadata_nhgis_data_tables_get**](DefaultApi.md#metadata_nhgis_data_tables_get) | **GET** /metadata/nhgis/data_tables | List all data_tables
 [**metadata_nhgis_datasets_dataset_data_tables_data_table_get**](DefaultApi.md#metadata_nhgis_datasets_dataset_data_tables_data_table_get) | **GET** /metadata/nhgis/datasets/{dataset}/data_tables/{dataTable} | Detailed data table view
 [**metadata_nhgis_datasets_dataset_get**](DefaultApi.md#metadata_nhgis_datasets_dataset_get) | **GET** /metadata/nhgis/datasets/{dataset} | Detailed dataset view
@@ -16,9 +16,9 @@ Method | HTTP request | Description
 [**metadata_nhgis_time_series_tables_time_series_table_get**](DefaultApi.md#metadata_nhgis_time_series_tables_time_series_table_get) | **GET** /metadata/nhgis/time_series_tables/{timeSeriesTable} | Detailed time series table view
 
 
-# **extracts_extract_number_get**
-> extracts_extract_number_get(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing) -> DataExtract, OpenAPI.Clients.ApiResponse <br/>
-> extracts_extract_number_get(_api::DefaultApi, response_stream::Channel, extract_number::Int64, collection::String, version::String; _mediaType=nothing) -> Channel{ DataExtract }, OpenAPI.Clients.ApiResponse
+# **extract_info**
+> extract_info(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing) -> DataExtract, OpenAPI.Clients.ApiResponse <br/>
+> extract_info(_api::DefaultApi, response_stream::Channel, extract_number::Int64, collection::String, version::String; _mediaType=nothing) -> Channel{ DataExtract }, OpenAPI.Clients.ApiResponse
 
 Get a specific data extract.
 
@@ -46,9 +46,9 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
-# **extracts_get**
-> extracts_get(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing) -> Vector{DataExtract}, OpenAPI.Clients.ApiResponse <br/>
-> extracts_get(_api::DefaultApi, response_stream::Channel, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing) -> Channel{ Vector{DataExtract} }, OpenAPI.Clients.ApiResponse
+# **extract_list**
+> extract_list(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing) -> Vector{DataExtract}, OpenAPI.Clients.ApiResponse <br/>
+> extract_list(_api::DefaultApi, response_stream::Channel, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing) -> Channel{ Vector{DataExtract} }, OpenAPI.Clients.ApiResponse
 
 Get a list of recent data extracts.
 
@@ -82,9 +82,9 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
-# **extracts_post**
-> extracts_post(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing) -> DataExtractPostResponse, OpenAPI.Clients.ApiResponse <br/>
-> extracts_post(_api::DefaultApi, response_stream::Channel, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing) -> Channel{ DataExtractPostResponse }, OpenAPI.Clients.ApiResponse
+# **extract_submit**
+> extract_submit(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing) -> DataExtractPostResponse, OpenAPI.Clients.ApiResponse <br/>
+> extract_submit(_api::DefaultApi, response_stream::Channel, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing) -> Channel{ DataExtractPostResponse }, OpenAPI.Clients.ApiResponse
 
 Create a data extract
 

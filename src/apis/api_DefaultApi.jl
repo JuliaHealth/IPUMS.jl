@@ -11,12 +11,12 @@ This can be used to construct the `OpenAPI.Clients.Client` instance.
 """
 basepath(::Type{ DefaultApi }) = "https://api.ipums.org"
 
-const _returntypes_extracts_extract_number_get_DefaultApi = Dict{Regex,Type}(
+const _returntypes_extract_info_DefaultApi = Dict{Regex,Type}(
     Regex("^" * replace("200", "x"=>".") * "\$") => DataExtract,
 )
 
-function _oacinternal_extracts_extract_number_get(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
-    _ctx = OpenAPI.Clients.Ctx(_api.client, "GET", _returntypes_extracts_extract_number_get_DefaultApi, "/extracts/{extractNumber}", ["APIKeyHeader", ])
+function _oacinternal_extract_info(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
+    _ctx = OpenAPI.Clients.Ctx(_api.client, "GET", _returntypes_extract_info_DefaultApi, "/extracts/{extractNumber}", ["APIKeyHeader", ])
     OpenAPI.Clients.set_param(_ctx.path, "extractNumber", extract_number)  # type Int64
     OpenAPI.Clients.set_param(_ctx.query, "collection", collection)  # type String
     OpenAPI.Clients.set_param(_ctx.query, "version", version)  # type String
@@ -34,22 +34,22 @@ Params:
 
 Return: DataExtract, OpenAPI.Clients.ApiResponse
 """
-function extracts_extract_number_get(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
-    _ctx = _oacinternal_extracts_extract_number_get(_api, extract_number, collection, version; _mediaType=_mediaType)
+function extract_info(_api::DefaultApi, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
+    _ctx = _oacinternal_extract_info(_api, extract_number, collection, version; _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx)
 end
 
-function extracts_extract_number_get(_api::DefaultApi, response_stream::Channel, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
-    _ctx = _oacinternal_extracts_extract_number_get(_api, extract_number, collection, version; _mediaType=_mediaType)
+function extract_info(_api::DefaultApi, response_stream::Channel, extract_number::Int64, collection::String, version::String; _mediaType=nothing)
+    _ctx = _oacinternal_extract_info(_api, extract_number, collection, version; _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx, response_stream)
 end
 
-const _returntypes_extracts_get_DefaultApi = Dict{Regex,Type}(
+const _returntypes_extract_list_DefaultApi = Dict{Regex,Type}(
     Regex("^" * replace("200", "x"=>".") * "\$") => Vector{DataExtract},
 )
 
-function _oacinternal_extracts_get(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
-    _ctx = OpenAPI.Clients.Ctx(_api.client, "GET", _returntypes_extracts_get_DefaultApi, "/extracts", ["APIKeyHeader", ])
+function _oacinternal_extract_list(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
+    _ctx = OpenAPI.Clients.Ctx(_api.client, "GET", _returntypes_extract_list_DefaultApi, "/extracts", ["APIKeyHeader", ])
     OpenAPI.Clients.set_param(_ctx.query, "collection", collection)  # type String
     OpenAPI.Clients.set_param(_ctx.query, "version", version)  # type String
     OpenAPI.Clients.set_param(_ctx.query, "pageNumber", page_number)  # type Int64
@@ -69,22 +69,22 @@ Params:
 
 Return: Vector{DataExtract}, OpenAPI.Clients.ApiResponse
 """
-function extracts_get(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extracts_get(_api, collection, version; page_number=page_number, page_size=page_size, _mediaType=_mediaType)
+function extract_list(_api::DefaultApi, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
+    _ctx = _oacinternal_extract_list(_api, collection, version; page_number=page_number, page_size=page_size, _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx)
 end
 
-function extracts_get(_api::DefaultApi, response_stream::Channel, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extracts_get(_api, collection, version; page_number=page_number, page_size=page_size, _mediaType=_mediaType)
+function extract_list(_api::DefaultApi, response_stream::Channel, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
+    _ctx = _oacinternal_extract_list(_api, collection, version; page_number=page_number, page_size=page_size, _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx, response_stream)
 end
 
-const _returntypes_extracts_post_DefaultApi = Dict{Regex,Type}(
+const _returntypes_extract_submit_DefaultApi = Dict{Regex,Type}(
     Regex("^" * replace("200", "x"=>".") * "\$") => DataExtractPostResponse,
 )
 
-function _oacinternal_extracts_post(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
-    _ctx = OpenAPI.Clients.Ctx(_api.client, "POST", _returntypes_extracts_post_DefaultApi, "/extracts", ["APIKeyHeader", ], data_extract_post)
+function _oacinternal_extract_submit(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
+    _ctx = OpenAPI.Clients.Ctx(_api.client, "POST", _returntypes_extract_submit_DefaultApi, "/extracts", ["APIKeyHeader", ], data_extract_post)
     OpenAPI.Clients.set_param(_ctx.query, "collection", collection)  # type String
     OpenAPI.Clients.set_param(_ctx.query, "version", version)  # type String
     OpenAPI.Clients.set_header_accept(_ctx, ["application/json", ])
@@ -101,13 +101,13 @@ Params:
 
 Return: DataExtractPostResponse, OpenAPI.Clients.ApiResponse
 """
-function extracts_post(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extracts_post(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
+function extract_submit(_api::DefaultApi, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
+    _ctx = _oacinternal_extract_submit(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx)
 end
 
-function extracts_post(_api::DefaultApi, response_stream::Channel, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extracts_post(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
+function extract_submit(_api::DefaultApi, response_stream::Channel, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
+    _ctx = _oacinternal_extract_submit(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
     return OpenAPI.Clients.exec(_ctx, response_stream)
 end
 
@@ -351,9 +351,9 @@ function metadata_nhgis_time_series_tables_time_series_table_get(_api::DefaultAp
     return OpenAPI.Clients.exec(_ctx, response_stream)
 end
 
-export extracts_extract_number_get
-export extracts_get
-export extracts_post
+export extract_info
+export extract_list
+export extract_submit
 export metadata_nhgis_data_tables_get
 export metadata_nhgis_datasets_dataset_data_tables_data_table_get
 export metadata_nhgis_datasets_dataset_get
