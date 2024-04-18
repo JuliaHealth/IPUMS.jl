@@ -34,7 +34,7 @@ module IPUMS
     const API_VERSION = "v2"
 
     include("modelincludes.jl")
-    include("apis/api_DefaultApi.jl")
+    include("apis/api_IPUMSAPI.jl")
     include("piracy.jl")
 
 
@@ -54,7 +54,7 @@ module IPUMS
 
     =#
 
-    export DefaultApi
+    export IPUMSAPI
     export parse_ddi
     export extract_download
 end
