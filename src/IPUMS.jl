@@ -4,6 +4,8 @@ module IPUMS
         @kwdef
     import Downloads:
         download as dl
+    import OpenAPI.Clients: 
+        Client
 
     using DataFrames
     using Dates

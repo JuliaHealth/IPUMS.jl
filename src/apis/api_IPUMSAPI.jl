@@ -11,6 +11,30 @@ This can be used to construct the `OpenAPI.Clients.Client` instance.
 """
 basepath(::Type{ IPUMSAPI }) = "https://api.ipums.org"
 
+"""
+```julia
+IPUMSAPI(url::String, headers::Dict)
+```
+
+Create an IPUMS API object for querying the IPUMS server.
+
+> NOTE: If you need more control of how the connection to the server is made, consider using the [`OpenAPI.jl`](https://github.com/JuliaComputing/OpenAPI.jl) package and creating an `Client` object that you can pass into `IPUMSAPI()` directly.
+
+### Arguments
+
+- `url::String` -- The URL of the server. This is the base URL that will be used for all API calls.
+
+- `headers::Dict` -- A dictionary of HTTP headers to be sent with all API calls.
+
+### Returns
+
+`api::IPUMSAPI` -- An API object that can be passed to all `IPUMS.jl` methods that require an API object.
+
+"""
+function IPUMSAPI(url::String, headers::Dict)
+    IPUMSAPI(Client(url; headers = headers))
+end
+
 const _returntypes_extract_info_IPUMSAPI = Dict{Regex,Type}(
     Regex("^" * replace("200", "x"=>".") * "\$") => DataExtract,
 )
