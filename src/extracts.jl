@@ -67,34 +67,25 @@ function extract_download(
     gis_data = true
 )
     
-    #= 
-    
-    TODO: Fix this function regarding the new way how 
-    extract_info works
+    metadata, defn, _ = extract_info(api, extract_number, collection)
+    links = metadata["downloadUrls"]
 
-    =#
-    info = extract_info(api, extract_number, collection)
-    links = info[1].downloadLinks
-    #= 
+    isempty(links) && return nothing
 
-    BUG: Parsing of extract info fails more or less.
-    Need to find out why.
-
-    =#
     if codebook
-        link = links.codebookPreview |> JSON3.read |> x -> x["url"]
+        link = links["codebookPreview"] 
         codebook_name = isnothing(codebook_name) ? basename(link) : codebook_name * ".zip"
         dl(link, joinpath(output_path, codebook_name); headers = api.client.headers)
         @info "Codebook for Extract $(extract_number) downloaded to $(joinpath(output_path, codebook_name))."
     end
     if table_data 
-        link = links.tableData |> JSON3.read |> x -> x["url"]
+        link = links["tableData"] 
         table_data_name = isnothing(table_data_name) ? basename(link) : table_data_name * ".zip"
         dl(link, joinpath(output_path, table_data_name); headers = api.client.headers)
         @info "Table data for Extract $(extract_number) downloaded to $(joinpath(output_path, table_data_name))."
     end
     if gis_data 
-        link = links.gisData |> JSON3.read |> x -> x["url"]
+        link = links["gisData"] 
         gis_data_name = isnothing(gis_data_name) ? basename(link) : gis_data_name * ".zip"
         dl(link, joinpath(output_path, gis_data_name); headers = api.client.headers)
         @info "GIS data for Extract $(extract_number) downloaded to $(joinpath(output_path, table_data_name))."
