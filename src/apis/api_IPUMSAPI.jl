@@ -133,7 +133,7 @@ Get information about a specific data extract.
 
 - `collection` -- What collection is being queried.
 
-> NOTE: To be ready to download, an extract must have a `completed` status. However, some requests that are `completed` may still be unavailable for download, as extracts expire and are removed from IPUMS servers after a set period of time (72 hours for microdata collections, 2 weeks for IPUMS NHGIS).
+> NOTE: To be ready to download, an extract must have a `completed` status. However, some requests that are `completed` may still be unavailable for download, as extracts expire and are removed from IPUMS servers after a set period of time (72 hours for microdata collections, 2 weeks for IPUMS NHGIS). If an extract has expired, a warning from this function will be emitted.
 
 `defn::IPUMS.DataExtractDefinition` -- The associated data extract definition that was used to generate this extract.
 
@@ -166,11 +166,16 @@ function extract_info(_api::IPUMSAPI, extract_number::Int64, collection::String;
     _ctx = _oacinternal_extract_info(_api, extract_number, collection, version; _mediaType = nothing)
     res, msg = OpenAPI.Clients.exec(_ctx)
     defn = res.extractDefinition
+    
 
-    urls = Dict(
-        link => JSON3.read(getfield(res.downloadLinks, idx)).url 
-        for (idx, link) in enumerate(["codebookPreview", "tableData", "gisData"])
-    )
+    if isnothing(getfield(res.downloadLinks, 1))
+        urls = []
+    else
+        urls = Dict(
+            link => JSON3.read(getfield(res.downloadLinks, idx)).url 
+            for (idx, link) in enumerate(["codebookPreview", "tableData", "gisData"])
+        )
+    end
 
     info = [
         "collection",
@@ -205,7 +210,7 @@ function extract_info(_api::IPUMSAPI, extract_number::Int64, collection::String;
     ]
 
     if isempty(urls)
-        @info "This extract has expired and associated data cannot be downloaded. Please resubmit this extract request again to prepare the data."
+        @warn "Extract $(extract_number) has expired and the associated data cannot be downloaded any longer. If you would like to download the data for this extract, please resubmit the extract request associated with this extract again to create a new extract with the same data from this extract."
     end
 
     metadata = Dict(info .=> values)
@@ -234,13 +239,25 @@ function _oacinternal_extract_list(_api::IPUMSAPI, collection::String, version::
     return _ctx
 end
 
-@doc raw"""Get a list of recent data extracts.
+@doc raw"""
 
-Params:
-- collection::String (required)
-- version::String (required)
-- page_number::Int64
-- page_size::Int64
+Get a list of recent data extracts.
+
+TODO: Finish implementation for page_size and page_number; will probably need a loop.
+
+### Arguments
+
+- `api::IPUMSAPI` -- An `IPUMSAPI` object to establish connection details.
+
+- `collection::String` -- What IPUMS collection to be queried for the extract (options could include `"nhgis"`, `"usa"`, etc. corresponding to IPUMS NHGIS or IPUMS USA databases). 
+
+### Keyword Arguments
+
+- `version::String` -- What version of the IPUMS API to use (Default: `"2"`)
+
+- `page_number::Int64` -- Specify the page number of results to return.
+
+- `page_size::Int64` -- Specify how many results to return per page.
 
 Return: Vector{DataExtract}, OpenAPI.Clients.ApiResponse
 """
