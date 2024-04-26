@@ -51,6 +51,12 @@ julia> extract_download(api, 1, "nhgis"; output_path = "file_downloads/", codebo
 [ Info: Table data for Extract 1 downloaded to file_downloads/DATA_1.zip.
 [ Info: GIS data for Extract 1 downloaded to file_downloads/DATA_1.zip.
 "file_downloads/"
+
+julia> extract_download(api, 2, "nhgis", output_path="file_downloads/")
+┌ Warning: Extract 2 has expired and the associated data cannot be downloaded any longer. If you would like to download the data for
+ this extract, please resubmit the extract request associated with this extract again to create a new extract with the same data fro
+m this extract.
+└ @ IPUMS ~/FOSS/IPUMS.jl/src/apis/api_IPUMSAPI.jl:213
 ```
 
 """
