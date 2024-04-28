@@ -243,8 +243,8 @@ end
 ```julia
 extract_list(
     api::IPUMSAPI, 
-    collection::String, 
-    version::String; 
+    collection::String;
+    version::String = "2", 
     extracts::Int64 = 10, 
     _mediaType=nothing
 )
@@ -252,7 +252,7 @@ extract_list(
 
 Get a list of recent data extracts.
 
-> NOTE: This function emits a warning if a particular extract has expired.
+> NOTE: This function emits warnings when returned extracts are expired.
 
 ### Arguments
 
@@ -270,9 +270,48 @@ Get a list of recent data extracts.
 
 - `Vector{DataExtract}` -- a vector of `DataExtract` objects that contains the relevant extract number (`number`), its IPUMS status (`status`), the definition used to generate the associated definition (`extractDefinition`), and links to download the extract's data (`downloadLinks`).
 
+### Examples
+
+```julia-repl
+julia> res = extract_list(api, "nhgis")
+┌ Warning: Extract 1 has expired and the associated data cannot be downloaded any longer. If you would like to download the data for this extract, please resubmit the extract request associated with this extract again to create a new extract with the same data from this extract.
+└ @ IPUMS 
+2-element Vector{IPUMS.DataExtract}:
+ {
+  "extractDefinition": {
+    #=
+    ...
+    Extract definition details here
+    ...
+    =#
+  },
+  "number": 2,
+  "status": "completed",
+  "downloadLinks": {
+    "codebookPreview": "nhgis0002_csv_PREVIEW.zip",
+    "tableData": "nhgis0002_csv.zip",
+    "gisData": "nhgis0002_shape.zip"
+  }
+}
+
+ {
+  "extractDefinition": {
+    #=
+    ...
+    Extract definition details here
+    ...
+    =#
+  },
+  "number": 1,
+  "status": "completed",
+  "downloadLinks": {}
+}
+```
+
+> TIP: If you want to record all the data extracts that are expired, you can loop through each of the returned extracts and check if the `downloadLinks` field is empty. If it is, that means it is expired.
 
 """
-function extract_list(api::IPUMSAPI, collection::String, version::String; extracts::Int64 = 10, _mediaType=nothing)
+function extract_list(api::IPUMSAPI, collection::String; version::String = "2", extracts::Int64 = 10, _mediaType=nothing)
 
     #=
     
@@ -324,19 +363,80 @@ function _oacinternal_extract_submit(_api::IPUMSAPI, collection::String, version
     return _ctx
 end
 
-@doc raw"""Create a data extract
+@doc raw"""
+```julia
+extract_submit(
+    api::IPUMSAPI, 
+    collection::String, 
+    extract_definition::String = nothing; 
+    version::String = "2", 
+    _mediaType=nothing
+)
+```
 
-Params:
-- collection::String (required)
-- version::String (required)
-- data_extract_post::DataExtractPost
+Submit an extract definition to IPUMS for IPUMS to generate a data extract with requested data.
 
-Return: DataExtractPostResponse, OpenAPI.Clients.ApiResponse
+### Arguments
+
+- `api::IPUMSAPI` -- An `IPUMSAPI` object to establish connection details.
+
+- `collection::String` -- What IPUMS collection to be queried for the extract (options could include `"nhgis"`, `"usa"`, etc. corresponding to IPUMS NHGIS or IPUMS USA databases). 
+
+- `extract_definition::String` -- The location of a file storing the extract definition you want to submit.
+
+### Keyword Arguments
+
+- `version::String` -- What version of the IPUMS API to use (Default: `"2"`).
+
+### Returns
+
+- `DataExtractPostResponse` -- Upon a successful submission, this object will contain a copy of the extract definition submitted, the extract ID, its status, and any relevant download links.
+
+### Examples
+
+```julia-repl
+julia> res = extract_submit(api, "nhgis", my_extract_definition_file)
+{
+  "extractDefinition": {
+    #=
+    ...
+    Extract definition details here
+    ...
+    =#
+  },
+  "number": 4,
+  "status": "queued",
+  "downloadLinks": {}
+}
+
+julia> res = extract_submit(api, "nhgis", "fake_file.json")
+[ Info: The value you provided for the argument `extract_definition` ("fake_file.json") is not a valid filepath. Please update the path to your data extract.
+┌ Error: ArgumentError("invalid JSON at byte position 1 while parsing type JSON3.False: InvalidChar\nfake_file.json\n")
+└ @ IPUMS 
+┌ Error: The extract definition submission request was not successful. Please review your extract definition and try again.
+└ @ IPUMS 
+```
+
 """
-function extract_submit(_api::IPUMSAPI, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extract_submit(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
-    return OpenAPI.Clients.exec(_ctx)
+function extract_submit(api::IPUMSAPI, collection::String, extract_definition::String = nothing; version::String = "2", _mediaType=nothing)
+    try isfile(extract_definition)
+        extract_definition = JSON3.read(extract_definition)
+    catch e
+        @info "The value you provided for the argument `extract_definition` (\"$(extract_definition)\") is not a valid filepath. Please update the path to your data extract."
+        @error e
+    end
+
+    _ctx = _oacinternal_extract_submit(api, collection, version; data_extract_post=extract_definition, _mediaType=_mediaType)
+
+    res, msg = OpenAPI.Clients.exec(_ctx)
+
+    if isnothing(res)
+        @error "The extract definition submission request was not successful. Please review your extract definition and try again."
+    end
+
+    return res
 end
+
 
 function extract_submit(_api::IPUMSAPI, response_stream::Channel, collection::String, version::String; data_extract_post=nothing, _mediaType=nothing)
     _ctx = _oacinternal_extract_submit(_api, collection, version; data_extract_post=data_extract_post, _mediaType=_mediaType)
