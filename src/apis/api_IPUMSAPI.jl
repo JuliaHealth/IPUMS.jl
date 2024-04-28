@@ -240,10 +240,19 @@ function _oacinternal_extract_list(_api::IPUMSAPI, collection::String, version::
 end
 
 @doc raw"""
+```julia
+extract_list(
+    api::IPUMSAPI, 
+    collection::String, 
+    version::String; 
+    extracts::Int64 = 10, 
+    _mediaType=nothing
+)
+```
 
 Get a list of recent data extracts.
 
-TODO: Finish implementation for page_size and page_number; will probably need a loop.
+> NOTE: This function emits a warning if a particular extract has expired.
 
 ### Arguments
 
@@ -253,17 +262,48 @@ TODO: Finish implementation for page_size and page_number; will probably need a 
 
 ### Keyword Arguments
 
-- `version::String` -- What version of the IPUMS API to use (Default: `"2"`)
+- `version::String` -- What version of the IPUMS API to use (Default: `"2"`).
 
-- `page_number::Int64` -- Specify the page number of results to return.
+- `extracts::Int64` -- Starting from the newest extract, get the most recent desired number of extracts (Default: `"10"`).
 
-- `page_size::Int64` -- Specify how many results to return per page.
+### Returns
 
-Return: Vector{DataExtract}, OpenAPI.Clients.ApiResponse
+- `Vector{DataExtract}` -- a vector of `DataExtract` objects that contains the relevant extract number (`number`), its IPUMS status (`status`), the definition used to generate the associated definition (`extractDefinition`), and links to download the extract's data (`downloadLinks`).
+
+
 """
-function extract_list(_api::IPUMSAPI, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
-    _ctx = _oacinternal_extract_list(_api, collection, version; page_number=page_number, page_size=page_size, _mediaType=_mediaType)
-    return OpenAPI.Clients.exec(_ctx)
+function extract_list(api::IPUMSAPI, collection::String, version::String; extracts::Int64 = 10, _mediaType=nothing)
+
+    #=
+    
+    TODO: There will be an error error if the user is trying to find more than 255 extracts if I recall correctly.
+    Will have to double check the API and fix this later.
+    The best way to handle this in the future will be to utilize the page_number in the msg url directly and continue querying based on how many extracts per page someone may want.
+    This can result in greater control but I think the majority of users will just want to get the most recent extracts in general.
+
+    =#
+    _ctx = _oacinternal_extract_list(api, collection, version; page_number=nothing, page_size=extracts, _mediaType=_mediaType)
+    res, msg = OpenAPI.Clients.exec(_ctx)
+
+    for d in res
+        d.extractDefinition = convert(DataExtractDefinition, d.extractDefinition)
+        if !isempty(d.downloadLinks)
+            urls = Dict(
+                link => d.downloadLinks[link]["url"]
+                for link in ["codebookPreview", "tableData", "gisData"]
+            )
+            urls = DataExtractDownloadLinks(
+                urls["codebookPreview"],
+                urls["tableData"],
+                urls["gisData"]
+            )
+            d.downloadLinks = urls
+        else
+            @warn "Extract $(d.number) has expired and the associated data cannot be downloaded any longer. If you would like to download the data for this extract, please resubmit the extract request associated with this extract again to create a new extract with the same data from this extract."
+        end
+    end
+
+    return res
 end
 
 function extract_list(_api::IPUMSAPI, response_stream::Channel, collection::String, version::String; page_number=nothing, page_size=nothing, _mediaType=nothing)
