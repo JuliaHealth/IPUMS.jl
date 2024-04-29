@@ -73,7 +73,7 @@ function extract_download(
     gis_data = true
 )
     
-    metadata, defn, _ = extract_info(api, extract_number, collection)
+    metadata, defn = extract_info(api, extract_number, collection)
     links = metadata["downloadUrls"]
 
     isempty(links) && return nothing

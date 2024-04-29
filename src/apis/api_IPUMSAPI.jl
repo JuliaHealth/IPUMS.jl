@@ -137,13 +137,10 @@ Get information about a specific data extract.
 
 `defn::IPUMS.DataExtractDefinition` -- The associated data extract definition that was used to generate this extract.
 
-`msg::OpenAPI.Clients.ApiResponse` -- The response message from the IPUMS API.
-
-
 ### Examples
 
 ```julia-repl
-julia> metadata, defn, msg = extract_info(api, 1, "nhgis", "2");
+julia> metadata, defn = extract_info(api, 1, "nhgis", "2");
 
 julia> metadata
 Dict{String, Any} with 13 entries:
@@ -164,11 +161,17 @@ Dict{String, Any} with 13 entries:
 """
 function extract_info(_api::IPUMSAPI, extract_number::Int64, collection::String; version::String = "2")
     _ctx = _oacinternal_extract_info(_api, extract_number, collection, version; _mediaType = nothing)
-    res, msg = OpenAPI.Clients.exec(_ctx)
+    res, _ = OpenAPI.Clients.exec(_ctx)
     defn = res.extractDefinition
     
+    return _extract_info(extract_number, res, defn)
 
-    if isnothing(getfield(res.downloadLinks, 1))
+end
+
+function _extract_info(extract_number, res, defn)
+
+    url_check = getfield(res.downloadLinks, 1) |> unique
+    if isnothing(url_check) || isempty(url_check)
         urls = []
     else
         urls = Dict(
@@ -215,13 +218,8 @@ function extract_info(_api::IPUMSAPI, extract_number::Int64, collection::String;
 
     metadata = Dict(info .=> values)
 
-    return metadata, defn, msg
+    return metadata, defn
 
-end
-
-function extract_info(_api::IPUMSAPI, response_stream::Channel, extract_number::Int64, collection::String; version::String = "2", _mediaType=nothing)
-    _ctx = _oacinternal_extract_info(_api, extract_number, collection, version; _mediaType=_mediaType)
-    return OpenAPI.Clients.exec(_ctx, response_stream)
 end
 
 const _returntypes_extract_list_IPUMSAPI = Dict{Regex,Type}(

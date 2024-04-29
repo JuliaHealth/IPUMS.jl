@@ -1,0 +1,60 @@
+{
+  "extractDefinition": {
+    "datasets": {
+      "2000_SF1b": {
+        "dataTables": [
+          "NP001A"
+        ],
+        "geogLevels": [
+          "blck_grp"
+        ]
+      },
+      "1988_1997_CBPa": {
+        "dataTables": [
+          "NT001"
+        ],
+        "geogLevels": [
+          "county"
+        ],
+        "breakdownValues": [
+          "bs30.si0762",
+          "bs30.si2026"
+        ],
+        "years": [
+          "1988",
+          "1989",
+          "1990",
+          "1991",
+          "1992",
+          "1993",
+          "1994"
+        ]
+      }
+    },
+    "timeSeriesTables": {
+      "A00": {
+        "geogLevels": [
+          "state"
+        ],
+        "years": [
+          "1990"
+        ]
+      }
+    },
+    "dataFormat": "csv_no_header",
+    "timeSeriesTableLayout": "time_by_file_layout",
+    "breakdownAndDataTypeLayout": "single_file",
+    "shapefiles": [
+      "us_state_1790_tl2000"
+    ],
+    "geographicExtents": [
+      "010"
+    ],
+    "description": "example extract request",
+    "version": 2,
+    "collection": "nhgis"
+  },
+  "number": 2,
+  "status": "completed",
+  "downloadLinks": {}
+}
