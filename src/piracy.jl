@@ -24,6 +24,10 @@ end
 
 This is a pirated method that supports the `extract_list` method in returning additional information about `page_size`, `page_number`, and generated URLs.
 
+TODO: Review if we want to replace `extract_list`'s OpenAPI implementation with a manual implementation
+This would encompass dynamically building a URL based on the collection someone wants to use, the page_size,
+the page_number, and execute the query.
+
 """
 function OpenAPI.from_json(a::Vector{IPUMS.DataExtract}, b)
     [IPUMS.DataExtract(
