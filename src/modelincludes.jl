@@ -3,7 +3,7 @@
 
 include("models/model_DataExtract.jl")
 include("models/model_DataExtractDownloadLinks.jl")
-include("models/model_DataExtractExtractDefinition.jl")
+include("models/model_DataExtractDefinition.jl")
 include("models/model_DataExtractPost.jl")
 include("models/model_DataExtractPostResponse.jl")
 include("models/model_DataTableFull.jl")
