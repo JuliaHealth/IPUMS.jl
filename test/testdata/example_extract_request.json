@@ -1,0 +1,41 @@
+{
+  "datasets": {
+    "1988_1997_CBPa": {
+      "years": ["1988", "1989", "1990", "1991", "1992", "1993", "1994"],
+      "breakdownValues": ["bs30.si0762", "bs30.si2026"],
+      "dataTables": [
+        "NT001"
+      ],
+      "geogLevels": [
+        "county"
+      ]
+    },
+    "2000_SF1b": {
+      "dataTables": [
+        "NP001A"
+      ],
+      "geogLevels": [
+        "blck_grp"
+      ]
+    }
+  },
+  "timeSeriesTables": {
+    "A00": {
+      "geogLevels": [
+        "state"
+      ],
+      "years": [
+        "1990"
+      ]
+    }
+  },
+  "shapefiles": [
+    "us_state_1790_tl2000"
+  ],
+  "timeSeriesTableLayout": "time_by_file_layout",
+  "geographicExtents": ["010"],
+  "dataFormat": "csv_no_header",
+  "description": "example extract request",
+  "breakdownAndDataTypeLayout": "single_file"
+}
+
