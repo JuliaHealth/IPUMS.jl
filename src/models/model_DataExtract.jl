@@ -11,13 +11,13 @@
         downloadLinks=nothing,
     )
 
-    - extractDefinition::DataExtractExtractDefinition
+    - extractDefinition::DataExtractDefinition
     - number::Int64
     - status::String
     - downloadLinks::DataExtractDownloadLinks
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
-    extractDefinition = nothing # spec type: Union{ Nothing, DataExtractExtractDefinition }
+    extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }
     number::Union{Nothing, Int64} = nothing
     status::Union{Nothing, String} = nothing
     downloadLinks = nothing # spec type: Union{ Nothing, DataExtractDownloadLinks }
@@ -31,7 +31,7 @@ Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     end
 end # type DataExtract
 
-const _property_types_DataExtract = Dict{Symbol,String}(Symbol("extractDefinition")=>"DataExtractExtractDefinition", Symbol("number")=>"Int64", Symbol("status")=>"String", Symbol("downloadLinks")=>"DataExtractDownloadLinks", )
+const _property_types_DataExtract = Dict{Symbol,String}(Symbol("extractDefinition")=>"DataExtractDefinition", Symbol("number")=>"Int64", Symbol("status")=>"String", Symbol("downloadLinks")=>"DataExtractDownloadLinks", )
 OpenAPI.property_type(::Type{ DataExtract }, name::Symbol) = Union{Nothing,eval(Base.Meta.parse(_property_types_DataExtract[name]))}
 
 function check_required(o::DataExtract)
