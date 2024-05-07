@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**extractDefinition** | [***DataExtractExtractDefinition**](DataExtractExtractDefinition.md) |  | [optional] [default to nothing]
+**extractDefinition** | [***DataExtractDefinition**](DataExtractDefinition.md) |  | [optional] [default to nothing]
 **number** | **Int64** |  | [optional] [default to nothing]
 **status** | **String** |  | [optional] [default to nothing]
 **downloadLinks** | [***DataExtractDownloadLinks**](DataExtractDownloadLinks.md) |  | [optional] [default to nothing]
