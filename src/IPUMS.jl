@@ -7,14 +7,20 @@ module IPUMS
     import OpenAPI.Clients: 
         Client
 
-    using DataFrames
-    using Dates
-    using HTTP
-    using JSON3
-    using OpenAPI
-    using TimeZones
-    using URIs
-    using EzXML
+    using DataFrames: 
+        DataFrames, 
+        DataFrame, 
+        colmetadata!, 
+        metadata, 
+        metadata!
+    using EzXML: 
+        EzXML
+    using HTTP: 
+        HTTP
+    using JSON3: 
+        JSON3
+    using OpenAPI: 
+        OpenAPI
 
     #= 
 
