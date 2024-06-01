@@ -21,7 +21,8 @@ module IPUMS
         JSON3
     using OpenAPI: 
         OpenAPI
-
+    using StaticArrays:
+        @SVector, SVector
     #= 
 
     Scripts used across whole of package
@@ -66,4 +67,5 @@ module IPUMS
     export parse_ddi
     export extract_download
     export load_ipums_extract
+    export load_ipums_extract_v2
 end
