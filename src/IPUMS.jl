@@ -21,8 +21,6 @@ module IPUMS
         JSON3
     using OpenAPI: 
         OpenAPI
-    using StaticArrays:
-        @SVector, SVector
     #= 
 
     Scripts used across whole of package
