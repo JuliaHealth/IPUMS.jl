@@ -30,24 +30,23 @@ function parse_ddi(filepath::String)
 
     # check to make sure the provided file is an xml file.
     _check_that_file_is_xml(filepath)
-    
+
     # check to make sure file exists
     _check_that_file_exists(filepath)
-    
+
     # read xml file and parse extract level metadata
-    
+
     ddifile = EzXML.readxml(filepath)
     ns = EzXML.namespace(ddifile.root)
-    
-    ddi = DDIInfo(filepath=filepath, _xml_doc=ddifile, _ns=ns)
+
+    ddi = DDIInfo(; filepath=filepath, _xml_doc=ddifile, _ns=ns)
 
     _read_ddi_and_parse_extract_level_metadata!(ddi)
-    
+
     # get variables metadata from file
     _get_var_metadata_from_ddi!(ddi)
-    
-    return ddi;
 
+    return ddi
 end;
 
 
@@ -68,15 +67,13 @@ The function returns nothing if the file is an XML file. If the file is not
     an XML file, then the function raises an `ArgumentError`.
 """
 function _check_that_file_is_xml(filepath::String)
-    
-    extension = filepath[findlast(==('.'), filepath)+1:end]
+    extension = filepath[(findlast(==('.'), filepath) + 1):end]
 
     if extension != "xml"
         throw(ArgumentError("The DDI file: $filepath should be an XML file."))
     else
         return true
     end
-
 end
 
 
@@ -97,15 +94,13 @@ The function returns nothing if the file is a DAT file. If the file is not
     a DAT file, then the function raises an `ArgumentError`.
 """
 function _check_that_file_is_dat(filepath::String)
-    
-    extension = filepath[findlast(==('.'), filepath)+1:end]
+    extension = filepath[(findlast(==('.'), filepath) + 1):end]
 
     if extension != "dat"
         throw(ArgumentError("The IPUMS Extract File: $filepath should be an DAT file."))
     else
         return true
     end
-
 end
 
 
@@ -125,13 +120,13 @@ The function returns nothing if the file exists. If the file does not exist,
     then the function raises an `ArgumentError`.
 """
 function _check_that_file_exists(filepath::String)
-
     if !isfile(filepath)
         throw(ArgumentError("The specified file: $filepath does not exist."))
     else
         return true
     end
 end
+
 
 """
     _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
@@ -149,17 +144,17 @@ The function return the original `DDIInfo` object with updated data in the
 attributes.
 """
 function _read_ddi_and_parse_extract_level_metadata!(ddi::DDIInfo)
-
     xmlroot = ddi._xml_doc.root
     ns = ddi._ns
 
     ddi.conditions = EzXML.findall(EXTRACT_CONDITIONS, xmlroot, ["x" => ns])[1].content
     ddi.citation = EzXML.findall(EXTRACT_CITATION, xmlroot, ["x" => ns])[1].content
-    ddi.ipums_project = EzXML.findall(EXTRACT_IPUMS_PROJECT, xmlroot, ["x" => ns])[1].content
+    ddi.ipums_project =
+        EzXML.findall(EXTRACT_IPUMS_PROJECT, xmlroot, ["x" => ns])[1].content
     ddi.extract_notes = EzXML.findall(EXTRACT_NOTES, xmlroot, ["x" => ns])[1].content
-    ddi.extract_date = EzXML.findall(EXTRACT_DATE, xmlroot, ["x" => ns])[1].content
-
+    return ddi.extract_date = EzXML.findall(EXTRACT_DATE, xmlroot, ["x" => ns])[1].content
 end
+
 
 """
     _get_var_metadata_from_ddi!(ddi::DDIInfo)
@@ -180,10 +175,9 @@ attributes.
 
 """
 function _get_var_metadata_from_ddi!(ddi::DDIInfo)
-
     xmlroot = ddi._xml_doc.root
     ns = ddi._ns
-    
+
     name_nodes = EzXML.findall(VAR_NAME_XPATH, xmlroot, ["x" => ns])
     startpos_nodes = EzXML.findall(VAR_STARTPOS_XPATH, xmlroot, ["x" => ns])
     endpos_nodes = EzXML.findall(VAR_ENDPOS_XPATH, xmlroot, ["x" => ns])
@@ -194,7 +188,7 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     vartype_nodes = EzXML.findall(VAR_TYPE_XPATH, xmlroot, ["x" => ns])
     varinterval_nodes = EzXML.findall(VAR_INTERVAL_XPATH, xmlroot, ["x" => ns])
 
-    name_vec = [v.content for v in name_nodes] 
+    name_vec = [v.content for v in name_nodes]
     startpos_vec = parse.(Int64, [v.content for v in startpos_nodes])
     endpos_vec = parse.(Int64, [v.content for v in endpos_nodes])
     width_vec = parse.(Int64, [v.content for v in width_nodes])
@@ -203,7 +197,6 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     dcml_vec = parse.(Int64, [v.content for v in dcml_nodes])
     vartype_vec = [v.content for v in vartype_nodes]
     varinterval_vec = [v.content for v in varinterval_nodes]
-
 
     # This loop iterates over each variable and identifies its datatype. 
     # The notations coded in the original DDI file are somewhat ambiguous,
@@ -225,19 +218,22 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     # the categories and their corresponding numerical indices. 
     # The loop saves this coding information to a vector of key, value pairs.
 
-    varnodes =  EzXML.findall(VAR_NODE_LOCATION, xmlroot, ["x" => ns])   
-    category_vec = Union{Vector{@NamedTuple{val::Int64, labl::String}}, Nothing}[]
+    varnodes = EzXML.findall(VAR_NODE_LOCATION, xmlroot, ["x" => ns])
+    category_vec = Union{Vector{@NamedTuple{val::Int64, labl::String}},Nothing}[]
     for i in eachindex(varnodes)
         n = EzXML.findall("x:catgry", varnodes[i], ["x" => ns])
         if length(n) > 0
             catvalue_nodes = EzXML.findall("x:catgry/x:catValu", varnodes[i], ["x" => ns])
             l_nodes = EzXML.findall("x:catgry/x:labl", varnodes[i], ["x" => ns])
-            
+
             # QUESTION: does this parse statement need a try...catch?
             catvalue_vec = parse.(Int64, [v.content for v in catvalue_nodes])
             l_vec = [v.content for v in l_nodes]
-            push!(category_vec, [(val = catvalue_vec[i], labl = l_vec[i]) for i=1:length(catvalue_vec)])
-        
+            push!(
+                category_vec,
+                [(val=catvalue_vec[i], labl=l_vec[i]) for i in 1:length(catvalue_vec)],
+            )
+
         else
             push!(category_vec, nothing)
         end
@@ -251,44 +247,50 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
 
     regex = r"^(?<val>[[:graph:]]+)(([[:blank:]]+[[:punct:]|=]+[[:blank:]])+)(?<lbl>.+)$"m
     regex2 = r"^(?<val>[[:graph:]]+)(([[:blank:]]+[[:punct:]|=]+[[:blank:]])+)(?<lbl>.+)$"m
-    
-    coder_instr_vec = Union{String, Nothing}[]
+
+    coder_instr_vec = Union{String,Nothing}[]
     for i in eachindex(varnodes)
         n = EzXML.findall("x:codInstr", varnodes[i], ["x" => ns])
         if length(n) > 0
             coder_instr_nodes = EzXML.findall("x:codInstr", varnodes[i], ["x" => ns])
             push!(coder_instr_vec, coder_instr_nodes[1].content)
-            
+
             # These 2 regex statements are taken directly from the IPUMSR R 
             # package, starting on line 911 of the ddi_read.R file. There
             # are 2 different regex statements that might match the unstructured 
             # text, hence we match on both statements. If the first match succeeds
             # we privilege it, otherwise we consider the second match.
-            
-            matches = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex, coder_instr_nodes[1].content)]
-            matches2 = [(val=_string_to_num(m[:val]), labl=m[:lbl]) for m in eachmatch(regex2, coder_instr_nodes[1].content)]
+
+            matches = [
+                (val=_string_to_num(m[:val]), labl=m[:lbl]) for
+                m in eachmatch(regex, coder_instr_nodes[1].content)
+            ]
+            matches2 = [
+                (val=_string_to_num(m[:val]), labl=m[:lbl]) for
+                m in eachmatch(regex2, coder_instr_nodes[1].content)
+            ]
             if (length(matches) > 0) && (!isnothing(category_vec[i]))
                 append!(category_vec[i], matches)
             elseif (length(matches) > 0) && (isnothing(category_vec[i]))
                 category_vec[i] = matches
             elseif (length(matches2) > 0) && (!isnothing(category_vec[i]))
-                append!(category_vec[i], matches2) 
+                append!(category_vec[i], matches2)
             elseif (length(matches2) > 0) && (isnothing(category_vec[i]))
                 category_vec[i] = matches2
             end
-        else 
+        else
             push!(coder_instr_vec, nothing)
         end
     end
 
     # Prepare the metadata summary dataframe, to help display the results.
     # Save that data summary to the DDIInfo object.
-    
-    categorical_vec = [ifelse(isnothing(r), "No" , "Yes") for r in category_vec]
-    summary_df = DataFrame([name_vec, labl_vec, var_dtype_vec, startpos_vec, 
-                            endpos_vec, categorical_vec], 
-                            [:name, :description, :datatype, :start_pos, 
-                            :end_pos, :categorical])
+
+    categorical_vec = [ifelse(isnothing(r), "No", "Yes") for r in category_vec]
+    summary_df = DataFrame(
+        [name_vec, labl_vec, var_dtype_vec, startpos_vec, endpos_vec, categorical_vec],
+        [:name, :description, :datatype, :start_pos, :end_pos, :categorical],
+    )
     ddi.data_summary = summary_df
 
     # This loop creates DDIVariable objects for each variable in the dataset, 
@@ -296,22 +298,23 @@ function _get_var_metadata_from_ddi!(ddi::DDIInfo)
     # when configuring the dataframe column names, datatypes, metadata, etc.
     var_vector = DDIVariable[]
     for i in eachindex(name_nodes)
-        dv = DDIVariable(name=name_vec[i],
-                            position_start=startpos_vec[i],
-                            position_end=endpos_vec[i],
-                            position_width=width_vec[i],
-                            labl=labl_vec[i],
-                            desc=txt_vec[i],
-                            dcml=dcml_vec[i],
-                            var_dtype=var_dtype_vec[i],
-                            var_interval=varinterval_vec[i],
-                            category_labels=category_vec[i],
-                            coder_instructions=coder_instr_vec[i])
+        dv = DDIVariable(;
+            name=name_vec[i],
+            position_start=startpos_vec[i],
+            position_end=endpos_vec[i],
+            position_width=width_vec[i],
+            labl=labl_vec[i],
+            desc=txt_vec[i],
+            dcml=dcml_vec[i],
+            var_dtype=var_dtype_vec[i],
+            var_interval=varinterval_vec[i],
+            category_labels=category_vec[i],
+            coder_instructions=coder_instr_vec[i],
+        )
         push!(var_vector, dv)
     end
 
-    ddi.variable_info = var_vector
-
+    return ddi.variable_info = var_vector
 end
 
 
@@ -336,7 +339,6 @@ function _string_to_num(x::SubString{String})
     n = [v.match for v in eachmatch(r"[0-9]+", x)][1]
     return parse(Int64, n)
 end
-
 
 
 """
@@ -375,7 +377,9 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
 
     # Load ddi column-level metadata to local variables
     name_vec = String[v.name for v in ddi.variable_info]
-    range_vec = UnitRange{Int64}[v.position_start:v.position_end for v in ddi.variable_info]
+    range_vec = UnitRange{Int64}[
+        (v.position_start):(v.position_end) for v in ddi.variable_info
+    ]
     dtype_vec = Vector[v.var_dtype[] for v in ddi.variable_info]
     dcml_vec = Int64[v.dcml for v in ddi.variable_info]
 
@@ -386,29 +390,33 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
     # Save extract level metadata to dataframe. This data applies to the entire
     # file.
 
-    metadata!(df, "conditions", ddi.conditions, style=:note);
-    metadata!(df, "citation", ddi.citation, style=:note);
-    metadata!(df, "ipums_project", ddi.ipums_project, style=:note);
-    metadata!(df, "extract_notes", ddi.extract_notes, style=:note);
-    metadata!(df, "extract_date", ddi.extract_date, style=:note);
+    metadata!(df, "conditions", ddi.conditions; style=:note)
+    metadata!(df, "citation", ddi.citation; style=:note)
+    metadata!(df, "ipums_project", ddi.ipums_project; style=:note)
+    metadata!(df, "extract_notes", ddi.extract_notes; style=:note)
+    metadata!(df, "extract_date", ddi.extract_date; style=:note)
 
     # Setup and write column level metadata to dataframe.
-    fields = Dict("label" => :labl, 
-                    "description" => :desc, 
-                    "data type" => :var_dtype,
-                    "numeric type" => :var_interval,
-                    "coding instructions" => :coder_instructions,
-                    "category labels" => :category_labels)
+    fields = Dict(
+        "label" => :labl,
+        "description" => :desc,
+        "data type" => :var_dtype,
+        "numeric type" => :var_interval,
+        "coding instructions" => :coder_instructions,
+        "category labels" => :category_labels,
+    )
 
     # Iterate over each column in the dataset and save the corresponding metadata 
     # dictionary for that column to the dataframe.
     for i in eachindex(ddi.variable_info)
-        for (k,v) in fields
-            colmetadata!(df, 
-                            ddi.variable_info[i].name, 
-                            k, 
-                            getfield(ddi.variable_info[i], v), 
-                            style=:note);
+        for (k, v) in fields
+            colmetadata!(
+                df,
+                ddi.variable_info[i].name,
+                k,
+                getfield(ddi.variable_info[i], v);
+                style=:note,
+            )
         end
     end
 
@@ -421,9 +429,11 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
     arr_cache = Array{Number}(undef, length(name_vec))
     arr_cache .= 0
 
-    _df_loader_inplace_svector!(df, extract_filepath, arr_cache, range_vec, arr_dtype, arr_dcml)
-    
-    return df;
+    _df_loader_inplace_svector!(
+        df, extract_filepath, arr_cache, range_vec, arr_dtype, arr_dcml
+    )
+
+    return df
 end;
 
 
@@ -451,15 +461,13 @@ end;
     provided dataframe in-place.
 
 """
-function _df_loader_inplace_svector!(df, extract_filepath, array_cache, range_vec, p_dtype, p_dcml)
+function _df_loader_inplace_svector!(
+    df, extract_filepath, array_cache, range_vec, p_dtype, p_dcml
+)
     for line in eachline(extract_filepath)
         lvec = SubString{String}[strip(line[r]) for r in range_vec]
-        map!((x, p, d) -> _parse_data(x, p, d),
-                array_cache, 
-                lvec, 
-                p_dtype, 
-                p_dcml)
-    push!(df, array_cache)
+        map!((x, p, d) -> _parse_data(x, p, d), array_cache, lvec, p_dtype, p_dcml)
+        push!(df, array_cache)
     end
 end
 
@@ -489,8 +497,10 @@ end
     This function returns the parsed float number that corresponds to the input string.
 
 """
-function _parse_data(strnum::SubString{String}, dtype::Type{T}, decimals::Int64) where {T <: AbstractFloat}
-        @. parse(dtype, chop(strnum, tail=decimals) * "." * last(strnum, decimals))
+function _parse_data(
+    strnum::SubString{String}, dtype::Type{T}, decimals::Int64
+) where {T<:AbstractFloat}
+    @. parse(dtype, chop(strnum; tail=decimals) * "." * last(strnum, decimals))
 end
 
 
@@ -521,7 +531,9 @@ end
     This function returns the parsed integer value that corresponds to the input string.
 
 """
-function _parse_data(strnum::SubString{String}, dtype::Type{T}, decimals::Int64) where {T <: Integer}
-        @. parse(dtype, strnum)
+function _parse_data(
+    strnum::SubString{String}, dtype::Type{T}, decimals::Int64
+) where {T<:Integer}
+    @. parse(dtype, strnum)
 end
 
