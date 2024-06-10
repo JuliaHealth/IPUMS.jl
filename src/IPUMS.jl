@@ -67,5 +67,5 @@ module IPUMS
     export parse_ddi
     export extract_download
     export load_ipums_extract
-    export load_ipums_extract_v2
+
 end
