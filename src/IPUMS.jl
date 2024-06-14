@@ -21,7 +21,6 @@ module IPUMS
         JSON3
     using OpenAPI: 
         OpenAPI
-
     #= 
 
     Scripts used across whole of package
@@ -66,4 +65,5 @@ module IPUMS
     export parse_ddi
     export extract_download
     export load_ipums_extract
+
 end
