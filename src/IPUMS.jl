@@ -6,7 +6,8 @@ module IPUMS
         download as dl
     import OpenAPI.Clients: 
         Client
-
+    import Shapefile:
+        Table
     using DataFrames: 
         DataFrames, 
         DataFrame, 
@@ -54,7 +55,7 @@ module IPUMS
     =#
 
     include("parsers/ddi_parser.jl")
-
+    include("parsers/nhgis_parser.jl")
     #=
     
     Exports
