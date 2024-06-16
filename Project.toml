@@ -10,6 +10,7 @@ EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 OpenAPI = "d5e62ea6-ddf3-4d43-8e4c-ad5e6c8bfd7d"
+Shapefile = "8e980c4a-a4fe-5da2-b3a7-4b4b0353a2f4"
 
 [compat]
 DataFrames = "1.4"
