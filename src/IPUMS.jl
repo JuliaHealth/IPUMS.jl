@@ -6,8 +6,8 @@ module IPUMS
         download as dl
     import OpenAPI.Clients: 
         Client
-    import Shapefile:
-        Table
+    import GeoDataFrames:
+        read
     using DataFrames: 
         DataFrames, 
         DataFrame, 
@@ -66,5 +66,6 @@ module IPUMS
     export parse_ddi
     export extract_download
     export load_ipums_extract
+    export load_ipums_nhgis
 
 end
