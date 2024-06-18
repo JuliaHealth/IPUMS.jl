@@ -29,7 +29,7 @@ julia> gdf = load_ipums_nhgis("test/testdata/nhgis0001_shapefile/US_state_1790.s
 """
 function load_ipums_nhgis(filepath::String)
     
-    gdf = read(fname)
+    gdf = read(filepath)
 
     return gdf
 
