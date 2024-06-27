@@ -13,7 +13,9 @@
         datasetName=nothing,
         nVariables=nothing,
     )
+This function creates a table giving the nhgisCode, the description of the date, their universe and the dataset name
 
+# Attributes
     - name::String
     - nhgisCode::String
     - description::String
@@ -21,6 +23,8 @@
     - sequence::Int64
     - datasetName::String
     - nVariables::Int64
+
+# Return
 """
 Base.@kwdef mutable struct DataTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

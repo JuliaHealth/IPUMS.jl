@@ -10,11 +10,15 @@
         group=nothing,
         sequence=nothing,
     )
+The fuction gives a dataset given a group, a sequence,an input and a description 
 
+# Arguments
     - name::String
     - description::String
     - group::String
     - sequence::Int64
+# Return 
+The function returns a new dataset
 """
 Base.@kwdef mutable struct DatasetSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

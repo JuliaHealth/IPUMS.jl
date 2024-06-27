@@ -8,9 +8,12 @@
         name=nothing,
         nhgisCode=nothing,
     )
-
+This function gives a table with the name of the data and their nhgiscode
+# Attributes
     - name::String
     - nhgisCode::String
+Retrurn
+
 """
 Base.@kwdef mutable struct DataTableFullVariablesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

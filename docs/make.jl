@@ -1,5 +1,7 @@
 using IPUMS
 using Documenter
+using Revise
+Revise.revise()
 
 DocMeta.setdocmeta!(IPUMS, :DocTestSetup, :(using IPUMS); recursive=true)
 
@@ -17,12 +19,12 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Workflows" => "workflow.md",
+        "How to " => "howto.md",
         "Tutorials" => "tutorials.md",
-        "HowTo" => "howto.md",
-        "Workflow" => "workflow.md",
         "Examples" => "examples.md",
         "Mission" => "mission.md",
-        "Contributing" => "contributing.md"
+        "References" => "references.md",
     ],
 )
 

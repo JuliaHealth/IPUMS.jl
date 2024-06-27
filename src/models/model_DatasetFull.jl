@@ -14,6 +14,9 @@
         hasMultipleDataTypes=nothing,
         breakdowns=nothing,
     )
+This function creates a dataset giving the description and the group of the data, the sequence, the geographical information and if it has multiple data types and breakdowns.
+
+# Arguments
 
     - name::String
     - description::String
@@ -23,6 +26,8 @@
     - geogLevels::Vector{DatasetFullGeogLevelsInner}
     - hasMultipleDataTypes::Bool
     - breakdowns::DatasetFullBreakdowns
+# Return 
+The function returns a new table 
 """
 Base.@kwdef mutable struct DatasetFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

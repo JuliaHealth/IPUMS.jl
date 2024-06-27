@@ -9,10 +9,15 @@
         tableData=nothing,
         gisData=nothing,
     )
+This function extracts data giving the codebook prview, the table data and gis data
 
+# Arguments
     - codebookPreview::String
     - tableData::String
     - gisData::String
+
+# Return
+The function returns new extracted data
 """
 Base.@kwdef mutable struct DataExtractDownloadLinks <: OpenAPI.APIModel
     codebookPreview::Union{Nothing, String} = nothing

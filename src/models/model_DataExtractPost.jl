@@ -14,7 +14,9 @@
         geographicExtents=nothing,
         description=nothing,
     )
+This function extracts data giving the time series table,the format of the data, the table layout, the shape of the file, its geographic extent and the description 
 
+# Arguments
     - datasets::Dict{String, Dataset}
     - timeSeriesTables::Dict{String, TimeSeriesTable}
     - dataFormat::String
@@ -23,6 +25,8 @@
     - shapefiles::Vector{String}
     - geographicExtents::Vector{String}
     - description::String
+# Return 
+
 """
 Base.@kwdef mutable struct DataExtractPost <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }

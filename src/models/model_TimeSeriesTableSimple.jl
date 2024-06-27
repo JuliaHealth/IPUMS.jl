@@ -13,13 +13,34 @@
         geogLevels=nothing,
     )
 
-    - name::String
-    - description::String
-    - geographicIntegration::String
-    - sequence::Float32
-    - timeSeries::Vector{String}
-    - geogLevels::Vector{String}
+    TODO: Add description
+    This fuction 
+
+    # Arguments:
+
+    TODO: Label arguments
+
+    - `name::String`
+    - `description::String`
+    - `geographicIntegration::String`
+    - `sequence::Float32`
+    - `timeSeries::Vector{String}`
+    - `geogLevels::Vector{String}`
+
+    # Return
+
+    TODO: State what they return
+    
+    # Example
+
+    TODO: Provide an example
+
+    This function takes as input the name,description, geographic integration, the time series and the geographical level of the data, 
+        and returns a table
 """
+
+
+
 Base.@kwdef mutable struct TimeSeriesTableSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
     description::Union{Nothing, String} = nothing

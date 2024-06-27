@@ -12,13 +12,16 @@
         basis=nothing,
         sequence=nothing,
     )
-
+This function creates a new file 
+# Aut
     - name::String
     - year::String
     - geographicLevel::String
     - extent::String
     - basis::String
     - sequence::Int64
+# Return 
+
 """
 Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

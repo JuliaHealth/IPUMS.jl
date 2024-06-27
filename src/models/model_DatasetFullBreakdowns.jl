@@ -12,13 +12,18 @@
         years=nothing,
         geographicInstances=nothing,
     )
+This function creates a dataset giving the description and the type of data, the sequence, the geographical ans year information and breakdowns.
 
+# Arguments
     - name::String
     - type::String
     - description::String
     - breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}
     - years::Vector{String}
     - geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}
+
+# Return
+The function returns a new dataset
 """
 Base.@kwdef mutable struct DatasetFullBreakdowns <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

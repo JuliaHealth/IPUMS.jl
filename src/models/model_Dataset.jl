@@ -10,11 +10,15 @@
         breakdownValues=nothing,
         years=nothing,
     )
+This function creates a new data table giving geographical levels, breakdown values and years
 
+# Arguments
     - dataTables::Vector{String}
     - geogLevels::Vector{String}
     - breakdownValues::Vector{String}
     - years::Vector{String}
+
+
 """
 Base.@kwdef mutable struct Dataset <: OpenAPI.APIModel
     dataTables::Union{Nothing, Vector{String}} = nothing

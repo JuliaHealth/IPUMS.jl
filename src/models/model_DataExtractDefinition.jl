@@ -16,6 +16,9 @@
         version=nothing,
         collection=nothing,
     )
+This function extracts data giving the data format, the time table, the breakdown and type of layout, the shape of the files, their geogrphic information, a description, the version and collection of data
+
+# Arguments
 
     - datasets::Dict{String, Dataset}
     - timeSeriesTables::Dict{String, TimeSeriesTable}
@@ -27,6 +30,8 @@
     - description::String
     - version::Int64
     - collection::String
+# Return
+The function return a new dataset
 """
 Base.@kwdef mutable struct DataExtractDefinition <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }

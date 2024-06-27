@@ -10,7 +10,7 @@
         description=nothing,
         sequence=nothing,
     )
-
+This function returns a table with name of data, description, sequence and nhgisCode 
     - name::String
     - nhgisCode::String
     - description::String

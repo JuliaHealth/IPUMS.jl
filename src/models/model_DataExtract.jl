@@ -10,11 +10,16 @@
         status=nothing,
         downloadLinks=nothing,
     )
+This function extracts data giving the status and the download download links 
+# Arguments
 
-    - extractDefinition::DataExtractDefinition
-    - number::Int64
-    - status::String
-    - downloadLinks::DataExtractDownloadLinks
+    - `extractDefinition::DataExtractDefinition`
+    - `number::Int64`
+    - `status::String`
+    - `downloadLinks::DataExtractDownloadLinks`
+
+# Return
+It returns the definition and the data with their download status and the link
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

@@ -9,10 +9,14 @@
         description=nothing,
         hasGeogExtentSelection=nothing,
     )
+This function gives the geographical information about data
 
+# Arguments
     - name::String
     - description::String
     - hasGeogExtentSelection::Bool
+# Return 
+The function return a new dataset
 """
 Base.@kwdef mutable struct DatasetFullGeogLevelsInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

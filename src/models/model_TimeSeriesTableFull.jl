@@ -13,12 +13,19 @@
         geogLevels=nothing,
     )
 
-    - name::String
-    - description::String
-    - geographicIntegration::String
-    - sequence::Float32
-    - timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}
-    - geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}
+This function creates a table with fixed name,description, geographical and timeline information
+
+# Argument
+    - `name::String`
+    - `description::String`
+    - `geographicIntegration::String`
+    - `sequence::Float32`
+    - `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`
+    - `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`
+# Return
+The return is a new table with fixed name,description,time and geographical information of the data
+
+# Example
 """
 Base.@kwdef mutable struct TimeSeriesTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

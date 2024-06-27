@@ -8,9 +8,16 @@
         geogLevels=nothing,
         years=nothing,
     )
+This function creates a table with geographical and time information
 
-    - geogLevels::Vector{String}
-    - years::Vector{String}
+# Arguments
+    - `geogLevels::Vector{String}`
+    - `years::Vector{String}`
+
+# Return
+The return of the function is a table 
+
+# Example
 """
 Base.@kwdef mutable struct TimeSeriesTable <: OpenAPI.APIModel
     geogLevels::Union{Nothing, Vector{String}} = nothing

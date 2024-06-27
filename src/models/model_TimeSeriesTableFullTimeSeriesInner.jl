@@ -10,9 +10,18 @@
         sequence=nothing,
     )
 
-    - name::String
-    - description::String
-    - sequence::Int64
+  
+This function takes as input the name,the description and the sequence of data e and return a new table
+
+# Argument
+
+    - `name::String`
+    - `description::String`
+    - `sequence::Int64`
+# Return
+
+The return is a new table with fixed name and description
+
 """
 Base.@kwdef mutable struct TimeSeriesTableFullTimeSeriesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
