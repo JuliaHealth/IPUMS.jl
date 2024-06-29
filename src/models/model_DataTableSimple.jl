@@ -2,19 +2,24 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataTableSimple
-
-    DataTableSimple(;
-        name=nothing,
-        nhgisCode=nothing,
-        description=nothing,
-        sequence=nothing,
-    )
+"""
+```
+DataTableSimple(;
+    name=nothing,
+    nhgisCode=nothing,
+    description=nothing,
+    sequence=nothing,
+)
+```       
 This function returns a table with name of data, description, sequence and nhgisCode 
-    - name::String
-    - nhgisCode::String
-    - description::String
-    - sequence::Int64
+- `name::String`-The unique identifier for the data table within its dataset.
+- `nhgisCode::String`-The code for this data table that will appear in extract.
+- `description::String`-A short description of the data table.
+- `sequence::Int64`-The order for which this data table will appear in the metadata API and extracts.
+
+# Example
+# Reference
+To find out more about the DataTable type visit the [Reference page of IPUMS API DataTable](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

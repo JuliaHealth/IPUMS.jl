@@ -2,24 +2,33 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract
+"""
 
-    DataExtract(;
-        extractDefinition=nothing,
-        number=nothing,
-        status=nothing,
-        downloadLinks=nothing,
-    )
-This function extracts data giving the status and the download download links 
+```
+DataExtract(;
+    extractDefinition=nothing,
+    number=nothing,
+    status=nothing,
+    downloadLinks=nothing,
+)
+```
+This function  extracts data given the 
 # Arguments
 
-    - `extractDefinition::DataExtractDefinition`
-    - `number::Int64`
-    - `status::String`
-    - `downloadLinks::DataExtractDownloadLinks`
+- `extractDefinition::DataExtractDefinition`- Definition of the extracted data
+- `number::Int64`-
+- `status::String`- Status of the data extraction
+- `downloadLinks::DataExtractDownloadLinks`- Download link for the extracted data
 
 # Return
 It returns the definition and the data with their download status and the link
+
+# Example
+ OrderedMap { "extractDefinition": OrderedMap { "datasets": OrderedMap { "1790_cPop": OrderedMap { "dataTables": List [ "NT1" ], "geogLevels": List [ "place_00498" ] }, "1800_cPop": OrderedMap { "dataTables": List [ "NT3" ], "geogLevels": List [ "state" ] } }, "timeSeriesTables": OrderedMap { "A00": OrderedMap { "geogLevels": List [ "state" ] } }, "timeSeriesTableLayout": "time_by_row_layout", "dataFormat": "csv_no_header", "description": "abc", "version": 2, "collection": "nhgis" },
+  "number": 2, "status": "complete", "downloadLinks": OrderedMap { "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip", "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+  "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip" } }
+# Reference
+To find out more about the DataExtract type visit the [Reference page of IPUMS API DataExtract](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

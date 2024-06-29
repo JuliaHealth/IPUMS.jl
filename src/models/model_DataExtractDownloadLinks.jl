@@ -2,22 +2,28 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract_downloadLinks
-
-    DataExtractDownloadLinks(;
-        codebookPreview=nothing,
-        tableData=nothing,
-        gisData=nothing,
-    )
+"""
+```
+DataExtractDownloadLinks(;
+    codebookPreview=nothing,
+    tableData=nothing,
+    gisData=nothing,
+)
+```
 This function extracts data giving the codebook prview, the table data and gis data
 
 # Arguments
-    - codebookPreview::String
-    - tableData::String
-    - gisData::String
+- `codebookPreview::String`-
+-`tableData::String`- 
+- `gisData::String`-
 
 # Return
 The function returns new extracted data
+    
+# Example
+OrderedMap { "codebookPreview": "", "tableData": "", "gisData": "state"}
+# Reference
+https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractDownloadLinks <: OpenAPI.APIModel
     codebookPreview::Union{Nothing, String} = nothing

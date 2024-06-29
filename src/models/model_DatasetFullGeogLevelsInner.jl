@@ -2,21 +2,27 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_geogLevels_inner
-
-    DatasetFullGeogLevelsInner(;
-        name=nothing,
-        description=nothing,
-        hasGeogExtentSelection=nothing,
-    )
+"""
+```
+DatasetFullGeogLevelsInner(;
+    name=nothing,
+    description=nothing,
+    hasGeogExtentSelection=nothing,
+)
+```
 This function gives the geographical information about data
 
 # Arguments
-    - name::String
-    - description::String
-    - hasGeogExtentSelection::Bool
+- `name::String`-The dataset identifier 
+- `description::String`- A short description of the dataset
+- `hasGeogExtentSelection::Bool`- boolean indicating if the dataset has geogrphical extent
 # Return 
 The function return a new dataset
+    
+# Example
+ OrderedMap { "name": "1790_cPop", "description": "1790 Census: Population Data [US, States & Counties]", "hasGeogExtentSelection": "1"}
+# Reference
+To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetFullGeogLevelsInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

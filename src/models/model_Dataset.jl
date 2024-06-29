@@ -2,23 +2,27 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""Dataset
-
-    Dataset(;
-        dataTables=nothing,
-        geogLevels=nothing,
-        breakdownValues=nothing,
-        years=nothing,
-    )
-This function creates a new data table giving geographical levels, breakdown values and years
+"""
+```
+Dataset(;
+    dataTables=nothing,
+    geogLevels=nothing,
+    breakdownValues=nothing,
+    years=nothing,
+)
+```
+This function creates a new data table given geographical levels, breakdown values and years
 
 # Arguments
-    - dataTables::Vector{String}
-    - geogLevels::Vector{String}
-    - breakdownValues::Vector{String}
-    - years::Vector{String}
+- `dataTables::Vector{String}`- A list of available data table for this site
+- `geogLevels::Vector{String}`- A list of geographic levels available for the dataset.
+- `breakdownValues::Vector{String}`- Breakdown values available for this dataset
+- `years::Vector{String}`- List of the years if data of multiple years are present
 
-
+# Example
+rderedMap { "dataTables": "", "geogLevels": "", "breakdownValues": "", "years": "" }]
+# Reference
+To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct Dataset <: OpenAPI.APIModel
     dataTables::Union{Nothing, Vector{String}} = nothing

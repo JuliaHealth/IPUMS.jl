@@ -2,41 +2,41 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTableSimple
+"""
+```
+TimeSeriesTableSimple(;
+    name=nothing,
+    description=nothing,
+    geographicIntegration=nothing,
+    sequence=nothing,
+    timeSeries=nothing,
+    geogLevels=nothing,
+)
+```
+This fuction generstes s 
 
-    TimeSeriesTableSimple(;
-        name=nothing,
-        description=nothing,
-        geographicIntegration=nothing,
-        sequence=nothing,
-        timeSeries=nothing,
-        geogLevels=nothing,
-    )
+# Arguments:
 
-    TODO: Add description
-    This fuction 
+- `name::String`- The unique identifier of the time series table.
+- `description::String`- A short description of the time series table.
+- `geographicIntegration::String`-  How the time series tables align geographic units across time
+- `sequence::Float32`- The order in which the time series table will appear in the metadata API and extracts.
+- `timeSeries::Vector{String}`-  A list of time series for this time series table.
+- `geogLevels::Vector{String}`- A list of geographic levels available for this time series table.
 
-    # Arguments:
+# Return
+This function takes as input the name,description, geographic integration, the time series and the geographical level of the data, 
+    and returns a table
 
-    TODO: Label arguments
+# Example
+OrderedMap { "name": "A00", "description": "Total Population", "geographicIntegration": "Nominal", "sequence": 0.01,
+"years": List [ "1790", "1800", "1810", "1820", "1830", "1840", "1850", "1860", "1870", "1880", "1890", "1900", "1910", "1920", "1930", "1940", "1950", "1960", "1970", "1980", "1990", "2000", "2010" ],
+"geogLevels": List [ "state", "county" ] }
 
-    - `name::String`
-    - `description::String`
-    - `geographicIntegration::String`
-    - `sequence::Float32`
-    - `timeSeries::Vector{String}`
-    - `geogLevels::Vector{String}`
 
-    # Return
 
-    TODO: State what they return
-    
-    # Example
-
-    TODO: Provide an example
-
-    This function takes as input the name,description, geographic integration, the time series and the geographical level of the data, 
-        and returns a table
+# Reference 
+To find out more about the Shapefile type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 
 

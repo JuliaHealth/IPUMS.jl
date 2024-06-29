@@ -2,29 +2,37 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataTableFull
-
-    DataTableFull(;
-        name=nothing,
-        nhgisCode=nothing,
-        description=nothing,
-        universe=nothing,
-        sequence=nothing,
-        datasetName=nothing,
-        nVariables=nothing,
-    )
+"""
+```
+DataTableFull(;
+    name=nothing,
+    nhgisCode=nothing,
+    description=nothing,
+    universe=nothing,
+    sequence=nothing,
+    datasetName=nothing,
+    nVariables=nothing,
+)
+```
 This function creates a table giving the nhgisCode, the description of the date, their universe and the dataset name
 
 # Attributes
-    - name::String
-    - nhgisCode::String
-    - description::String
-    - universe::String
-    - sequence::Int64
-    - datasetName::String
-    - nVariables::Int64
+- `name::String`The unique identifier for the data table within its dataset.
+- `nhgisCode::String`-The code for this data table that will appear in extract.
+- `description::String`- A short description of the data table.
+- `universe::String`-The statistical population (set of entities) measured by this data table (e.g., persons, families, occupied housing units, etc.).
+- `sequence::Int64`- The order for which this data table will appear in the metadata API and extracts.
+- `datasetName::String`- The name of the dataset from which the data are from
+- `nVariables::Int64`-A list of variables within the table.
 
 # Return
+
+# Example
+
+OrderedMap { "name": "NT1", "description": "Total Population", "universe": "Persons", "nhgisCode": "AAA",
+"sequence": 1, "datasetName": "1790_cPop", "variables": List [ OrderedMap { "description": "Total", "nhgisCode": "AAA001" } ] }
+# Reference
+To find out more about the DataTable type visit the [Reference page of IPUMS API DataTable](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

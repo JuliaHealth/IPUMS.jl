@@ -2,22 +2,26 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTable
-
-    TimeSeriesTable(;
-        geogLevels=nothing,
-        years=nothing,
-    )
-This function creates a table with geographical and time information
+"""
+```
+TimeSeriesTable(;
+    geogLevels=nothing,
+    years=nothing,
+)
+```
+This function creates a table with geographical and time information.
 
 # Arguments
-    - `geogLevels::Vector{String}`
-    - `years::Vector{String}`
+- `geogLevels::Vector{String}`- The geographical level of the Time Series Table
+- `years::Vector{String}`-A list of years for this time series table.
 
 # Return
-The return of the function is a table 
+The function returns a time series table giving the geographical level and the years to which the data are referring to. 
 
 # Example
+ OrderedMap { "geogLevels": "", "years": "1790"}
+# Reference
+To find out more about the Shapefile type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 Base.@kwdef mutable struct TimeSeriesTable <: OpenAPI.APIModel
     geogLevels::Union{Nothing, Vector{String}} = nothing

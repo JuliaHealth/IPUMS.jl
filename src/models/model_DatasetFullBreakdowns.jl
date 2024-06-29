@@ -2,28 +2,35 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_breakdowns
-
-    DatasetFullBreakdowns(;
-        name=nothing,
-        type=nothing,
-        description=nothing,
-        breakdownValues=nothing,
-        years=nothing,
-        geographicInstances=nothing,
-    )
-This function creates a dataset giving the description and the type of data, the sequence, the geographical ans year information and breakdowns.
+"""
+```
+DatasetFullBreakdowns(;
+    name=nothing,
+    type=nothing,
+    description=nothing,
+    breakdownValues=nothing,
+    years=nothing,
+    geographicInstances=nothing,
+)
+```
+This function ceates a dataset giving the description and the type of data, the sequence, the geographical ans year information and breakdowns.
 
 # Arguments
-    - name::String
-    - type::String
-    - description::String
-    - breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}
-    - years::Vector{String}
-    - geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}
+- `name::String`-The dataset identifier 
+- `type::String`- The type of dat in the dataset
+- `description::String`- a short description of the dataset
+- `breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}`- List of breakdown available for the dataset
+- `years::Vector{String}`-List of the years if data of multiple years are present
+- `geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}`- List of geographical extent
 
 # Return
 The function returns a new dataset
+    
+# Example
+OrderedMap { "name": "2010_SF1a", "type": "", "description": "SF 1a - P & H Tables [Blocks & Larger Areas]","breakdownValues": List [ OrderedMap { "name": "bs32.ge00", "description": "Total area" } ],  
+  "years": "","geographicInstances": List [ OrderedMap { "name": "010", "description": "Alabama" } ]}
+# Reference
+To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetFullBreakdowns <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

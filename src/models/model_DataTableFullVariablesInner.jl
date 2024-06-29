@@ -2,18 +2,23 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataTableFull_variables_inner
-
-    DataTableFullVariablesInner(;
-        name=nothing,
-        nhgisCode=nothing,
-    )
+"""
+```
+DataTableFullVariablesInner(;
+    name=nothing,
+    nhgisCode=nothing,
+)
+```
 This function gives a table with the name of the data and their nhgiscode
 # Attributes
-    - name::String
-    - nhgisCode::String
-Retrurn
+-` name::String`-The unique identifier for the data table within its dataset.
+- `nhgisCode::String`-The code for this data table that will appear in extract.
+#Return
 
+# Example
+OrderedMap { "name": "NT1",  "nhgisCode": "AAA" }
+# Reference
+To find out more about the DataTable type visit the [Reference page of IPUMS API DataTable](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableFullVariablesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

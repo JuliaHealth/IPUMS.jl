@@ -2,30 +2,37 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTableFull
-
-    TimeSeriesTableFull(;
-        name=nothing,
-        description=nothing,
-        geographicIntegration=nothing,
-        sequence=nothing,
-        timeSeries=nothing,
-        geogLevels=nothing,
-    )
-
-This function creates a table with fixed name,description, geographical and timeline information
+"""
+```
+TimeSeriesTableFull(;
+    name=nothing,
+    description=nothing,
+    geographicIntegration=nothing,
+    sequence=nothing,
+    timeSeries=nothing,
+    geogLevels=nothing,
+)
+```
+This function creates a table with fixed name,description, geographical and timeline information.
 
 # Argument
-    - `name::String`
-    - `description::String`
-    - `geographicIntegration::String`
-    - `sequence::Float32`
-    - `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`
-    - `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`
+- `name::String`- The unique identifier of the time series table.
+- `description::String`- A short description of the time series table.
+- `geographicIntegration::String`- How the time series tables align geographic units across time.
+- `sequence::Float32`- The order of appearence of the dataset in the metadata API and extract 
+- `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`- A list of time series for this time series table.
+- `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`-  A list of geographic levels available for this time series table.
+
 # Return
 The return is a new table with fixed name,description,time and geographical information of the data
 
 # Example
+example: OrderedMap { "name": "A00", "description": "Total Population", "geographicIntegration": "Nominal", 
+"sequence": 0.01, "timeSeries": List [ OrderedMap { "name": "AA", "description": "Persons: Total", "sequence": 1 } ],
+"geogLevels": List [ OrderedMap { "name": "state", "description": "State", "sequence": 4 }, OrderedMap { "name": "county", "description": "State--County", "sequence": 25 } ] }
+
+# Reference
+To find out more about the Time Series Table type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 Base.@kwdef mutable struct TimeSeriesTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

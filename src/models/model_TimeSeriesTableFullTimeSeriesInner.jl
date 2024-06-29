@@ -2,26 +2,31 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTableFull_timeSeries_inner
-
-    TimeSeriesTableFullTimeSeriesInner(;
-        name=nothing,
-        description=nothing,
-        sequence=nothing,
-    )
-
+"""
+```
+TimeSeriesTableFullTimeSeriesInner(;
+    name=nothing,
+    description=nothing,
+    sequence=nothing,
+)
+```
   
 This function takes as input the name,the description and the sequence of data e and return a new table
 
 # Argument
 
-    - `name::String`
-    - `description::String`
-    - `sequence::Int64`
+- `name::String`- The unique identifier of the time series table.
+- `description::String`- A short description of the time series table.
+- `sequence::Int64`- The order in which the time series table will appear in the metadata API and extracts.
 # Return
 
-The return is a new table with fixed name and description
+The return is a new Time Series Table with fixed name and description.
 
+# Example
+ OrderedMap { "name": "", "description": "", "sequence": 101 }
+
+# Reference
+To find out more about the Shapefile type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 Base.@kwdef mutable struct TimeSeriesTableFullTimeSeriesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

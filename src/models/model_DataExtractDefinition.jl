@@ -2,36 +2,42 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract_extractDefinition
-
-    DataExtractDefinition(;
-        datasets=nothing,
-        timeSeriesTables=nothing,
-        dataFormat=nothing,
-        timeSeriesTableLayout=nothing,
-        breakdownAndDataTypeLayout=nothing,
-        shapefiles=nothing,
-        geographicExtents=nothing,
-        description=nothing,
-        version=nothing,
-        collection=nothing,
-    )
+"""
+```
+DataExtractDefinition(;
+    datasets=nothing,
+    timeSeriesTables=nothing,
+    dataFormat=nothing,
+    timeSeriesTableLayout=nothing,
+    breakdownAndDataTypeLayout=nothing,
+    shapefiles=nothing,
+    geographicExtents=nothing,
+    description=nothing,
+    version=nothing,
+    collection=nothing,
+)
+```
 This function extracts data giving the data format, the time table, the breakdown and type of layout, the shape of the files, their geogrphic information, a description, the version and collection of data
 
 # Arguments
 
-    - datasets::Dict{String, Dataset}
-    - timeSeriesTables::Dict{String, TimeSeriesTable}
-    - dataFormat::String
-    - timeSeriesTableLayout::String
-    - breakdownAndDataTypeLayout::String
-    - shapefiles::Vector{String}
-    - geographicExtents::Vector{String}
-    - description::String
-    - version::Int64
-    - collection::String
+-`datasets::Dict{String, Dataset}`- A dictionary indicating the dataset to select
+-`timeSeriesTables::Dict{String, TimeSeriesTable}`- An object where each key is the name of the requested time series table and each value is another object describing your selections for that time series table.
+-`dataFormat::String`- The requested format of your data. 
+-`timeSeriesTableLayout::String`- The layout of your time series table data. 
+-`breakdownAndDataTypeLayout::String`-The layout of your dataset data when multiple data types or breakdown combos are present.
+-`shapefiles::Vector{String}`- A list of selected shapefiles.
+-`geographicExtents::Vector{String}`-A list of geographic_instances to use as extents for all datasets on this request.
+-`description::String`- A short description of your extract.
+-`version::Int64`-
+-`collection::String`-
 # Return
 The function return a new dataset
+    
+# Example
+
+# Reference
+https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
 """
 Base.@kwdef mutable struct DataExtractDefinition <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }

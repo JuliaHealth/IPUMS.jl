@@ -2,32 +2,39 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull
-
-    DatasetFull(;
-        name=nothing,
-        description=nothing,
-        group=nothing,
-        sequence=nothing,
-        dataTables=nothing,
-        geogLevels=nothing,
-        hasMultipleDataTypes=nothing,
-        breakdowns=nothing,
-    )
+"""
+```
+DatasetFull(;
+    name=nothing,
+    description=nothing,
+    group=nothing,
+    sequence=nothing,
+    dataTables=nothing,
+    geogLevels=nothing,
+    hasMultipleDataTypes=nothing,
+    breakdowns=nothing,
+)
+```
 This function creates a dataset giving the description and the group of the data, the sequence, the geographical information and if it has multiple data types and breakdowns.
 
 # Arguments
 
-    - name::String
-    - description::String
-    - group::String
-    - sequence::Int64
-    - dataTables::Vector{DataTableSimple}
-    - geogLevels::Vector{DatasetFullGeogLevelsInner}
-    - hasMultipleDataTypes::Bool
-    - breakdowns::DatasetFullBreakdowns
+- `name::String`- The dataset identifier 
+- `description::String`- a short description of the dataset
+- `group::String`- the group of dataset to which it belongs
+- `sequence::Int64`- the order of appearence of the dataset in the metadata API and extract
+- `dataTables::Vector{DataTableSimple}`- The list of the available datatable for the dataset
+- `geogLevels::Vector{DatasetFullGeogLevelsInner}`- A list of the geographic levels available for the dataset
+- `hasMultipleDataTypes::Bool`-A boolean indicating if multiple data types exist for the dataset
+- `breakdowns::DatasetFullBreakdowns`- List of breakdown available for the dataset
 # Return 
 The function returns a new table 
+    
+# Example
+ OrderedMap { "name": "2010_SF1a", "group": "2010 Census", "description": "SF 1a - P & H Tables [Blocks & Larger Areas]", "sequence": 4802, "hasMultipleDataTypes": false, "dataTables": List [ OrderedMap { "name": "P1", "nhgisCode": "H7V", "description": "Total Population", "sequence": 1 } ], "geogLevels": List [ OrderedMap { "name": "nation", "description": "Nation", "hasGeogExtentSelection": false, "sequence": 1 } ], "geographicInstances": List [ OrderedMap { "name": "010", "description": "Alabama" } ], "breakdowns": List [ OrderedMap { "name": "bs32", "type": "Spatial", "description": "Geographic Subarea (2010 Census and American Community Survey)",
+"breakdowns": List [ OrderedMap { "name": "bs32.ge00", "description": "Total area" } ] } ] }
+# Reference
+To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
