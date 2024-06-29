@@ -11,18 +11,43 @@ Dataset(;
     years=nothing,
 )
 ```
-This function creates a new data table given geographical levels, breakdown values and years
+This function creates a new record of a Dataset given geographical levels, breakdown values and years.
 
 # Arguments
-- `dataTables::Vector{String}`- A list of available data table for this site
-- `geogLevels::Vector{String}`- A list of geographic levels available for the dataset.
-- `breakdownValues::Vector{String}`- Breakdown values available for this dataset
-- `years::Vector{String}`- List of the years if data of multiple years are present
 
-# Example
-rderedMap { "dataTables": "", "geogLevels": "", "breakdownValues": "", "years": "" }]
-# Reference
-To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+- `dataTables::Vector{String}`- A list of available data tables for this Dataset.
+- `geogLevels::Vector{String}`- A list of geographic levels available for the Dataset,(eg. "county","state").
+- `breakdownValues::Vector{String}`- Breakdown values available for this grouping for the available Dataset.
+- `years::Vector{String}`- List of the years if data of multiple years are present.
+
+#Returns
+
+This function returns a new record of a Dataset giving the geographical levels, breakdown values and years.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.Dataset(dataTables =["1790_cPop"],geogLevels =[ "state"],breakdownValues =["bs32.ge00"],years = ["1790"])
+{
+  "dataTables": [
+    "1790_cPop"
+  ],
+  "geogLevels": [
+    "state"
+  ],
+  "breakdownValues": [
+    "bs32.ge00"
+  ],
+  "years": [
+    "1790"
+  ]
+}
+```
+# References
+
+To know more about the Dataset type visit the links:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
+* https://www.nhgis.org/frequently-asked-questions-faq#breakdowns
 """
 Base.@kwdef mutable struct Dataset <: OpenAPI.APIModel
     dataTables::Union{Nothing, Vector{String}} = nothing
