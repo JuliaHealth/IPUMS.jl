@@ -30,6 +30,9 @@ julia> gdf = load_ipums_nhgis("test/testdata/nhgis0001_shapefile/US_state_1790.s
 function load_ipums_nhgis(filepath::String)
     
     gdf = read(filepath)
+    md = metadata(gdf)
+    crs = metadata(gdf)["crs"]
+    #nhgis_object = NHGISInfo(filepath, "NHGIS", md, crs)
 
     return gdf
 

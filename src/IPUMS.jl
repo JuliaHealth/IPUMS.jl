@@ -22,6 +22,7 @@ module IPUMS
         JSON3
     using OpenAPI: 
         OpenAPI
+    using GeoFormatTypes
     #= 
 
     Scripts used across whole of package

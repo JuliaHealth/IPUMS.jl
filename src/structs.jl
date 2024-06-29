@@ -230,3 +230,54 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     _ns::String = ""
     data_summary::DataFrame = DataFrame()
 end
+
+
+
+"""
+```julia
+NHGISInfo(
+    filepath::String, 
+    ipums_project::String = "",
+    data_summary::DataFrame = DataFrame()
+    geom_projection::String
+)
+```
+
+A struct representing the metadata taken from an IPUMS NHGIS extract. An IPUMS 
+NHGIS extract contains both file-level metadata (such as the date of export), as well
+as variable level metadata (such as the name and data type of a variable). 
+
+# Keyword Arguments
+
+- `filepath::String` -  File system path to the DDI (`.xml`) file.
+- `ipums_project::String` - Identifier for the IPUMS source of the extract 
+                            data, such as `IPUMS CPS`, or `IPUMS USA`, etc. 
+- `data_summary::DataFrame` - Contains a dataframe that holds summary information
+                    about the variables in the dataset, including variable names,
+                    data types, variable descriptions, and categorical information.
+- `geom_projection::String` - the GIS spatial or geometric projection for the 
+                    IPUMS NHGIS extract.
+
+# Returns
+
+- `NHGISInfo` object that contains both file-level and variable-level metadata 
+            extracted from an IPUMS NHGIS extract. 
+
+# Example
+
+```julia-repl
+julia> IPUMS.NHGISInfo(filepath = "test_ddi.xml")
+
+IPUMS.DDIInfo("test_ddi.xml", "", "", "", "", "", IPUMS.DDIVariable[], EzXML.Document(EzXML.Node(<DOCUMENT_NODE@0x00000000034466d0>)), "", 0×0 DataFrame)
+```
+
+# References
+
+"""
+Base.@kwdef mutable struct NHGISInfo
+    filepath::String
+    ipums_project::String = ""
+    data_summary::DataFrame = DataFrame()
+    geom_projection::GeoFormatTypes.WellKnownText{GeoFormatTypes.CRS}
+end
+
