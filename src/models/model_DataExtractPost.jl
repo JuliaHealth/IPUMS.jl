@@ -15,9 +15,10 @@ DataExtractPost(;
     description=nothing,
 )
 ```
-This function extracts data giving the time series table,the format of the data, the table layout, the shape of the file, its geographic extent and the description 
+This function extracts data giving the time series table,the format of the data, the table layout, the shape of the file, its geographic extent and the description.
 
 # Arguments
+
 - `datasets::Dict{String, Dataset}`- An object where each key is the name of the requested dataset and each value is another object describing your selections for that datase
 - `timeSeriesTables::Dict{String, TimeSeriesTable}`-An object where each key is the name of the requested time series table and each value is another object describing your selections for that time series table.
 - `dataFormat::String`- The requested format of your data
@@ -26,11 +27,14 @@ This function extracts data giving the time series table,the format of the data,
 - `shapefiles::Vector{String}`- A list of selected shapefiles.
 - `geographicExtents::Vector{String}`- A list of geographic_instances to use as extents for all datasets on this request
 - `description::String`- A short description of your extract.
-# Return 
 
-# Example
-OrderedMap { "datasets": OrderedMap { "1790_cPop": OrderedMap { "dataTables": List [ "NT1" ], "geogLevels": List [ "state" ] } }, "timeSeriesTables": OrderedMap { "A00": OrderedMap { "geogLevels": List [ "state" ], "years": List [ "1990" ] } },
-  "dataFormat": "csv_no_header","timeSeriesTableLayout": "time_by_row_layout","breakdownAndDataTypeLayout": "","shapefiles": "","geographicExtents": "", "description": "abc" }
+# Returns
+
+The fuction returns a dataset, giving the Time Series Table to which it refers, its layout,the data format, the selected shape files, the geographic extent, a descritpion and the breakdonw data.
+
+# Examples
+
+
 
 # Reference
 https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
