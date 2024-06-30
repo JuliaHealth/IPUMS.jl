@@ -14,21 +14,30 @@ DataExtractPostResponse(;
 This function extracts data giving a data definition,the status of the download and the link
 
 # Arguments
+
 - `extractDefinition::DataExtractDefinition`-  A short description of the extract data.
-- `number::Int64`-
+- `number::Int64`- The number of data.
 - `status::String`- The status of data extraction
 - `downloadLinks::DataExtractDownloadLinks`- The link to download data
 
-# Return 
+# Returns
 
-Returns a new table with data definition,numbers,status and the download link
+Returns a new record of data with data definition,numbers,status and the download link
 
-# Example
-OrderedMap { "extractDefinition": OrderedMap { "datasets": OrderedMap { "1790_cPop": OrderedMap { "dataTables": List [ "NT1" ], "geogLevels": List [ "place_00498" ] }, "1800_cPop": OrderedMap { "dataTables": List [ "NT3" ], "geogLevels": List [ "state" ] } }, "timeSeriesTables": OrderedMap { "A00": OrderedMap { "geogLevels": List [ "state" ] } },
-"timeSeriesTableLayout": "time_by_row_layout", "dataFormat": "csv_no_header", "description": "abc", "version": 2, "collection": "nhgis" }, "number": 2, "status": "complete",
-"downloadLinks": OrderedMap { "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip", "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip", "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip" } }
-# Reference
-https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
+# Examples
+```julia-repl
+julia> IPUMS.DataExtractPostResponse(extractDefinition = "1790_cPop",number = 2,status = "complete", downloadLinks =  "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip")
+{
+  "extractDefinition": "1790_cPop",
+  "number": 2,
+  "status": "complete",
+  "downloadLinks": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip"
+}
+```
+# References
+
+ To know more about DataExtractPostResponse visit the link:
+* https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
 """
 Base.@kwdef mutable struct DataExtractPostResponse <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }
