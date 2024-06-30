@@ -11,17 +11,31 @@ DatasetSimple(;
     sequence=nothing,
 )
 ```
-The fuction gives a dataset given a group, a sequence,an input and a description 
+The fuction gives a dataset given a group, a sequence,an input and a description .
 
 # Arguments
+
 - `name::String`-The dataset identifier 
 - `description::String`-A short description of the dataset
 - `group::String`-The group of datasets to which this dataset belongs.
 - `sequence::Int64`-The order in which the dataset will appear in the metadata API and extracts.
-# Return 
-The function returns a new dataset
-# Example
-OrderedMap { "name": "1790_cPop", "description": "1790 Census: Population Data [US, States & Counties", "group": "1790 Census", "sequence": 101 }
+
+# Returns
+
+The function returns the name,the group, the description and the sequence of the data.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.DatasetSimple(name =  "1790_cPop", description = "1790 Census: Population Data [US, States & Counties]",group = "1790 Census",sequence =  101)
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]",
+  "group": "1790 Census",
+  "sequence": 101
+}
+```
+
 # Reference
 To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
