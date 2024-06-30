@@ -14,9 +14,10 @@ DataTableFull(;
     nVariables=nothing,
 )
 ```
-This function creates a table giving the nhgisCode, the description of the date, their universe and the dataset name
+This function creates a record giving the nhgisCode, the description of the date, their universe and the dataset name
 
 # Attributes
+
 - `name::String`The unique identifier for the data table within its dataset.
 - `nhgisCode::String`-The code for this data table that will appear in extract.
 - `description::String`- A short description of the data table.
@@ -25,14 +26,18 @@ This function creates a table giving the nhgisCode, the description of the date,
 - `datasetName::String`- The name of the dataset from which the data are from
 - `nVariables::Int64`-A list of variables within the table.
 
-# Return
+# Returns
 
-# Example
+This returns the name of the data, their nhgisCode, a description,their universe, a sequence, a dataset name and variables.
 
-OrderedMap { "name": "NT1", "description": "Total Population", "universe": "Persons", "nhgisCode": "AAA",
-"sequence": 1, "datasetName": "1790_cPop", "variables": List [ OrderedMap { "description": "Total", "nhgisCode": "AAA001" } ] }
+# Examples
+
+
+
 # Reference
-To find out more about the DataTable type visit the [Reference page of IPUMS API DataTable](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+
+To find out more about the DataTableFull visit:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DataTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
