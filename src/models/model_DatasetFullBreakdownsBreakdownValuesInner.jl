@@ -9,14 +9,28 @@ DatasetFullBreakdownsBreakdownValuesInner(;
     description=nothing,
 )
 ```
-The fuction ge
+The fuction give the name and the description of the dataset.
+
+# Arguments
+
 - `name::String`-The dataset identifier 
 - `description::String`- a short description of the dataset
 
-# Example
-OrderedMap { "name": "1790_cPop", "description": "1790 Census: Population Data [US, States & Counties]"}
-# Reference
-To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+#Returns
+
+This returns the name and the description of the dataset.
+
+# Examples
+```julia-repl
+julia> IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "1790_cPop",description = "1790 Census: Population Data [US, States & Counties]")
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]"
+}
+```
+# References
+To find out more about the Dataset type visit the link:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 
 """
 Base.@kwdef mutable struct DatasetFullBreakdownsBreakdownValuesInner <: OpenAPI.APIModel
