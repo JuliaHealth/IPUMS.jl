@@ -13,9 +13,10 @@ DatasetFullBreakdowns(;
     geographicInstances=nothing,
 )
 ```
-This function ceates a dataset giving the description and the type of data, the sequence, the geographical ans year information and breakdowns.
+This function ceates a dataset given the description and the type of data, the sequence, the geographical ans year information and breakdowns.
 
 # Arguments
+
 - `name::String`-The dataset identifier 
 - `type::String`- The type of dat in the dataset
 - `description::String`- a short description of the dataset
@@ -23,14 +24,18 @@ This function ceates a dataset giving the description and the type of data, the 
 - `years::Vector{String}`-List of the years if data of multiple years are present
 - `geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}`- List of geographical extent
 
-# Return
-The function returns a new dataset
+# Returns
+
+The function returns a new dataset givi
     
-# Example
-OrderedMap { "name": "2010_SF1a", "type": "", "description": "SF 1a - P & H Tables [Blocks & Larger Areas]","breakdownValues": List [ OrderedMap { "name": "bs32.ge00", "description": "Total area" } ],  
-  "years": "","geographicInstances": List [ OrderedMap { "name": "010", "description": "Alabama" } ]}
-# Reference
-To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+# Examples
+
+
+
+# References
+
+To find out more about the Dataset type visit link
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DatasetFullBreakdowns <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
