@@ -11,22 +11,32 @@ TimeSeriesTableFullTimeSeriesInner(;
 )
 ```
   
-This function takes as input the name,the description and the sequence of data e and return a new table
+This function takes as input the name,the description and the sequence of data e and return a new record
 
-# Argument
+# Arguments
 
 - `name::String`- The unique identifier of the time series table.
 - `description::String`- A short description of the time series table.
 - `sequence::Int64`- The order in which the time series table will appear in the metadata API and extracts.
-# Return
+
+# Returns
 
 The return is a new Time Series Table with fixed name and description.
 
-# Example
- OrderedMap { "name": "", "description": "", "sequence": 101 }
+# Examples
 
-# Reference
-To find out more about the Shapefile type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
+```julia-repl
+julia> IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "1790_cPop", description =  "1790 Census: Population Data [US, States & Counties]", sequence = 101)
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]",
+  "sequence": 101
+}
+```
+
+# References
+To find out more about the TimeSeriesTableFullTimeSeriesInner visit:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/
 """
 Base.@kwdef mutable struct TimeSeriesTableFullTimeSeriesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
