@@ -10,19 +10,34 @@ DatasetFullGeogLevelsInner(;
     hasGeogExtentSelection=nothing,
 )
 ```
-This function gives the geographical information about data
+This function gives the geographical information about data and their description
 
 # Arguments
+
 - `name::String`-The dataset identifier 
 - `description::String`- A short description of the dataset
 - `hasGeogExtentSelection::Bool`- boolean indicating if the dataset has geogrphical extent
-# Return 
-The function return a new dataset
+
+# Returns
+
+The function return the name,the geographical extention of the data and their description
     
-# Example
- OrderedMap { "name": "1790_cPop", "description": "1790 Census: Population Data [US, States & Counties]", "hasGeogExtentSelection": "1"}
-# Reference
-To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+# Examples
+
+```julia-repl
+julia> IPUMS.DatasetFullGeogLevelsInner(name = "1790_cPop", description = "1790 Census: Population Data [US, States & Counties]", hasGeogExtentSelection = 1)        
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]",
+  "hasGeogExtentSelection": true
+}
+
+```
+
+# References
+
+To find out more about the DatasetFullGeogLevelsInner visit the link:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DatasetFullGeogLevelsInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
