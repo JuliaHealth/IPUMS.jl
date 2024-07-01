@@ -2,19 +2,43 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract
+"""
 
-    DataExtract(;
-        extractDefinition=nothing,
-        number=nothing,
-        status=nothing,
-        downloadLinks=nothing,
-    )
+```
+DataExtract(;
+    extractDefinition=nothing,
+    number=nothing,
+    status=nothing,
+    downloadLinks=nothing,
+)
+```
+This function extracts data given the definition of the data extracted, the link for the download and its status. 
 
-    - extractDefinition::DataExtractDefinition
-    - number::Int64
-    - status::String
-    - downloadLinks::DataExtractDownloadLinks
+# Arguments
+
+- `extractDefinition::DataExtractDefinition`- Definition of the extracted data.
+- `number::Int64`- Number of the data.
+- `status::String`- Status of the data extraction (eg. "complete").
+- `downloadLinks::DataExtractDownloadLinks`- Download link for the extracted data.
+
+# Returns
+
+It returns the data definition,the number the status of the download and the link to download the data.
+
+# Examples
+
+```julia-repl
+
+julia> IPUMS.DataExtract(extractDefinition = "datasets",number = 2, status="complete", downloadLinks = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip")
+{
+  "extractDefinition": "datasets",
+  "number": 2,
+  "status": "complete",
+  "downloadLinks": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip"
+}
+```
+# Reference
+To find out more about the DataExtract type visit the [Reference page of IPUMS API DataExtract](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

@@ -2,23 +2,40 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_breakdowns
+"""
+```
+DatasetFullBreakdowns(;
+    name=nothing,
+    type=nothing,
+    description=nothing,
+    breakdownValues=nothing,
+    years=nothing,
+    geographicInstances=nothing,
+)
+```
+This function ceates a dataset given the description and the type of data, the sequence, the geographical ans year information and breakdowns.
 
-    DatasetFullBreakdowns(;
-        name=nothing,
-        type=nothing,
-        description=nothing,
-        breakdownValues=nothing,
-        years=nothing,
-        geographicInstances=nothing,
-    )
+# Arguments
 
-    - name::String
-    - type::String
-    - description::String
-    - breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}
-    - years::Vector{String}
-    - geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}
+- `name::String`-The dataset identifier 
+- `type::String`- The type of dat in the dataset
+- `description::String`- a short description of the dataset
+- `breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}`- List of breakdown available for the dataset
+- `years::Vector{String}`-List of the years if data of multiple years are present
+- `geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}`- List of geographical extent
+
+# Returns
+
+The function returns a new dataset givi
+    
+# Examples
+
+
+
+# References
+
+To find out more about the Dataset type visit link
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DatasetFullBreakdowns <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

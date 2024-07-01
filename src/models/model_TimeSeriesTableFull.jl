@@ -2,23 +2,76 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTableFull
+"""
+```
+TimeSeriesTableFull(;
+    name=nothing,
+    description=nothing,
+    geographicIntegration=nothing,
+    sequence=nothing,
+    timeSeries=nothing,
+    geogLevels=nothing,
+)
+```
+This function creates a table record for the `TimeSeriesTableFull` with fixed name, description, geographical and timeline information.
 
-    TimeSeriesTableFull(;
-        name=nothing,
-        description=nothing,
-        geographicIntegration=nothing,
-        sequence=nothing,
-        timeSeries=nothing,
-        geogLevels=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
-    - geographicIntegration::String
-    - sequence::Float32
-    - timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}
-    - geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}
+- `name::String`- The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
+- `description::String`- A short description of the time series variable referred to in `name`.
+- `geographicIntegration::String`- How does the variable value account for changes in geographic boundaries over time, (eg. "Nominal").
+- `sequence::Float32`- The order of appearence of the dataset in the metadata API and extract.
+- `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`- A list of time series records corresponding to the variable specified in `name`.
+- `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`-  A list of geographic levels available for this time series table.
+
+# Returns
+
+The return is a new record for the `TimeSeriesTableFull` containing the variable name, description, time series, and geographical information of the data.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.TimeSeriesTableFull(name="A00", description= "Total Population", 
+                                geographicIntegration= "Nominal", 
+                                sequence= 0.01, 
+                                timeSeries=[Dict("name" => "AA", "description" => "Persons: Total", "sequence" => 1 )], 
+                                geogLevels= [ Dict( "name" => "state", "description" =>  "State", "sequence" => 4 ), 
+                                              Dict( "name" => "county", "description" => "State--County", "sequence" => 25 ) ])
+
+{
+  "name": "A00",
+  "description": "Total Population",
+  "geographicIntegration": "Nominal",
+  "sequence": 0.01,
+  "timeSeries": [
+    {
+      "name": "AA",
+      "sequence": 1,
+      "description": "Persons: Total"
+    }
+  ],
+  "geogLevels": [
+    {
+      "name": "state",
+      "sequence": 4,
+      "description": "State"
+    },
+    {
+      "name": "county",
+      "sequence": 25,
+      "description": "State--County"
+    }
+  ]
+}
+```
+
+# References
+
+For additional information please refer to the following sources:
+
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/
+* https://www.nhgis.org/time-series-tables
+
 """
 Base.@kwdef mutable struct TimeSeriesTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

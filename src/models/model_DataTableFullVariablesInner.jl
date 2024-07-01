@@ -2,15 +2,38 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataTableFull_variables_inner
+"""
+```
+DataTableFullVariablesInner(;
+    name=nothing,
+    nhgisCode=nothing,
+)
+```
+This function creates a record with the name of the data and their nhgiscode
 
-    DataTableFullVariablesInner(;
-        name=nothing,
-        nhgisCode=nothing,
-    )
+# Attributes
 
-    - name::String
-    - nhgisCode::String
+-` name::String`-The unique identifier for the data table within its dataset.
+- `nhgisCode::String`-The code for this data table that will appear in extract.
+
+#Returns
+
+This returns the name and nhgisCode of the data.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.DataTableFullVariablesInner(name = "NT1",nhgisCode = "AAA")
+{
+  "name": "NT1",
+  "nhgisCode": "AAA"
+}
+
+
+```
+# Reference
+To find out more about DataTableFullVariablesInner visit :
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DataTableFullVariablesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

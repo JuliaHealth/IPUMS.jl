@@ -2,17 +2,40 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""Error
+"""
+```
+Error(;
+    type=nothing,
+    status=nothing,
+    detail=nothing,
+)
+```
+This function send an error message 
+# Arguments
 
-    Error(;
-        type=nothing,
-        status=nothing,
-        detail=nothing,
-    )
+-`type::Int64`- Gives the type of error
+- `status::String`- Gives the status of the error
+- `detail::String`- Gives the details of the error 
 
-    - type::Int64
-    - status::String
-    - detail::String
+# Returns
+
+Returns errors giving details
+
+# Examples
+
+```julia-repl
+julia> IPUMS.Error(type =001, status = "aaa ",detail = "abc" )
+{
+  "type": 1,
+  "status": "aaa ",
+  "detail": "abc"
+}
+```
+
+
+# References
+To know more about errors see:
+* https://developer.ipums.org/docs/v2/reference/nhgis/
 """
 Base.@kwdef mutable struct Error <: OpenAPI.APIModel
     type::Union{Nothing, Int64} = nothing

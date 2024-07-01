@@ -2,15 +2,36 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_breakdowns_breakdownValues_inner
+"""
+```
+DatasetFullBreakdownsBreakdownValuesInner(;
+    name=nothing,
+    description=nothing,
+)
+```
+The fuction give the name and the description of the dataset.
 
-    DatasetFullBreakdownsBreakdownValuesInner(;
-        name=nothing,
-        description=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
+- `name::String`-The dataset identifier 
+- `description::String`- a short description of the dataset
+
+#Returns
+
+This returns the name and the description of the dataset.
+
+# Examples
+```julia-repl
+julia> IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "1790_cPop",description = "1790 Census: Population Data [US, States & Counties]")
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]"
+}
+```
+# References
+To find out more about the Dataset type visit the link:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
+
 """
 Base.@kwdef mutable struct DatasetFullBreakdownsBreakdownValuesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

@@ -2,27 +2,43 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull
+"""
+```
+DatasetFull(;
+    name=nothing,
+    description=nothing,
+    group=nothing,
+    sequence=nothing,
+    dataTables=nothing,
+    geogLevels=nothing,
+    hasMultipleDataTypes=nothing,
+    breakdowns=nothing,
+)
+```
+This function creates a dataset given the description and the group of the data, the sequence, the geographical information and if it has multiple data types and breakdowns.
 
-    DatasetFull(;
-        name=nothing,
-        description=nothing,
-        group=nothing,
-        sequence=nothing,
-        dataTables=nothing,
-        geogLevels=nothing,
-        hasMultipleDataTypes=nothing,
-        breakdowns=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
-    - group::String
-    - sequence::Int64
-    - dataTables::Vector{DataTableSimple}
-    - geogLevels::Vector{DatasetFullGeogLevelsInner}
-    - hasMultipleDataTypes::Bool
-    - breakdowns::DatasetFullBreakdowns
+- `name::String`- The dataset identifier 
+- `description::String`- a short description of the dataset
+- `group::String`- the group of dataset to which it belongs
+- `sequence::Int64`- the order of appearence of the dataset in the metadata API and extract
+- `dataTables::Vector{DataTableSimple}`- The list of the available datatable for the dataset
+- `geogLevels::Vector{DatasetFullGeogLevelsInner}`- A list of the geographic levels available for the dataset
+- `hasMultipleDataTypes::Bool`-A boolean indicating if multiple data types exist for the dataset
+- `breakdowns::DatasetFullBreakdowns`- List of breakdown available for the dataset
+
+# Returns
+
+The function returns a new dataset giving the name of the data, the description, their group, the sequence of appearace, the geographical level, and breakdowns.
+    
+# Examples
+
+
+# References
+
+To find out more about the Dataset type visit the link:
+https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
 """
 Base.@kwdef mutable struct DatasetFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
