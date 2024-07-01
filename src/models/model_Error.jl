@@ -14,16 +14,28 @@ This function send an error message
 # Arguments
 
 -`type::Int64`- Gives the type of error
-- `status::String`-
+- `status::String`- Gives the status of the error
 - `detail::String`- Gives the details of the error 
 
-# Return
-Returns errors giving details
-# Example
- OrderedMap { "type": "", "status": "", "detail": "" }
+# Returns
 
-# Reference
-To know more about errors see the [Reference page of IPUMS API Errors](https://developer.ipums.org/docs/v2/reference/nhgis/)
+Returns errors giving details
+
+# Examples
+
+```julia-repl
+julia> IPUMS.Error(type =001, status = "aaa ",detail = "abc" )
+{
+  "type": 1,
+  "status": "aaa ",
+  "detail": "abc"
+}
+```
+
+
+# References
+To know more about errors see:
+* https://developer.ipums.org/docs/v2/reference/nhgis/
 """
 Base.@kwdef mutable struct Error <: OpenAPI.APIModel
     type::Union{Nothing, Int64} = nothing
