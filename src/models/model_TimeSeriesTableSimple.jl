@@ -13,30 +13,44 @@ TimeSeriesTableSimple(;
     geogLevels=nothing,
 )
 ```
-This fuction generstes s 
+This fuction creates a new record given the name and the description of the data, their geographicIntegration and timeSeries, the geographical levels and the sequence.
 
-# Arguments:
+# Arguments
 
-- `name::String`- The unique identifier of the time series table.
-- `description::String`- A short description of the time series table.
-- `geographicIntegration::String`-  How the time series tables align geographic units across time
-- `sequence::Float32`- The order in which the time series table will appear in the metadata API and extracts.
-- `timeSeries::Vector{String}`-  A list of time series for this time series table.
+- `name::String`-  The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
+- `description::String`- A short description of the time series variable referred to in `name`.
+- `geographicIntegration::String`-   How does the variable value account for changes in geographic boundaries over time, (eg. "Nominal").
+- `sequence::Float32`- The order of appearence of the dataset in the metadata API and extract.
+- `timeSeries::Vector{String}`-  A list of time series records corresponding to the variable specified in `name`.
 - `geogLevels::Vector{String}`- A list of geographic levels available for this time series table.
 
-# Return
-This function takes as input the name,description, geographic integration, the time series and the geographical level of the data, 
-    and returns a table
+# Returns
 
-# Example
-OrderedMap { "name": "A00", "description": "Total Population", "geographicIntegration": "Nominal", "sequence": 0.01,
-"years": List [ "1790", "1800", "1810", "1820", "1830", "1840", "1850", "1860", "1870", "1880", "1890", "1900", "1910", "1920", "1930", "1940", "1950", "1960", "1970", "1980", "1990", "2000", "2010" ],
-"geogLevels": List [ "state", "county" ] }
+This function returns a new record given the name,description, geographic integration, the time series and the geographical level of the data.
 
 
+# Examples
 
-# Reference 
-To find out more about the Shapefile type visit the [Reference page of IPUMS API Time Series Table](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
+```julia-repl
+julia> IPUMS.TimeSeriesTableSimple(name = "A00", description = "Total Population", geographicIntegration = "Nominal",sequence = 0.01, timeSeries = ["1790"],geogLevels = ["state"] )
+{
+  "name": "A00",
+  "description": "Total Population",
+  "geographicIntegration": "Nominal",
+  "sequence": 0.01,
+  "timeSeries": [
+    "1790"
+  ],
+  "geogLevels": [
+    "state"
+  ]
+}
+```
+
+# References 
+
+To find out more about the `TimeSeriesTableSimple` type visit the link:
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/
 """
 
 
