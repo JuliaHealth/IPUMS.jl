@@ -15,7 +15,7 @@ DataExtractPost(;
     description=nothing,
 )
 ```
-This function extracts data giving the time series table,the format of the data, the table layout, the shape of the file, its geographic extent and the description.
+This function prepares a POST object for delivery to an IPUMS POST endpoint.
 
 # Arguments
 
@@ -30,7 +30,7 @@ This function extracts data giving the time series table,the format of the data,
 
 # Returns
 
-The fuction returns a dataset, giving the Time Series Table to which it refers, its layout,the data format, the selected shape files, the geographic extent, a descritpion and the breakdonw data.
+The fuction returns a POST object for delivery to an IPUMS POST endpoint.
 
 # Examples
 
