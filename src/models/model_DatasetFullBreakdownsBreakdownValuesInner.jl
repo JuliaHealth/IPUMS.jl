@@ -9,7 +9,7 @@ DatasetFullBreakdownsBreakdownValuesInner(;
     description=nothing,
 )
 ```
-The fuction give the name and the description of the dataset.
+Inner constructor representing the variables within a DatasetFull object.
 
 # Arguments
 
@@ -18,7 +18,7 @@ The fuction give the name and the description of the dataset.
 
 #Returns
 
-This returns the name and the description of the dataset.
+This returns an inner constructor.
 
 # Examples
 ```julia-repl
