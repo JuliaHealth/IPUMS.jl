@@ -12,7 +12,8 @@ DataExtract(;
     downloadLinks=nothing,
 )
 ```
-This function extracts data given the definition of the data extracted, the link for the download and its status. 
+
+This function prepares a data extract request for submission to the IPUMS API.
 
 # Arguments
 
@@ -30,7 +31,7 @@ It returns the data definition,the number the status of the download and the lin
 ```julia-repl
 
 julia> example = Dict(
-         "extractDefinition" => Dict(
+         "extractDefinition" => DataExtractDefinition(
              "version" => 2,
              "variables" => Dict(
                  "YEAR" => Dict(),
@@ -52,41 +53,12 @@ julia> example = Dict(
          ),
          "number" => 2,
          "status" => "complete",
-         "downloadLinks" => Dict(
-             "data" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.dat",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "ddiCodebook" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.cbk",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "basicCodebook" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.xml",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "spssCommandFile" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.sps",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "sasCommandFile" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.sas",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "stataCommandFile" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.do",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
-             ),
-             "rCommandFile" => Dict(
-                 "url" => "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.R",
-                 "bytes" => 42,
-                 "sha256" => "abc123"
+         "downloadLinks" => DataExtractDownloadLinks(
+             #=
+                ...
+                Download link details here
+                ...
+                =#
              )
          )
      )
@@ -95,68 +67,21 @@ julia> IPUMS.DataExtract(example["extractDefinition"], example["number"], exampl
 
 {
   "extractDefinition": {
-    "dataFormat": "csv",
-    "variables": {
-      "YEAR": {},
-      "AGE": {
-        "attachedCharacteristics": [
-          "mother",
-          "father",
-          "spouse",
-          "head"
-        ]
-      }
-    },
-    "dataStructure": {
-      "rectangular": {
-        "on": "P"
-      }
-    },
-    "samples": {
-      "us2013a": {}
-    },
-    "version": 2,
-    "description": "my extract",
-    "collection": "usa"
+   #=
+    ...
+    Extract definition details here
+    ...
+    =#
   },
   "number": 2,
   "status": "complete",
   "downloadLinks": {
-    "ddiCodebook": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.cbk"
-    },
-    "basicCodebook": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.xml"
-    },
-    "data": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.dat"
-    },
-    "sasCommandFile": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.sas"
-    },
-    "stataCommandFile": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.do"
-    },
-    "spssCommandFile": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.sps"
-    },
-    "rCommandFile": {
-      "sha256": "abc123",
-      "bytes": 42,
-      "url": "https://api.ipums.org/downloads/usa/api/v1/extracts/1234567/usa_0002.R"
-    }
+     #=
+    ...
+    Download link details here
+    ...
+    =#
+   
   }
 }
 ```
