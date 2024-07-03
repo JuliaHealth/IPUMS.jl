@@ -15,7 +15,7 @@ DatasetFull(;
     breakdowns=nothing,
 )
 ```
-This function creates a dataset given the description and the group of the data, the sequence, the geographical information and if it has multiple data types and breakdowns.
+This function creates a dataset given informations about the data.
 
 # Arguments
 
@@ -30,7 +30,7 @@ This function creates a dataset given the description and the group of the data,
 
 # Returns
 
-The function returns a new dataset giving the name of the data, the description, their group, the sequence of appearace, the geographical level, and breakdowns.
+The function returns a new dataset.
     
 # Examples
 
