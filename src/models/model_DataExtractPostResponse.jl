@@ -15,25 +15,17 @@ This function extracts data giving a data definition,the status of the download 
 
 # Arguments
 
-- `extractDefinition::DataExtractDefinition`-  A short description of the extract data.
-- `number::Int64`- The number of data.
-- `status::String`- The status of data extraction
-- `downloadLinks::DataExtractDownloadLinks`- The link to download data
+- `extractDefinition::DataExtractDefinition`-  An object coming from a DataExtractDefinition file.
+- `number::Int64`- The extract ID number.
+- `status::String`- The status of data extraction.
+- `downloadLinks::DataExtractDownloadLinks`- The link to download data.
 
 # Returns
 
-Returns a new record of data with data definition,numbers,status and the download link
+Returns a POST response from the IPUMS API.
 
 # Examples
-```julia-repl
-julia> IPUMS.DataExtractPostResponse(extractDefinition = "1790_cPop",number = 2,status = "complete", downloadLinks =  "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip")
-{
-  "extractDefinition": "1790_cPop",
-  "number": 2,
-  "status": "complete",
-  "downloadLinks": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip"
-}
-```
+
 # References
 
  To know more about DataExtractPostResponse visit the link:
