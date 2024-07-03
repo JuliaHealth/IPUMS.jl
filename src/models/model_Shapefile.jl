@@ -13,7 +13,7 @@ Shapefile(;
     sequence=nothing,
 )
 ```
-This function creates a new file for geographic information systems (GIS).
+This function creates a representation for geographic information systems (GIS) files.
 
 # Attributes
 
