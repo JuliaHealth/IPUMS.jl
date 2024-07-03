@@ -13,7 +13,7 @@ DatasetFullBreakdowns(;
     geographicInstances=nothing,
 )
 ```
-This function ceates a dataset given the description and the type of data, the sequence, the geographical ans year information and breakdowns.
+This function ceates a dataset given the description of the data.
 
 # Arguments
 
@@ -26,7 +26,7 @@ This function ceates a dataset given the description and the type of data, the s
 
 # Returns
 
-The function returns a new dataset givi
+The function returns a new dataset.
     
 # Examples
 
