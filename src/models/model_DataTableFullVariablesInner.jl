@@ -9,7 +9,7 @@ DataTableFullVariablesInner(;
     nhgisCode=nothing,
 )
 ```
-This function creates a record with the name of the data and their nhgiscode
+Inner constructor representing the variables within a DataTableFull object.
 
 # Attributes
 
@@ -18,7 +18,7 @@ This function creates a record with the name of the data and their nhgiscode
 
 #Returns
 
-This returns the name and nhgisCode of the data.
+This returns an inner constructor.
 
 # Examples
 
