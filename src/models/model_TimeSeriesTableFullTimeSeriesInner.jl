@@ -11,7 +11,7 @@ TimeSeriesTableFullTimeSeriesInner(;
 )
 ```
   
-This function takes as input the name,the description and the sequence of data e and return a new record
+Inner constructor representing the variables within a TimeSeriesTableFull object
 
 # Arguments
 
@@ -21,7 +21,7 @@ This function takes as input the name,the description and the sequence of data e
 
 # Returns
 
-The return is a new Time Series Table with fixed name and description.
+This returns an inner constructor.
 
 # Examples
 
