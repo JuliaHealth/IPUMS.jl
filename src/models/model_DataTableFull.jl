@@ -14,7 +14,7 @@ DataTableFull(;
     nVariables=nothing,
 )
 ```
-This function creates a record giving the nhgisCode, the description of the date, their universe and the dataset name
+Constructor to store information about a given table within a particular IPUMS dataset.
 
 # Attributes
 
@@ -29,10 +29,6 @@ This function creates a record giving the nhgisCode, the description of the date
 # Returns
 
 This returns the name of the data, their nhgisCode, a description,their universe, a sequence, a dataset name and variables.
-
-# Examples
-
-
 
 # Reference
 
