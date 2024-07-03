@@ -8,6 +8,7 @@ module IPUMS
         Client
     import GeoDataFrames:
         read
+    import GeoFormatTypes
     using DataFrames: 
         DataFrames, 
         DataFrame, 
@@ -22,7 +23,6 @@ module IPUMS
         JSON3
     using OpenAPI: 
         OpenAPI
-    using GeoFormatTypes
     #= 
 
     Scripts used across whole of package

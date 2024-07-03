@@ -26,6 +26,6 @@ end
 @testset "NHGIS Parser" begin
     datafile = "testdata/nhgis0001_shapefile/US_state_1790.shp"
     df = load_ipums_nhgis(datafile)
-    @test size(df) == (16, 8)
+    @test size(df.geodataframe) == (16, 8)
 
 end
