@@ -10,20 +10,24 @@ DataExtractDownloadLinks(;
     gisData=nothing,
 )
 ```
-This function extracts data giving the codebook prview, the table data and gis data
+This function provides the download links for an extract's codebook, tabular data, and GIS data.
 
 # Arguments
+
 - `codebookPreview::String`-
--`tableData::String`- 
+- `tableData::String`- 
 - `gisData::String`-
 
-# Return
-The function returns new extracted data
+# Returns
+
+The function returns the download links for an extract's codebook, tabular data, and GIS data.
     
-# Example
+# Examples
+
 OrderedMap { "codebookPreview": "", "tableData": "", "gisData": "state"}
-# Reference
-https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
+
+# References
+https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
 """
 Base.@kwdef mutable struct DataExtractDownloadLinks <: OpenAPI.APIModel
     codebookPreview::Union{Nothing, String} = nothing
