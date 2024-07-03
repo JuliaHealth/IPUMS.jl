@@ -11,7 +11,7 @@ DataTableSimple(;
     sequence=nothing,
 )
 ```       
-This function returns a record given  the name of data,the description, sequence and nhgisCode. 
+Simplified representation of a given IPUMS table given an nhgisCode.
 
 # Arguments 
 
