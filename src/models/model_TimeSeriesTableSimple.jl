@@ -13,7 +13,7 @@ TimeSeriesTableSimple(;
     geogLevels=nothing,
 )
 ```
-This fuction creates a new record given the name and the description of the data, their geographicIntegration and timeSeries, the geographical levels and the sequence.
+This fuction creates a new record given the name and the description of the data.
 
 # Arguments
 
@@ -26,7 +26,7 @@ This fuction creates a new record given the name and the description of the data
 
 # Returns
 
-This function returns a new record given the name,description, geographic integration, the time series and the geographical level of the data.
+This function returns a new record.
 
 
 # Examples
