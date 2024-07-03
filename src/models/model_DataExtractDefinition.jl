@@ -4,7 +4,7 @@
 
 """
 ```
-DataExtractDefinition(;
+DataExtractDefinition( version= "2",;
     datasets=nothing,
     timeSeriesTables=nothing,
     dataFormat=nothing,
@@ -13,31 +13,48 @@ DataExtractDefinition(;
     shapefiles=nothing,
     geographicExtents=nothing,
     description=nothing,
-    version=nothing,
     collection=nothing,
 )
 ```
-This function extracts data giving the data format, the time table, the breakdown and type of layout, the shape of the files, their geogrphic information, a description, the version and collection of data
+This function creates a definition object that is used for extracting data from an IPUMS dataset.
+
+
+# Keyword Arguments
+
+-`version::String` - What version of the IPUMS API to use (Default: `"2"`)
 
 # Arguments
 
 -`datasets::Dict{String, Dataset}`- A dictionary indicating the dataset to select
 -`timeSeriesTables::Dict{String, TimeSeriesTable}`- An object where each key is the name of the requested time series table and each value is another object describing your selections for that time series table.
--`dataFormat::String`- The requested format of your data. 
--`timeSeriesTableLayout::String`- The layout of your time series table data. 
+-`dataFormat::String`- The requested format of your data.Some examples are:
+    - `"csv_no_header"` (default) includes only a minimal header in the first row
+
+    - `"csv_header"` includes a second, more descriptive header row.
+
+    - `"fixed_width"` provides data in a fixed width format.
+-`timeSeriesTableLayout::String`- The layout of your time series table data. Some examples are:
+    - `"time_by_column_layout"` (wide format, default): rows correspond to geographic units, columns correspond to different times in the time series.
+
+    - `"time_by_row_layout"` (long format): rows correspond to a single geographic unit at a single point in time.
+
+    - `"time_by_file_layout"`: data for different times are provided in separate files.
 -`breakdownAndDataTypeLayout::String`-The layout of your dataset data when multiple data types or breakdown combos are present.
 -`shapefiles::Vector{String}`- A list of selected shapefiles.
 -`geographicExtents::Vector{String}`-A list of geographic_instances to use as extents for all datasets on this request.
 -`description::String`- A short description of your extract.
--`version::Int64`-
--`collection::String`-
-# Return
-The function return a new dataset
-    
-# Example
+-`collection::String`- What IPUMS collection to be queried for the extract (options could include "nhgis", "usa", etc. corresponding to IPUMS NHGIS or NHGIS USA databases).
 
-# Reference
-https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
+# Returns
+
+The function return a new definition object to extract data from IPUMS dataset.
+    
+# Examples
+
+# References
+
+To know more about `DataExtractDefinition` see:
+* https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
 """
 Base.@kwdef mutable struct DataExtractDefinition <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }
