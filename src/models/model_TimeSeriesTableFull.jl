@@ -13,7 +13,7 @@ TimeSeriesTableFull(;
     geogLevels=nothing,
 )
 ```
-This function creates a table record for the `TimeSeriesTableFull` with fixed name, description, geographical and timeline information.
+This function creates a table record for the `TimeSeriesTableFull`.
 
 # Arguments
 
