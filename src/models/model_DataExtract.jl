@@ -32,24 +32,11 @@ It returns the data definition,the number the status of the download and the lin
 
 julia> example = Dict(
          "extractDefinition" => DataExtractDefinition(
-             "version" => 2,
-             "variables" => Dict(
-                 "YEAR" => Dict(),
-                 "AGE" => Dict(
-                     "attachedCharacteristics" => ["mother", "father", "spouse", "head"]
-                 )
-             ),
-             "samples" => Dict(
-                 "us2013a" => Dict()
-             ),
-             "dataFormat" => "csv",
-             "description" => "my extract",
-             "dataStructure" => Dict(
-                 "rectangular" => Dict(
-                     "on" => "P"
-                 )
-             ),
-             "collection" => "usa"
+              #=
+                ...
+                extractDefinition details here
+                ...
+                =#
          ),
          "number" => 2,
          "status" => "complete",
