@@ -34,5 +34,3 @@ deploydocs(;
     devbranch="main"
 )
 
-
-# I'm working here!

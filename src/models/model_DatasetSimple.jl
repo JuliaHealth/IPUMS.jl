@@ -11,23 +11,30 @@ DatasetSimple(;
     sequence=nothing,
 )
 ```
-The fuction gives a dataset given a group, a sequence,an input and a description .
+This function creates a dataset reference with a provided name, description,
+group, and sequence.
 
 # Arguments
 
-- `name::String`-The dataset identifier 
-- `description::String`-A short description of the dataset
-- `group::String`-The group of datasets to which this dataset belongs.
-- `sequence::Int64`-The order in which the dataset will appear in the metadata API and extracts.
+- `name::String`- **(Optional)** The dataset identifier 
+- `description::String`-(Optional) A short description of the dataset
+- `group::String`-(Optional) The group of datasets to which this dataset belongs.
+- `sequence::Int64`-(Optional) The order in which the dataset will appear in the metadata API and extracts.
 
 # Returns
 
-The function returns the name,the group, the description and the sequence of the data.
+This function returns a DatasetSimple object with the properties specified
+by the function arguments.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.DatasetSimple(name =  "1790_cPop", description = "1790 Census: Population Data [US, States & Counties]",group = "1790 Census",sequence =  101)
+julia> IPUMS.DatasetSimple(name =  "1790_cPop", description = "1790 Census:
+                                Population Data [US, States & Counties]",
+                                group = "1790 Census",sequence =  101)
+
+# Output
+
 {
   "name": "1790_cPop",
   "description": "1790 Census: Population Data [US, States & Counties]",
@@ -36,8 +43,8 @@ julia> IPUMS.DatasetSimple(name =  "1790_cPop", description = "1790 Census: Popu
 }
 ```
 
-# Reference
-To find out more about the Dataset type visit the [Reference page of IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+# References
+To find out more about the Dataset type visit [IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
