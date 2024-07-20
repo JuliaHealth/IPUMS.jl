@@ -13,9 +13,8 @@ Inner constructor representing the variables within a DataTableFull object.
 
 # Attributes
 
--`name::String` - **(Optional)** The unique identifier for the data table within its dataset.
-
--`nhgisCode::String` - **(Optional)** The code for this data table that will appear in extract.
+- `name::String` - **(Optional)** The unique identifier for the data table within its dataset.
+- `nhgisCode::String` - **(Optional)** The code for this data table that will appear in extract.
 
 # Returns
 
