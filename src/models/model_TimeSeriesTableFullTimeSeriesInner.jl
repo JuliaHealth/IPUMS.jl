@@ -15,9 +15,9 @@ This function creates a reference to an IPUMS Time Series table.
 
 # Arguments
 
-- `name::String`- **(Optional)** The unique identifier of the time series table.
-- `description::String`- **(Optional)** A short description of the time series table.
-- `sequence::Int64`- **(Optional)** The order in which the time series table will appear in the metadata API and extracts.
+- `name::String` - **(Optional)** The unique identifier of the time series table.
+- `description::String` - **(Optional)** A short description of the time series table.
+- `sequence::Int64` - **(Optional)** The order in which the time series table will appear in the metadata API and extracts.
 
 # Returns
 
@@ -41,7 +41,7 @@ julia> IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "1790_cPop",
 
 # References
 
-Additional information about the `TimeSeriesTableFullTimeSeriesInner`object is available in the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
+Additional information about the `TimeSeriesTableFullTimeSeriesInner` object is available in the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 Base.@kwdef mutable struct TimeSeriesTableFullTimeSeriesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

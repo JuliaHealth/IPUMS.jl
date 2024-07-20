@@ -79,8 +79,8 @@ julia> IPUMS.TimeSeriesTableFull(name="A00",
 
 For additional information please refer to the following sources:
 
-* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/
-* https://www.nhgis.org/time-series-tables
+* <https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/>
+* <https://www.nhgis.org/time-series-tables>
 
 """
 Base.@kwdef mutable struct TimeSeriesTableFull <: OpenAPI.APIModel
