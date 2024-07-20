@@ -13,42 +13,31 @@ TimeSeriesTableFull(;
     geogLevels=nothing,
 )
 ```
-
-This function returns an object containing the attributes for downloading a
-Time Series Table.
+This function creates a table record for the `TimeSeriesTableFull`.
 
 # Arguments
 
-- `name::String`- **(Optional)** The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
-- `description::String`- **(Optional)** A short description of the time series variable referred to in `name`.
-- `geographicIntegration::String`- **(Optional)** Specifies how the variable accounts for changes in geographic boundaries over time, (eg. "Nominal").
-- `sequence::Float32`- **(Optional)** The order of appearence of the dataset in the metadata API and extract.
-- `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`- **(Optional)** A list of time series records corresponding to the variable specified in `name`.
-- `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`-  **(Optional)** A list of geographic levels available for this time series table.
+- `name::String`- The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
+- `description::String`- A short description of the time series variable referred to in `name`.
+- `geographicIntegration::String`- How does the variable value account for changes in geographic boundaries over time, (eg. "Nominal").
+- `sequence::Float32`- The order of appearence of the dataset in the metadata API and extract.
+- `timeSeries::Vector{TimeSeriesTableFullTimeSeriesInner}`- A list of time series records corresponding to the variable specified in `name`.
+- `geogLevels::Vector{TimeSeriesTableFullTimeSeriesInner}`-  A list of geographic levels available for this time series table.
 
 # Returns
 
-This function return a `TimeSeriesTableFull` object containing the variable
-name, description, time series, and geographical information of the data.
+The return is a new record for the `TimeSeriesTableFull` containing the variable name, description, time series, and geographical information of the data.
 
 # Examples
 
 ```julia-repl
-
-julia> IPUMS.TimeSeriesTableFull(name="A00",
-                                description= "Total Population", 
+julia> IPUMS.TimeSeriesTableFull(name="A00", description= "Total Population", 
                                 geographicIntegration= "Nominal", 
                                 sequence= 0.01, 
-                                timeSeries=[IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "AA",
-                                                                                     description = "Persons: Total",
-                                                                                     sequence = 1 )], 
-                                geogLevels= [ IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "state",
-                                                                                       description = "State",
-                                                                                       sequence = 4 ), 
-                                              IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "county",
-                                                                                       description = "State--County",
-                                                                                       sequence = 25 )])
-# Output
+                                timeSeries=[Dict("name" => "AA", "description" => "Persons: Total", "sequence" => 1 )], 
+                                geogLevels= [ Dict( "name" => "state", "description" =>  "State", "sequence" => 4 ), 
+                                              Dict( "name" => "county", "description" => "State--County", "sequence" => 25 ) ])
+
 {
   "name": "A00",
   "description": "Total Population",
@@ -57,25 +46,23 @@ julia> IPUMS.TimeSeriesTableFull(name="A00",
   "timeSeries": [
     {
       "name": "AA",
-      "description": "Persons: Total",
-      "sequence": 1
+      "sequence": 1,
+      "description": "Persons: Total"
     }
   ],
   "geogLevels": [
     {
       "name": "state",
-      "description": "State",
-      "sequence": 4
+      "sequence": 4,
+      "description": "State"
     },
     {
       "name": "county",
-      "description": "State--County",
-      "sequence": 25
+      "sequence": 25,
+      "description": "State--County"
     }
   ]
 }
-
-
 ```
 
 # References

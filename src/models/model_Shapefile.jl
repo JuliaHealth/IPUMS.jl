@@ -13,34 +13,25 @@ Shapefile(;
     sequence=nothing,
 )
 ```
-This function creates a reference to an NHGIS shapefile for an IPUMS dataset.
+This function creates a representation for geographic information systems (GIS) files.
 
-# Arguments
+# Attributes
 
-- `name::String`- **(Optional)** The unique identifier of the shapefile.
-- `year::String`- **(Optional)** The survey year in which the file's represented areas were used for tabulations.
-- `geographicLevel::String`- **(Optional)** The geographic level of the shapefile.
-- `extent::String`- **(Optional)** The geographic extent which is covered by the shapefile.
-- `basis::String`- **(Optional)** The derivation source of the shapefile.
-- `sequence::Int64`- **(Optional)** The order the shapefile in which appears in the metadata API.
+- `name::String`-The unique identifier of the shapefile.
+- `year::String`-The survey year in which the file's represented areas were used for tabulations.
+- `geographicLevel::String`-The geographic level of the shapefile.
+- `extent::String`-The geographic extent which is covered by the shapefile.
+- `basis::String`-The derivation source of the shapefile.
+- `sequence::Int64`- The order the shapefile in which appears in the metadata API.
 
 # Returns
 
-This function returns a Shapefile object containing the attributes specified in
-the function arguments.
+It returns a list of all the available shapefile.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.Shapefile(name = "base.tl2000.nongen.us_state_1790",
-                       year = "1790",
-                       geographicLevel = "state",
-                       extent = "united states",
-                       basis = "2000 tiger/line +",
-                       sequence =  1)
-
-# Output
-
+julia> IPUMS.Shapefile(name = "base.tl2000.nongen.us_state_1790", year = "1790", geographicLevel = "state", extent = "united states", basis = "2000 tiger/line +", sequence =  1)
 {
   "name": "base.tl2000.nongen.us_state_1790",
   "year": "1790",
@@ -52,7 +43,8 @@ julia> IPUMS.Shapefile(name = "base.tl2000.nongen.us_state_1790",
 ```
 # References
 
-Additional information about this object is available in the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/shapefiles/)
+To find out more about the Shapefile type visit :
+* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/shapefiles/
 """
 Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
