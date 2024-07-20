@@ -14,14 +14,13 @@ This function gives the geographical information about data and its description.
 
 # Arguments
 
-- `name::String`- **(Optional)** The dataset identifier 
-- `description::String`- **(Optional)** A short description of the dataset
-- `hasGeogExtentSelection::Bool`- **(Optional)** boolean indicating if the dataset has geogrphical extent
+- `name::String` - **(Optional)** The dataset identifier 
+- `description::String` - **(Optional)** A short description of the dataset
+- `hasGeogExtentSelection::Bool` - **(Optional)** boolean indicating if the dataset has geogrphical extent
 
 # Returns
 
-The function returns a `DatasetFullGeogLevelsInner` object with geographic \
-information related to a dataset.
+The function returns a `DatasetFullGeogLevelsInner` object with geographic information related to a dataset.
     
 # Examples
 
