@@ -43,6 +43,7 @@ julia> IPUMS.DatasetFullGeogLevelsInner(name = "1790_cPop",
 # References
 
 To learn more about the `DatasetFullGeogLevelsInner` visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets )
+
 """
 Base.@kwdef mutable struct DatasetFullGeogLevelsInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
