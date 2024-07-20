@@ -11,7 +11,7 @@ DataTableSimple(;
     sequence=nothing,
 )
 ```       
-Simplified representation of a given IPUMS table given.
+Builds an object that contains the representation of an IPUMS table.
 
 # Arguments 
 

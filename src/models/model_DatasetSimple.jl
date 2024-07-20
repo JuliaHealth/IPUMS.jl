@@ -29,9 +29,10 @@ by the function arguments.
 # Examples
 
 ```julia-repl
-julia> IPUMS.DatasetSimple(name =  "1790_cPop", description = "1790 Census:
-                                Population Data [US, States & Counties]",
-                                group = "1790 Census",sequence =  101)
+julia> IPUMS.DatasetSimple(name = "1790_cPop",
+                           description = "1790 Census: Population Data [US, States & Counties]",
+                           group = "1790 Census",
+                           sequence =  101)
 
 # Output
 
