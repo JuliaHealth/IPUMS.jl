@@ -13,27 +13,31 @@ Inner constructor representing the variables within a DataTableFull object.
 
 # Attributes
 
--` name::String`-The unique identifier for the data table within its dataset.
-- `nhgisCode::String`-The code for this data table that will appear in extract.
+-`name::String` - **(Optional)** The unique identifier for the data table within its dataset.
+-`nhgisCode::String` - **(Optional)** The code for this data table that will appear in extract.
 
-#Returns
+# Returns
 
-This returns an inner constructor.
+This returns an inner constructor for a DataTable variable, the `DataTableFullVariablesInner` object.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.DataTableFullVariablesInner(name = "NT1",nhgisCode = "AAA")
+
+julia> IPUMS.DataTableFullVariablesInner(name = "NT1",
+                                         nhgisCode = "AAA")
+
+# Output
+
 {
   "name": "NT1",
   "nhgisCode": "AAA"
 }
 
-
 ```
 # Reference
-To find out more about DataTableFullVariablesInner visit :
-* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
+To find out more about DataTableFullVariablesInner visit the
+[IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableFullVariablesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

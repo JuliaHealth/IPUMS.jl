@@ -10,22 +10,28 @@ DatasetFullGeogLevelsInner(;
     hasGeogExtentSelection=nothing,
 )
 ```
-This function gives the geographical information about data and their description
+This function gives the geographical information about data and its description.
 
 # Arguments
 
-- `name::String`-The dataset identifier 
-- `description::String`- A short description of the dataset
-- `hasGeogExtentSelection::Bool`- boolean indicating if the dataset has geogrphical extent
+- `name::String`- **(Optional)** The dataset identifier 
+- `description::String`- **(Optional)** A short description of the dataset
+- `hasGeogExtentSelection::Bool`- **(Optional)** boolean indicating if the dataset has geogrphical extent
 
 # Returns
 
-The function return the name,the geographical extention of the data and their description
+The function returns a `DatasetFullGeogLevelsInner` object with geographic \
+information related to a dataset.
     
 # Examples
 
 ```julia-repl
-julia> IPUMS.DatasetFullGeogLevelsInner(name = "1790_cPop", description = "1790 Census: Population Data [US, States & Counties]", hasGeogExtentSelection = 1)        
+julia> IPUMS.DatasetFullGeogLevelsInner(name = "1790_cPop",
+                                        description = "1790 Census: Population Data [US, States & Counties]",
+                                        hasGeogExtentSelection = 1)
+
+# Output
+
 {
   "name": "1790_cPop",
   "description": "1790 Census: Population Data [US, States & Counties]",
@@ -36,8 +42,7 @@ julia> IPUMS.DatasetFullGeogLevelsInner(name = "1790_cPop", description = "1790 
 
 # References
 
-To find out more about the DatasetFullGeogLevelsInner visit the link:
-* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
+To find out more about the `DatasetFullGeogLevelsInner`` visit the link [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetFullGeogLevelsInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

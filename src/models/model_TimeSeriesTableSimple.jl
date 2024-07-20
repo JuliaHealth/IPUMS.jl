@@ -13,48 +13,56 @@ TimeSeriesTableSimple(;
     geogLevels=nothing,
 )
 ```
-This fuction creates a new record given the name and the description of the data.
+This function creates a new Simple Time Series Table record to support
+downloading of the corresponding data.
 
 # Arguments
 
-- `name::String`-  The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
-- `description::String`- A short description of the time series variable referred to in `name`.
-- `geographicIntegration::String`-   How does the variable value account for changes in geographic boundaries over time, (eg. "Nominal").
-- `sequence::Float32`- The order of appearence of the dataset in the metadata API and extract.
-- `timeSeries::Vector{String}`-  A list of time series records corresponding to the variable specified in `name`.
-- `geogLevels::Vector{String}`- A list of geographic levels available for this time series table.
+- `name::String`- **(Optional)** The unique variable identifier for the time series table, (eg. "A00", "OWNERSHP").
+- `description::String`- **(Optional)** A short description of the time series variable referred to in `name`.
+- `geographicIntegration::String`- **(Optional)** How does the variable value account for changes in geographic boundaries over time, (eg. "Nominal").
+- `sequence::Float32`- **(Optional)** The order of appearence of the dataset in the metadata API and extract.
+- `timeSeries::Vector{String}`- **(Optional)** A list of time series records corresponding to the variable specified in `name`.
+- `geogLevels::Vector{String}`- **(Optional)** A list of geographic levels available for this time series table.
 
 # Returns
 
-This function returns a new record.
-
+This function returns a new `TimeSeriesTableSimple` object.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.TimeSeriesTableSimple(name = "A00", description = "Total Population", geographicIntegration = "Nominal",sequence = 0.01, timeSeries = ["1790"],geogLevels = ["state"] )
+julia> IPUMS.TimeSeriesTableSimple(name = "A00",
+                                   description = "Total Population",
+                                   geographicIntegration = "Nominal",
+                                   sequence = 0.01,
+                                   timeSeries = ["1790", "1800"],
+                                   geogLevels = ["state", "county"] )
+
+# Output
+
 {
   "name": "A00",
   "description": "Total Population",
   "geographicIntegration": "Nominal",
   "sequence": 0.01,
   "timeSeries": [
-    "1790"
+    "1790",
+    "1800"
   ],
   "geogLevels": [
-    "state"
+    "state",
+    "county"
   ]
 }
+
 ```
 
 # References 
 
-To find out more about the `TimeSeriesTableSimple` type visit the link:
-* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/
+To find out more about the `TimeSeriesTableSimple` type visit the
+[IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
-
-
-
 Base.@kwdef mutable struct TimeSeriesTableSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
     description::Union{Nothing, String} = nothing

@@ -11,19 +11,25 @@ DataTableSimple(;
     sequence=nothing,
 )
 ```       
-Simplified representation of a given IPUMS table given an nhgisCode.
+Simplified representation of a given IPUMS table given.
 
 # Arguments 
 
-- `name::String`-The unique identifier for the data table within its dataset.
-- `nhgisCode::String`-The code for this data table that will appear in extract.
-- `description::String`-A short description of the data table.
-- `sequence::Int64`-The order for which this data table will appear in the metadata API and extracts.
+- `name::String`- **(Optional)** The unique identifier for the data table within its dataset.
+- `nhgisCode::String`- **(Optional)** The code for this data table that will appear in extract.
+- `description::String`- **(Optional)** A short description of the data table.
+- `sequence::Int64`- **(Optional)** The order for which this data table will appear in the metadata API and extracts.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.DataTableSimple(name =  "NT1",nhgisCode = "AAA", description = "Total Population", sequence =  1 )
+julia> IPUMS.DataTableSimple(name = "NT1",
+                             nhgisCode = "AAA",
+                             description = "Total Population",
+                             sequence = 1)
+
+# Output
+
 {
   "name": "NT1",
   "nhgisCode": "AAA",
@@ -34,8 +40,8 @@ julia> IPUMS.DataTableSimple(name =  "NT1",nhgisCode = "AAA", description = "Tot
 
 # References
 
-To find out more about the DataTableSimple visit:
-* https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/
+For more information about the `DataTableSimple` object, consult the
+[IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
