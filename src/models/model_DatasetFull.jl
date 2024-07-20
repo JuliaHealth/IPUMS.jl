@@ -2,27 +2,98 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull
+"""
+```
+DatasetFull(;
+    name=nothing,
+    description=nothing,
+    group=nothing,
+    sequence=nothing,
+    dataTables=nothing,
+    geogLevels=nothing,
+    hasMultipleDataTypes=nothing,
+    breakdowns=nothing,
+)
+```
+This function creates a dataset given a dataset description. This function
+is used to download data from the IPUMS website.
 
-    DatasetFull(;
-        name=nothing,
-        description=nothing,
-        group=nothing,
-        sequence=nothing,
-        dataTables=nothing,
-        geogLevels=nothing,
-        hasMultipleDataTypes=nothing,
-        breakdowns=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
-    - group::String
-    - sequence::Int64
-    - dataTables::Vector{DataTableSimple}
-    - geogLevels::Vector{DatasetFullGeogLevelsInner}
-    - hasMultipleDataTypes::Bool
-    - breakdowns::DatasetFullBreakdowns
+- `name::String`- **(Optional)** The dataset identifier 
+- `description::String`- **(Optional)** a short description of the dataset
+- `group::String`- **(Optional)** the group of dataset to which it belongs
+- `sequence::Int64`- **(Optional)** the order of appearence of the dataset in the metadata API and extract
+- `dataTables::Vector{DataTableSimple}`- **(Optional)** The list of the available datatable for the dataset
+- `geogLevels::Vector{DatasetFullGeogLevelsInner}`- **(Optional)** A list of the geographic levels available for the dataset
+- `hasMultipleDataTypes::Bool`- **(Optional)** A boolean indicating if multiple data types exist for the dataset
+- `breakdowns::DatasetFullBreakdowns`- **(Optional)** List of breakdown available for the dataset
+
+# Returns
+
+The function returns a new `DatasetFull` object.
+    
+# Examples
+
+```julia-repl
+julia> IPUMS.DatasetFull(name = "2010_SF1a",
+                         description = "SF 1a - P & H Tables [Blocks & Larger Areas]",
+                         group = "2010 Census",
+                         sequence = 4802,
+                         dataTables = [IPUMS.DataTableSimple(name = "P1",
+                                                             nhgisCode = "H7V",
+                                                             description = "Total Population",
+                                                             sequence = 1)],
+                         geogLevels = [ IPUMS.DatasetFullGeogLevelsInner(name = "nation",
+                                        description = "Nation",
+                                        hasGeogExtentSelection = false)],
+                         hasMultipleDataTypes = false,
+                         breakdowns = IPUMS.DatasetFullBreakdowns(name = "bs32",
+                                                                  type = "Spatial",
+                                                                  description = "Geographic Subarea (2010 Census and American Community Survey)",
+                                                                  breakdownValues = [IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "bs32.ge00",
+                                                                                                           description = "Total area")]))
+
+# Output
+
+{                                                                                                                                                  
+  "name": "2010_SF1a",                                                                                                                             
+  "description": "SF 1a - P & H Tables [Blocks & Larger Areas]",                                                                                   
+  "group": "2010 Census",                                                                                                                          
+  "sequence": 4802,                                                                                                                                
+  "dataTables": [                                                                                                                                  
+    {
+      "name": "P1",
+      "nhgisCode": "H7V",
+      "description": "Total Population",
+      "sequence": 1
+    }
+  ],
+  "geogLevels": [
+    {
+      "name": "nation",
+      "description": "Nation",
+      "hasGeogExtentSelection": false
+    }
+  ],
+  "hasMultipleDataTypes": false,
+  "breakdowns": {
+    "name": "bs32",
+    "type": "Spatial",
+    "description": "Geographic Subarea (2010 Census and American Community Survey)",
+    "breakdownValues": [
+      {
+        "name": "bs32.ge00",
+        "description": "Total area"
+      }
+    ]
+  }
+}
+```
+
+# References
+
+To learn more about the `DatasetFull` type visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

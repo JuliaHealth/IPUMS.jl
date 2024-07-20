@@ -2,15 +2,44 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTable
+"""
+```
+TimeSeriesTable(;
+    geogLevels=nothing,
+    years=nothing,
+)
+```
+This function creates a table record with a given geographical level and year information.
 
-    TimeSeriesTable(;
-        geogLevels=nothing,
-        years=nothing,
-    )
+# Arguments
+- `geogLevels::Vector{String}` - A vector containing geographical levels, (eg."state", "county"), for the Time Series Table
+- `years::Vector{String}` - **(Optional)** A list of years for this Time Series Table.
 
-    - geogLevels::Vector{String}
-    - years::Vector{String}
+# Returns
+
+This function returns a Time Series Table record giving the geographical level and the years to which the data are referring. 
+
+# Examples
+```julia-repl
+julia> IPUMS.TimeSeriesTable(geogLevels=["state"],
+                             years =["1790"])
+
+# Outputs
+
+{
+  "geogLevels": [
+    "state"
+  ],
+  "years": [
+    "1790"
+  ]
+}
+```
+# References
+
+To find additional information on the Time Series Table, please refer to: 
+* <https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)>
+* <https://www.nhgis.org/time-series-tables>
 """
 Base.@kwdef mutable struct TimeSeriesTable <: OpenAPI.APIModel
     geogLevels::Union{Nothing, Vector{String}} = nothing

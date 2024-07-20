@@ -2,17 +2,44 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract_downloadLinks
+"""
+```
+DataExtractDownloadLinks(;
+    codebookPreview=nothing,
+    tableData=nothing,
+    gisData=nothing,
+)
+```
+This function provides the download links for a census extract's codebook, CSV data, and Shapefile.
 
-    DataExtractDownloadLinks(;
-        codebookPreview=nothing,
-        tableData=nothing,
-        gisData=nothing,
-    )
+# Arguments
 
-    - codebookPreview::String
-    - tableData::String
-    - gisData::String
+- `codebookPreview::String`- **(Optional)** HTTP link to preview of the codebook used to encode the census data
+- `tableData::String`- **(Optional)** HTTP link to the NHGIS CSV data file for download
+- `gisData::String`- **(Optional)** HTTP link to the NHGIS Shapefile for download
+
+# Returns
+
+The function returns a `DataExtractDownloadLinks` object containing the links for download.
+    
+# Examples
+
+```julia-repl
+julia> IPUMS.DataExtractDownloadLinks(codebookPreview = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+                           tableData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+                           gisData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip")
+
+# Output
+
+{
+  "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+  "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+  "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+}
+```
+
+# References
+For additional information on Dataset creation and download, consults the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractDownloadLinks <: OpenAPI.APIModel
     codebookPreview::Union{Nothing, String} = nothing

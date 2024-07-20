@@ -2,23 +2,57 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""Shapefile
+"""
+```
+Shapefile(;
+    name=nothing,
+    year=nothing,
+    geographicLevel=nothing,
+    extent=nothing,
+    basis=nothing,
+    sequence=nothing,
+)
+```
+This function creates a reference to an NHGIS shapefile for an IPUMS dataset.
 
-    Shapefile(;
-        name=nothing,
-        year=nothing,
-        geographicLevel=nothing,
-        extent=nothing,
-        basis=nothing,
-        sequence=nothing,
-    )
+# Attributes
 
-    - name::String
-    - year::String
-    - geographicLevel::String
-    - extent::String
-    - basis::String
-    - sequence::Int64
+- `name::String`- **(Optional)** The unique identifier of the shapefile.
+- `year::String`- **(Optional)** The survey year in which the file's represented areas were used for tabulations.
+- `geographicLevel::String`- **(Optional)** The geographic level of the shapefile.
+- `extent::String`- **(Optional)** The geographic extent which is covered by the shapefile.
+- `basis::String`- **(Optional)** The derivation source of the shapefile.
+- `sequence::Int64`- **(Optional)** The order the shapefile in which appears in the metadata API.
+
+# Returns
+
+This function returns a Shapefile object containing the attributes specified in
+the function arguments.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.Shapefile(name = "base.tl2000.nongen.us_state_1790",
+                       year = "1790",
+                       geographicLevel = "state",
+                       extent = "united states",
+                       basis = "2000 tiger/line +",
+                       sequence =  1)
+
+# Output
+
+{
+  "name": "base.tl2000.nongen.us_state_1790",
+  "year": "1790",
+  "geographicLevel": "state",
+  "extent": "united states",
+  "basis": "2000 tiger/line +",
+  "sequence": 1
+}
+```
+# References
+
+Additional information about this object is available in the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/shapefiles/)
 """
 Base.@kwdef mutable struct Shapefile <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

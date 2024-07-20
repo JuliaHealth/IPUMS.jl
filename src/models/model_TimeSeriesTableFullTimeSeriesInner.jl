@@ -2,17 +2,46 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""TimeSeriesTableFull_timeSeries_inner
+"""
+```
+TimeSeriesTableFullTimeSeriesInner(;
+    name=nothing,
+    description=nothing,
+    sequence=nothing,
+)
+```
+  
+This function creates a reference to an IPUMS Time Series table. 
 
-    TimeSeriesTableFullTimeSeriesInner(;
-        name=nothing,
-        description=nothing,
-        sequence=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
-    - sequence::Int64
+- `name::String` - **(Optional)** The unique identifier of the time series table.
+- `description::String` - **(Optional)** A short description of the time series table.
+- `sequence::Int64` - **(Optional)** The order in which the time series table will appear in the metadata API and extracts.
+
+# Returns
+
+This function returns a `TimeSeriesTableFullTimeSeriesInner` object that contains 
+information about a desired Time Series table.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.TimeSeriesTableFullTimeSeriesInner(name = "1790_cPop",
+                                                description =  "1790 Census: Population Data [US, States & Counties]",
+                                                sequence = 101)
+# Output
+
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]",
+  "sequence": 101
+}
+```
+
+# References
+
+Additional information about the `TimeSeriesTableFullTimeSeriesInner` object is available in the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/time_series/)
 """
 Base.@kwdef mutable struct TimeSeriesTableFullTimeSeriesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

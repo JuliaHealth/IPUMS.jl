@@ -2,19 +2,115 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract
+"""
 
-    DataExtract(;
-        extractDefinition=nothing,
-        number=nothing,
-        status=nothing,
-        downloadLinks=nothing,
-    )
+```
+DataExtract(;
+    extractDefinition=nothing,
+    number=nothing,
+    status=nothing,
+    downloadLinks=nothing,
+)
+```
 
-    - extractDefinition::DataExtractDefinition
-    - number::Int64
-    - status::String
-    - downloadLinks::DataExtractDownloadLinks
+This function prepares a data extract request for submission to the IPUMS API.
+
+# Arguments
+
+- `extractDefinition::DataExtractDefinition`- **(Optional)** Definition of the extracted data.
+- `number::Int64`- **(Optional)** Number of the data.
+- `status::String`- **(Optional)** Status of the data extraction (eg. "complete").
+- `downloadLinks::DataExtractDownloadLinks`- **(Optional)** Download link for the extracted data.
+
+# Returns
+
+This function returns a `DataExtract` object. 
+
+# Examples
+
+```julia-repl
+
+julia> IPUMS.DataExtract(extractDefinition = IPUMS.DataExtractDefinition(datasets = Dict("1790_cPop" => IPUMS.Dataset(dataTables = ["NT1"],
+                                                                        geogLevels = ["place_00498"]),
+                                                   "1800_cPop" => IPUMS.Dataset(dataTables = ["NT3"],
+                                                                        geogLevels = ["state"])),
+                                             timeSeriesTables = Dict("A00" => IPUMS.TimeSeriesTable(geogLevels = ["state"]),
+                                                                     "A03" => IPUMS.TimeSeriesTable(geogLevels = ["state"]) ),
+                                             dataFormat = "csv_no_header",
+                                             timeSeriesTableLayout = "time_by_row_layout",
+                                             shapefiles = ["https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"] ,
+                                             geographicExtents = ["united states"],
+                                             description = "abc",
+                                             version = 2,
+                                             collection = "nhgis"),
+                         number = 2,
+                         status = "complete",
+                         downloadLinks = IPUMS.DataExtractDownloadLinks(codebookPreview = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+                                         tableData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+                                         gisData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip")
+
+                        )
+
+# Output
+
+{                                                                                                                                                  
+  "extractDefinition": {                                                                                                                           
+    "datasets": {                                                                                                                                  
+      "1790_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT1"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "place_00498"                                                                                                                            
+        ]                                                                                                                                          
+      },                                                                                                                                           
+      "1800_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT3"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "state"                                                                                                                                  
+        ]                                                                                                                                          
+      }
+    },
+    "timeSeriesTables": {
+      "A00": {
+        "geogLevels": [
+          "state"
+        ]
+      },
+      "A03": {
+        "geogLevels": [
+          "state"
+        ]
+     }
+    },
+    "dataFormat": "csv_no_header",
+    "timeSeriesTableLayout": "time_by_row_layout",
+    "shapefiles": [
+      "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+    ],
+    "geographicExtents": [
+      "united states"
+    ],
+    "description": "abc",
+    "version": 2,
+    "collection": "nhgis"
+  },
+  "number": 2,
+  "status": "complete",
+  "downloadLinks": {
+    "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+    "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+    "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+  }
+}
+
+```
+# References
+
+To learn more about the `DataExtract` type, please visit the [IPUMS API DataExtract](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
+
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

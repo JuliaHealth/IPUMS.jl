@@ -2,27 +2,100 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtractPost
+"""
+``` 
+DataExtractPost(;
+    datasets=nothing,
+    timeSeriesTables=nothing,
+    dataFormat=nothing,
+    timeSeriesTableLayout=nothing,
+    breakdownAndDataTypeLayout=nothing,
+    shapefiles=nothing,
+    geographicExtents=nothing,
+    description=nothing,
+)
+```
+This function prepares a POST object for delivery to an IPUMS POST endpoint.
 
-    DataExtractPost(;
-        datasets=nothing,
-        timeSeriesTables=nothing,
-        dataFormat=nothing,
-        timeSeriesTableLayout=nothing,
-        breakdownAndDataTypeLayout=nothing,
-        shapefiles=nothing,
-        geographicExtents=nothing,
-        description=nothing,
-    )
+# Arguments
 
-    - datasets::Dict{String, Dataset}
-    - timeSeriesTables::Dict{String, TimeSeriesTable}
-    - dataFormat::String
-    - timeSeriesTableLayout::String
-    - breakdownAndDataTypeLayout::String
-    - shapefiles::Vector{String}
-    - geographicExtents::Vector{String}
-    - description::String
+- `datasets::Dict{String, Dataset}` - **(Optional)** A dictionary containing a `Dataset` object
+- `timeSeriesTables::Dict{String, TimeSeriesTable}` - **(Optional)** A dictionary containing a `TimeSeriesTable` object
+- `dataFormat::String` - **(Optional)** a specified data format
+- `timeSeriesTableLayout::String` - **(Optional)** The layout of your time series table data.
+- `breakdownAndDataTypeLayout::String` - **(Optional)** The layout of your dataset data when multiple data types or breakdown combos are present
+- `shapefiles::Vector{String}` - **(Optional)** A list of selected shapefiles
+- `geographicExtents::Vector{String}` - **(Optional)** A list of geographic_instances to use as extents for all datasets on this request
+- `description::String` - **(Optional)** A short description of the extract.
+
+# Returns
+
+This function returns a `DataExtractPost` object for delivery to an IPUMS POST endpoint.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.DataExtractPost(datasets = Dict("1790_cPop" => IPUMS.Dataset(dataTables = ["NT1"],
+                                                                        geogLevels = ["place_00498"]),
+                                                   "1800_cPop" => IPUMS.Dataset(dataTables = ["NT3"],
+                                                                        geogLevels = ["state"])),
+                           timeSeriesTables = Dict("A00" => IPUMS.TimeSeriesTable(geogLevels = ["state"]),
+                                                   "A03" => IPUMS.TimeSeriesTable(geogLevels = ["state"]) ),
+                           dataFormat = "csv_no_header",
+                           timeSeriesTableLayout = "time_by_row_layout",
+                           shapefiles = ["https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"] ,
+                           geographicExtents = ["united states"],
+                           description = "abc")
+
+# Output
+
+{                                                                                                                                                  
+  "datasets": {                                                                                                                                    
+    "1790_cPop": {                                                                                                                                 
+      "dataTables": [                                                                                                                              
+        "NT1"                                                                                                                                      
+      ],                                                                                                                                           
+      "geogLevels": [                                                                                                                              
+        "place_00498"                                                                                                                              
+      ]                                                                                                                                            
+    },                                                                                                                                             
+    "1800_cPop": {                                                                                                                                 
+      "dataTables": [                                                                                                                              
+        "NT3"                                                                                                                                      
+      ],                                                                                                                                           
+      "geogLevels": [
+        "state"
+      ]
+    }
+  },
+  "timeSeriesTables": {
+    "A00": {
+      "geogLevels": [
+        "state"
+      ]
+    },
+    "A03": {
+      "geogLevels": [
+        "state"
+      ]
+    }
+  },
+  "dataFormat": "csv_no_header",
+  "timeSeriesTableLayout": "time_by_row_layout",
+  "shapefiles": [
+    "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+  ],
+  "geographicExtents": [
+    "united states"
+  ],
+  "description": "abc"
+}
+
+```
+
+# Reference
+
+For additional information on the `DataExtractPost` object, please refer to the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractPost <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }
