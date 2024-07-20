@@ -17,9 +17,9 @@ group, and sequence.
 # Arguments
 
 - `name::String`- **(Optional)** The dataset identifier 
-- `description::String`-(Optional) A short description of the dataset
-- `group::String`-(Optional) The group of datasets to which this dataset belongs.
-- `sequence::Int64`-(Optional) The order in which the dataset will appear in the metadata API and extracts.
+- `description::String`- **(Optional)** A short description of the dataset
+- `group::String`- **(Optional)** The group of datasets to which this dataset belongs.
+- `sequence::Int64`- **(Optional)** The order in which the dataset will appear in the metadata API and extracts.
 
 # Returns
 
