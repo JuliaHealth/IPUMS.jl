@@ -10,24 +10,36 @@ DataExtractDownloadLinks(;
     gisData=nothing,
 )
 ```
-This function provides the download links for an extract's codebook, tabular data, and GIS data.
+This function provides the download links for a census extract's codebook, CSV data, and Shapefile.
 
 # Arguments
 
-- `codebookPreview::String`-
-- `tableData::String`- 
-- `gisData::String`-
+- `codebookPreview::String`- **(Optional)** HTTP link to preview of the codebook used to encode the census data
+- `tableData::String`- **(Optional)** HTTP link to the NHGIS CSV data file for download
+- `gisData::String`- **(Optional)** HTTP link to the NHGIS Shapefile for download
 
 # Returns
 
-The function returns the download links for an extract's codebook, tabular data, and GIS data.
+The function returns a `DataExtractDownloadLinks` object containing the links for download.
     
 # Examples
 
-OrderedMap { "codebookPreview": "", "tableData": "", "gisData": "state"}
+```julia-repl
+julia> IPUMS.DataExtractDownloadLinks(codebookPreview = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+                           tableData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+                           gisData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip")
+
+# Output
+
+{
+  "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+  "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+  "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+}
+```
 
 # References
-https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
+For additional information on Dataset creation and download, consults the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractDownloadLinks <: OpenAPI.APIModel
     codebookPreview::Union{Nothing, String} = nothing

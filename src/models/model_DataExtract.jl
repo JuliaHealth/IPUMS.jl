@@ -17,65 +17,100 @@ This function prepares a data extract request for submission to the IPUMS API.
 
 # Arguments
 
-- `extractDefinition::DataExtractDefinition`- Definition of the extracted data.
-- `number::Int64`- Number of the data.
-- `status::String`- Status of the data extraction (eg. "complete").
-- `downloadLinks::DataExtractDownloadLinks`- Download link for the extracted data.
+- `extractDefinition::DataExtractDefinition`- **(Optional)** Definition of the extracted data.
+- `number::Int64`- **(Optional)** Number of the data.
+- `status::String`- **(Optional)** Status of the data extraction (eg. "complete").
+- `downloadLinks::DataExtractDownloadLinks`- **(Optional)** Download link for the extracted data.
 
 # Returns
 
-It returns the data definition,the number the status of the download and the link to download the data.
+This function returns a `DataExtract` object. 
 
 # Examples
 
 ```julia-repl
 
-julia> example = Dict(
-         "extractDefinition" => DataExtractDefinition(
-              #=
-                ...
-                extractDefinition details here
-                ...
-                =#
-         ),
-         "number" => 2,
-         "status" => "complete",
-         "downloadLinks" => DataExtractDownloadLinks(
-             #=
-                ...
-                Download link details here
-                ...
-                =#
-             )
-         )
-     )
+julia> IPUMS.DataExtract(extractDefinition = IPUMS.DataExtractDefinition(datasets = Dict("1790_cPop" => IPUMS.Dataset(dataTables = ["NT1"],
+                                                                        geogLevels = ["place_00498"]),
+                                                   "1800_cPop" => IPUMS.Dataset(dataTables = ["NT3"],
+                                                                        geogLevels = ["state"])),
+                                             timeSeriesTables = Dict("A00" => IPUMS.TimeSeriesTable(geogLevels = ["state"]),
+                                                                     "A03" => IPUMS.TimeSeriesTable(geogLevels = ["state"]) ),
+                                             dataFormat = "csv_no_header",
+                                             timeSeriesTableLayout = "time_by_row_layout",
+                                             shapefiles = ["https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"] ,
+                                             geographicExtents = ["united states"],
+                                             description = "abc",
+                                             version = 2,
+                                             collection = "nhgis"),
+                         number = 2,
+                         status = "complete",
+                         downloadLinks = IPUMS.DataExtractDownloadLinks(codebookPreview = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+                                         tableData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+                                         gisData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip")
 
-julia> IPUMS.DataExtract(example["extractDefinition"], example["number"], example["status"], example["downloadLinks"])
+                        )
 
-{
-  "extractDefinition": {
-   #=
-    ...
-    Extract definition details here
-    ...
-    =#
+# Output
+
+{                                                                                                                                                  
+  "extractDefinition": {                                                                                                                           
+    "datasets": {                                                                                                                                  
+      "1790_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT1"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "place_00498"                                                                                                                            
+        ]                                                                                                                                          
+      },                                                                                                                                           
+      "1800_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT3"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "state"                                                                                                                                  
+        ]                                                                                                                                          
+      }
+    },
+    "timeSeriesTables": {
+      "A00": {
+        "geogLevels": [
+          "state"
+        ]
+      },
+      "A03": {
+        "geogLevels": [
+          "state"
+        ]
+     }
+    },
+    "dataFormat": "csv_no_header",
+    "timeSeriesTableLayout": "time_by_row_layout",
+    "shapefiles": [
+      "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+    ],
+    "geographicExtents": [
+      "united states"
+    ],
+    "description": "abc",
+    "version": 2,
+    "collection": "nhgis"
   },
   "number": 2,
   "status": "complete",
   "downloadLinks": {
-     #=
-    ...
-    Download link details here
-    ...
-    =#
-   
+    "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+    "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+    "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
   }
 }
-```
-# Reference
-To find out more about the DataExtract type visit the [Reference page of IPUMS API DataExtract](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 
-The example code was converted from javascript to Julia using ChatGPT(https://chatgpt.com/).
+```
+# References
+
+To learn more about the `DataExtract` type, please visit the [IPUMS API DataExtract](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
+
 """
 Base.@kwdef mutable struct DataExtract <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

@@ -11,25 +11,102 @@ DataExtractPostResponse(;
     downloadLinks=nothing,
 )
 ```
-This function extracts data giving a data definition,the status of the download and the link
+This function returns a response to a `DataExtractPost` request.
 
 # Arguments
 
-- `extractDefinition::DataExtractDefinition`-  An object coming from a DataExtractDefinition file.
-- `number::Int64`- The extract ID number.
-- `status::String`- The status of data extraction.
-- `downloadLinks::DataExtractDownloadLinks`- The link to download data.
+- `extractDefinition::DataExtractDefinition` - **(Optional)** A `DataExtractDefinition` from the original POST request
+- `number::Int64` - **(Optional)** The extract ID number
+- `status::String` - **(Optional)** The status of data extraction
+- `downloadLinks::DataExtractDownloadLinks` - **(Optional)** The download links for the data
 
 # Returns
 
-Returns a POST response from the IPUMS API.
+This function returns a `DataExtractPostResponse` object containing the response from the IPUMS API to the DataExtractPost request.
 
 # Examples
 
+```julia-repl
+julia> IPUMS.DataExtractPostResponse(extractDefinition = IPUMS.DataExtractDefinition(datasets = Dict("1790_cPop" => IPUMS.Dataset(dataTables = ["NT1"],
+                                                                                                                                  geogLevels = ["place_00498"]),
+                                                                                                     "1800_cPop" => IPUMS.Dataset(dataTables = ["NT3"],
+                                                                                                                                  geogLevels = ["state"])),
+                                                                                     timeSeriesTables = Dict("A00" => IPUMS.TimeSeriesTable(geogLevels = ["state"]),
+                                                                                                             "A03" => IPUMS.TimeSeriesTable(geogLevels = ["state"]) ),
+                                                                                     dataFormat = "csv_no_header",
+                                                                                     timeSeriesTableLayout = "time_by_row_layout",
+                                                                                     shapefiles = ["https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"] ,
+                                                                                     geographicExtents = ["united states"],
+                                                                                     description = "abc",
+                                                                                     version = 2,
+                                                                                     collection = "nhgis"),
+                                                                                     number = 90,
+                                                                                     status = "queued",
+                                                                                     downloadLinks = IPUMS.DataExtractDownloadLinks(codebookPreview = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+                                                                                                                                    tableData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+                                                                                                                                    gisData = "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"))
+
+# Output
+
+{                                                                                                                                                  
+  "extractDefinition": {                                                                                                                           
+    "datasets": {                                                                                                                                  
+      "1790_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT1"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "place_00498"                                                                                                                            
+        ]                                                                                                                                          
+      },                                                                                                                                           
+      "1800_cPop": {                                                                                                                               
+        "dataTables": [                                                                                                                            
+          "NT3"                                                                                                                                    
+        ],                                                                                                                                         
+        "geogLevels": [                                                                                                                            
+          "state"                                                                                                                                  
+        ]                                                                                                                                          
+      }                                                                                                                                            
+    },                                                                                                                                             
+    "timeSeriesTables": {
+      "A00": {
+        "geogLevels": [
+          "state"
+        ]
+      },
+      "A03": {
+        "geogLevels": [
+          "state"
+        ]
+      }
+    },
+    "dataFormat": "csv_no_header",
+    "timeSeriesTableLayout": "time_by_row_layout",
+    "shapefiles": [
+      "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+    ],
+    "geographicExtents": [
+      "united states"
+    ],
+    "description": "abc",
+    "version": 2,
+    "collection": "nhgis"
+  },
+  "number": 90,
+  "status": "queued",
+  "downloadLinks": {
+    "codebookPreview": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv_PREVIEW.zip",
+    "tableData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_csv.zip",
+    "gisData": "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+  }
+}
+
+```
+
+
 # References
 
- To know more about DataExtractPostResponse visit the link:
-* https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata
+To learn more about `DataExtractPostResponse` visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractPostResponse <: OpenAPI.APIModel
     extractDefinition = nothing # spec type: Union{ Nothing, DataExtractDefinition }

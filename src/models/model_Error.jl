@@ -10,32 +10,40 @@ Error(;
     detail=nothing,
 )
 ```
-This function send an error message 
+This function returns the error message from a dataset request to the IPUMS API. 
+
 # Arguments
 
--`type::Int64`- Gives the type of error
-- `status::String`- Gives the status of the error
-- `detail::String`- Gives the details of the error 
+- `type::Int64`- The error code for the message
+- `status::String` - The actual error message returned
+- `detail::String` - Additional explanation about the cause of the error
 
 # Returns
 
-Returns errors giving details
+This function return an `Error` object containing the reasons for the failure of a request to the IPUMS API.
 
 # Examples
 
 ```julia-repl
-julia> IPUMS.Error(type =001, status = "aaa ",detail = "abc" )
+
+julia> IPUMS.Error(type = 400,
+                   status = "SemanticValidationError",
+                   detail = "Geographic extents Extent selection is not required for selected geog levels. Please remove the 'geographic_extents' section of you request." )
+
+# Output
+
 {
-  "type": 1,
-  "status": "aaa ",
-  "detail": "abc"
+  "type": 400,
+  "status": "SemanticValidationError",
+  "detail": "Geographic extents Extent selection is not required for selected geog levels. Please remove the 'geographic_extents' section of you request."
 }
+
 ```
 
-
 # References
-To know more about errors see:
-* https://developer.ipums.org/docs/v2/reference/nhgis/
+To learn more about errors, please see:
+* <https://developer.ipums.org/docs/v2/reference/nhgis/>
+* <https://forum.ipums.org/t/proper-format-for-simple-api-call-in-r/4901>
 """
 Base.@kwdef mutable struct Error <: OpenAPI.APIModel
     type::Union{Nothing, Int64} = nothing
