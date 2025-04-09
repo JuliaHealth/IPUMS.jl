@@ -426,7 +426,7 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
     # extract the float values from corresponding integers. 
     arr_dtype = DataType[eltype(a) for a in dtype_vec]
     arr_dcml = Int64[d for d in dcml_vec]
-    arr_cache = Array{Number}(undef, length(name_vec))
+    arr_cache = Array{Union{Number, Missing}}(undef, length(name_vec))
     arr_cache .= 0
 
     _df_loader_inplace_svector!(
@@ -467,7 +467,7 @@ function _df_loader_inplace_svector!(
     for line in eachline(extract_filepath)
         lvec = SubString{String}[strip(line[r]) for r in range_vec]
         map!((x, p, d) -> _parse_data(x, p, d), array_cache, lvec, p_dtype, p_dcml)
-        push!(df, array_cache)
+        push!(df, array_cache, promote = true)
     end
 end
 
@@ -500,7 +500,11 @@ end
 function _parse_data(
     strnum::SubString{String}, dtype::Type{T}, decimals::Int64
 ) where {T<:AbstractFloat}
-    @. parse(dtype, chop(strnum; tail=decimals) * "." * last(strnum, decimals))
+    if isempty(strnum)
+        return missing
+    else
+        return @. parse(dtype, chop(strnum; tail=decimals) * "." * last(strnum, decimals))
+    end
 end
 
 
@@ -534,6 +538,10 @@ end
 function _parse_data(
     strnum::SubString{String}, dtype::Type{T}, decimals::Int64
 ) where {T<:Integer}
-    @. parse(dtype, strnum)
+    if isempty(strnum)
+        return missing
+    else
+        return @. parse(dtype, strnum)
+    end
 end
 
