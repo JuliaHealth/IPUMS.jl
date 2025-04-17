@@ -6,7 +6,9 @@ module IPUMS
         download as dl
     import OpenAPI.Clients: 
         Client
-
+    import GeoDataFrames:
+        read
+    import GeoFormatTypes
     using DataFrames: 
         DataFrames, 
         DataFrame, 
@@ -54,7 +56,7 @@ module IPUMS
     =#
 
     include("parsers/ddi_parser.jl")
-
+    include("parsers/nhgis_parser.jl")
     #=
     
     Exports
@@ -65,5 +67,6 @@ module IPUMS
     export parse_ddi
     export extract_download
     export load_ipums_extract
+    export load_ipums_nhgis
 
 end

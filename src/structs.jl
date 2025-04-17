@@ -230,3 +230,76 @@ https://ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/field_level_doc
     _ns::String = ""
     data_summary::DataFrame = DataFrame()
 end
+
+
+
+"""
+```julia
+NHGISInfo(
+    filepath::String, 
+    ipums_project::String = "",
+    data_summary::DataFrame = DataFrame(),
+    geom_projection::String,
+    geodataframe::DataFrame()
+)
+```
+
+A struct representing the metadata and data taken from an IPUMS NHGIS extract. An IPUMS 
+NHGIS extract contains both file-level metadata (such as the date of export), as well
+as variable level metadata (such as the name and data type of a variable). 
+
+This type is not accessed by users directly, but instead is constructed by 
+the `load_ipums_nhgis()` function.
+
+# Keyword Arguments
+
+- `filepath::String` -  File system path to the DDI (`.xml`) file.
+- `ipums_project::String` - Identifier for the IPUMS source of the extract 
+                            data, such as `IPUMS CPS`, or `IPUMS USA`, etc. 
+- `data_summary::DataFrame` - Contains a dataframe that holds summary information
+                    about the variables in the dataset, including variable names,
+                    data types, variable descriptions, and categorical information.
+- `geom_projection::String` - the GIS spatial or geometric projection for the 
+                    IPUMS NHGIS extract.
+- `geodataframe::DataFrame` - a GeoDataFrame that contains the data from the 
+                    Shapefile.
+
+# Returns
+
+- `NHGISInfo` object that contains both file-level and variable-level metadata 
+            extracted from an IPUMS NHGIS extract. 
+
+# Example
+
+```julia-repl
+julia> datafile = "US_state_1790.shp"
+julia> load_ipums_nhgis(datafile)
+IPUMS.NHGISInfo("US_state_1790.shp", "NHGIS",
+        0×0 DataFrame, 
+        GeoFormatTypes.WellKnownText{GeoFormatTypes.CRS}(GeoFormatTypes.CRS(), 
+        "PROJCS[\"USA_Contiguous_Albers_Equal_Area_Conic\",GEOGCS[\"NAD83\",
+            DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,
+            298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",
+            \"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],
+            UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],
+            AUTHORITY[\"EPSG\",\"4269\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],
+            PARAMETER[\"latitude_of_center\",37.5],PARAMETER[\"longitude_of_center\"
+            ,-96],PARAMETER[\"standard_parallel_1\",29.5],
+            PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"false_easting\"
+            ,0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,
+            AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],
+            AXIS[\"Northing\",NORTH],AUTHORITY[\"ESRI\",\"102003\"]]"), 
+            16×8 DataFrame ....
+```
+
+# References
+
+"""
+Base.@kwdef mutable struct NHGISInfo
+    filepath::String
+    ipums_project::String = "NHGIS"
+    data_summary::DataFrame = DataFrame()
+    geom_projection::GeoFormatTypes.WellKnownText{GeoFormatTypes.CRS}
+    geodataframe::DataFrame = DataFrame()
+end
+
