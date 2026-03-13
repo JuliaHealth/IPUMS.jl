@@ -2,17 +2,48 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""Error
+"""
+```
+Error(;
+    type=nothing,
+    status=nothing,
+    detail=nothing,
+)
+```
+This function returns the error message from a dataset request to the IPUMS API. 
 
-    Error(;
-        type=nothing,
-        status=nothing,
-        detail=nothing,
-    )
+# Arguments
 
-    - type::Int64
-    - status::String
-    - detail::String
+- `type::Int64`- The error code for the message
+- `status::String` - The actual error message returned
+- `detail::String` - Additional explanation about the cause of the error
+
+# Returns
+
+This function return an `Error` object containing the reasons for the failure of a request to the IPUMS API.
+
+# Examples
+
+```julia-repl
+
+julia> IPUMS.Error(type = 400,
+                   status = "SemanticValidationError",
+                   detail = "Geographic extents Extent selection is not required for selected geog levels. Please remove the 'geographic_extents' section of you request." )
+
+# Output
+
+{
+  "type": 400,
+  "status": "SemanticValidationError",
+  "detail": "Geographic extents Extent selection is not required for selected geog levels. Please remove the 'geographic_extents' section of you request."
+}
+
+```
+
+# References
+To learn more about errors, please see:
+* <https://developer.ipums.org/docs/v2/reference/nhgis/>
+* <https://forum.ipums.org/t/proper-format-for-simple-api-call-in-r/4901>
 """
 Base.@kwdef mutable struct Error <: OpenAPI.APIModel
     type::Union{Nothing, Int64} = nothing

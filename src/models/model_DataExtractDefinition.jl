@@ -2,31 +2,102 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataExtract_extractDefinition
+"""
+```
+DataExtractDefinition(;
+    datasets=nothing,
+    timeSeriesTables=nothing,
+    dataFormat=nothing,
+    timeSeriesTableLayout=nothing,
+    breakdownAndDataTypeLayout=nothing,
+    shapefiles=nothing,
+    geographicExtents=nothing,
+    description=nothing,
+    version=nothing,
+    collection=nothing,
+)
+```
+This function creates a definition object that is used for extracting data from an IPUMS dataset.
 
-    DataExtractDefinition(;
-        datasets=nothing,
-        timeSeriesTables=nothing,
-        dataFormat=nothing,
-        timeSeriesTableLayout=nothing,
-        breakdownAndDataTypeLayout=nothing,
-        shapefiles=nothing,
-        geographicExtents=nothing,
-        description=nothing,
-        version=nothing,
-        collection=nothing,
-    )
+# Arguments
 
-    - datasets::Dict{String, Dataset}
-    - timeSeriesTables::Dict{String, TimeSeriesTable}
-    - dataFormat::String
-    - timeSeriesTableLayout::String
-    - breakdownAndDataTypeLayout::String
-    - shapefiles::Vector{String}
-    - geographicExtents::Vector{String}
-    - description::String
-    - version::Int64
-    - collection::String
+- `datasets::Dict{String, Dataset}` - **(Optional)** A dictionary containing a `Dataset` object
+- `timeSeriesTables::Dict{String, TimeSeriesTable}` - **(Optional)** A dictionary containing a `TimeSeriesTable` object
+- `dataFormat::String` - **(Optional)** The requested format of the data
+- `timeSeriesTableLayout::String` - **(Optional)** The layout of the time series table data
+- `breakdownAndDataTypeLayout::String` - **(Optional)** The layout of the dataset data when multiple data types or breakdown combos are present.
+- `shapefiles::Vector{String}` - **(Optional)** A list of selected shapefiles.
+- `geographicExtents::Vector{String}` - **(Optional)** A list of geographic_instances to use as extents for all datasets on this request.
+- `description::String` - **(Optional)** A short description of your extract.
+- `version::String` - **(Optional)** the version of the IPUMS API to use (Default: `"2"`)
+- `collection::String` - **(Optional)** What IPUMS collection to be queried for the extract (options could include "nhgis", "usa", etc. corresponding to IPUMS NHGIS or NHGIS USA databases).
+
+# Returns
+
+The function return a new definition object to extract data from IPUMS dataset.
+    
+# Examples
+
+```julia-repl
+julia> IPUMS.DataExtractDefinition(datasets = Dict("1790_cPop" => IPUMS.Dataset(dataTables = ["NT1"],
+                                                                        geogLevels = ["place_00498"]),
+                                                   "1800_cPop" => IPUMS.Dataset(dataTables = ["NT3"],
+                                                                        geogLevels = ["state"])),
+                           timeSeriesTables = Dict("A00" => IPUMS.TimeSeriesTable(geogLevels = ["state"]),
+                                                   "A03" => IPUMS.TimeSeriesTable(geogLevels = ["state"]) ),
+                           dataFormat = "csv_no_header",
+                           timeSeriesTableLayout = "time_by_row_layout",
+                           shapefiles = ["https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"] ,
+                           geographicExtents = ["united states"],
+                           description = "abc",
+                           version = 2,
+                           collection = "nhgis"
+                           )
+# Output
+
+{                                                                                                                                                  
+  "datasets": {                                                                                                                                    
+    "1790_cPop": {                                                                                                                                 
+      "dataTables": [                                                                                                                              
+        "NT1"                                                                                                                                      
+      ],                                                                                                                                           
+      "geogLevels": [                                                                                                                              
+        "place_00498"                                                                                                                              
+      ]                                                                                                                                            
+    },                                                                                                                                             
+    "1800_cPop": {                                                                                                                                 
+      "dataTables": [                                                                                                                              
+        "NT3"                                                                                                                                      
+      ],                                                                                                                                           
+      "geogLevels": [                                                                                                                              
+        "state"                                                                                                                                    
+      ]
+    }
+  },
+  "timeSeriesTables": {
+    "A00": {
+      "geogLevels": [
+        "state"
+      ]
+   }
+  },
+  "dataFormat": "csv_no_header",
+  "timeSeriesTableLayout": "time_by_row_layout",
+  "shapefiles": [
+    "https://api.ipums.org/downloads/nhgis/api/v1/extracts/1234567/nhgis0007_shape.zip"
+  ],
+  "geographicExtents": [
+    "united states"
+  ],
+  "description": "abc",
+  "version": 2,
+  "collection": "nhgis"
+}
+
+```
+# References
+
+To learn more about `DataExtractDefinition`object, consult the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata)
 """
 Base.@kwdef mutable struct DataExtractDefinition <: OpenAPI.APIModel
     datasets::Union{Nothing, Dict} = nothing # spec type: Union{ Nothing, Dict{String, Dataset} }

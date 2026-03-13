@@ -2,15 +2,40 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_breakdowns_breakdownValues_inner
+"""
+```
+DatasetFullBreakdownsBreakdownValuesInner(;
+    name=nothing,
+    description=nothing,
+)
+```
+Inner constructor representing the variables within a `DatasetFull` object.
 
-    DatasetFullBreakdownsBreakdownValuesInner(;
-        name=nothing,
-        description=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
+- `name::String` - **(Optional)** The dataset identifier 
+- `description::String` - **(Optional)** a short description of the dataset
+
+# Returns
+
+This function returns an inner constructor for an `DatasetFullBreakdownsBreakdownValuesInner` object.
+This object is used in constructing a `DatasetFull` object.
+
+# Examples
+```julia-repl
+julia> IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "1790_cPop",
+                                                       description = "1790 Census: Population Data [US, States & Counties]")
+
+# Output
+
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]"
+}
+```
+# References
+To find out more about the Dataset type visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
+
 """
 Base.@kwdef mutable struct DatasetFullBreakdownsBreakdownValuesInner <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

@@ -2,23 +2,71 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetFull_breakdowns
+"""
+```
+DatasetFullBreakdowns(;
+    name=nothing,
+    type=nothing,
+    description=nothing,
+    breakdownValues=nothing,
+    years=nothing,
+    geographicInstances=nothing,
+)
+```
+This function creates a dataset given the description of the data.
 
-    DatasetFullBreakdowns(;
-        name=nothing,
-        type=nothing,
-        description=nothing,
-        breakdownValues=nothing,
-        years=nothing,
-        geographicInstances=nothing,
-    )
+# Arguments
 
-    - name::String
-    - type::String
-    - description::String
-    - breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}
-    - years::Vector{String}
-    - geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}
+- `name::String` - **(Optional)** The dataset identifier 
+- `type::String` - **(Optional)** The type of dat in the dataset
+- `description::String` - **(Optional)** a short description of the dataset
+- `breakdownValues::Vector{DatasetFullBreakdownsBreakdownValuesInner}` - **(Optional)** List of breakdown available for the dataset
+- `years::Vector{String}`- **(Optional)** List of the years if data of multiple years are present
+- `geographicInstances::Vector{DatasetFullBreakdownsBreakdownValuesInner}` - **(Optional)** List of geographical extents
+
+# Returns
+
+The function returns a new `DatasetFullBreakdowns` object.
+    
+# Examples
+
+```julia-repl
+julia> IPUMS.DatasetFullBreakdowns(name = "bs32",
+                                   type = "Spatial",
+                                   description = "Geographic Subarea (2010 Census and American Community Survey)",
+                                   breakdownValues = [IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "bs32.ge00",
+                                                                                                           description = "Total area")],
+                                   years = ["2010"],
+                                   geographicInstances = [IPUMS.DatasetFullBreakdownsBreakdownValuesInner(name = "010",
+                                                                                                           description = "Alabama")])
+
+# Output
+
+{
+  "name": "bs32",
+  "type": "Spatial",
+  "description": "Geographic Subarea (2010 Census and American Community Survey)",
+  "breakdownValues": [
+    {
+      "name": "bs32.ge00",
+      "description": "Total area"
+    }
+  ],
+  "years": [
+    "2010"
+  ],
+  "geographicInstances": [
+    {
+      "name": "010",
+      "description": "Alabama"
+    }
+  ]
+}
+```
+
+# References
+
+To find out more about the Dataset type visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/).
 """
 Base.@kwdef mutable struct DatasetFullBreakdowns <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

@@ -2,19 +2,58 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""Dataset
+"""
+```
+Dataset(;
+    dataTables=nothing,
+    geogLevels=nothing,
+    breakdownValues=nothing,
+    years=nothing,
+)
+```
+This function creates a new record of a Dataset given geographical levels, breakdown values and years.
 
-    Dataset(;
-        dataTables=nothing,
-        geogLevels=nothing,
-        breakdownValues=nothing,
-        years=nothing,
-    )
+# Arguments
 
-    - dataTables::Vector{String}
-    - geogLevels::Vector{String}
-    - breakdownValues::Vector{String}
-    - years::Vector{String}
+- `dataTables::Vector{String}`- A list of available data tables for this Dataset.
+- `geogLevels::Vector{String}`- A list of geographic levels available for the Dataset,(eg. "county","state").
+- `breakdownValues::Vector{String}`- **(Optional)** Breakdown values available for this grouping for the available Dataset.
+- `years::Vector{String}`- **(Optional)** List of the years if data of multiple years are present.
+
+# Returns
+
+This function returns a new `Dataset` object including geographic and temporal information.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.Dataset(dataTables = ["1790_cPop"],
+                     geogLevels = ["state"],
+                     breakdownValues =["bs32.ge00"],
+                     years = ["1790"])
+
+# Output
+
+{
+  "dataTables": [
+    "1790_cPop"
+  ],
+  "geogLevels": [
+    "state"
+  ],
+  "breakdownValues": [
+    "bs32.ge00"
+  ],
+  "years": [
+    "1790"
+  ]
+}
+```
+# References
+
+To know more about the Dataset type visit the links:
+* <https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/>
+* <https://www.nhgis.org/frequently-asked-questions-faq#breakdowns>
 """
 Base.@kwdef mutable struct Dataset <: OpenAPI.APIModel
     dataTables::Union{Nothing, Vector{String}} = nothing

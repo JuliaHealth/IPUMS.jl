@@ -2,19 +2,50 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DatasetSimple
+"""
+```
+DatasetSimple(;
+    name=nothing,
+    description=nothing,
+    group=nothing,
+    sequence=nothing,
+)
+```
+This function creates a dataset reference with a provided name, description,
+group, and sequence.
 
-    DatasetSimple(;
-        name=nothing,
-        description=nothing,
-        group=nothing,
-        sequence=nothing,
-    )
+# Arguments
 
-    - name::String
-    - description::String
-    - group::String
-    - sequence::Int64
+- `name::String`- **(Optional)** The dataset identifier 
+- `description::String`- **(Optional)** A short description of the dataset
+- `group::String`- **(Optional)** The group of datasets to which this dataset belongs.
+- `sequence::Int64`- **(Optional)** The order in which the dataset will appear in the metadata API and extracts.
+
+# Returns
+
+This function returns a DatasetSimple object with the properties specified
+by the function arguments.
+
+# Examples
+
+```julia-repl
+julia> IPUMS.DatasetSimple(name = "1790_cPop",
+                           description = "1790 Census: Population Data [US, States & Counties]",
+                           group = "1790 Census",
+                           sequence =  101)
+
+# Output
+
+{
+  "name": "1790_cPop",
+  "description": "1790 Census: Population Data [US, States & Counties]",
+  "group": "1790 Census",
+  "sequence": 101
+}
+```
+
+# References
+To find out more about the Dataset type visit [IPUMS API Dataset](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DatasetSimple <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing

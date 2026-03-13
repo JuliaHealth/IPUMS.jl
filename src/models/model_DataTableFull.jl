@@ -2,25 +2,67 @@
 # Do not modify this file directly. Modify the OpenAPI specification instead.
 
 
-@doc raw"""DataTableFull
+"""
+```
+DataTableFull(;
+    name=nothing,
+    nhgisCode=nothing,
+    description=nothing,
+    universe=nothing,
+    sequence=nothing,
+    datasetName=nothing,
+    nVariables=nothing,
+)
+```
+Constructor to store information about a given table within a particular IPUMS dataset.
 
-    DataTableFull(;
-        name=nothing,
-        nhgisCode=nothing,
-        description=nothing,
-        universe=nothing,
-        sequence=nothing,
-        datasetName=nothing,
-        nVariables=nothing,
-    )
+# Attributes
 
-    - name::String
-    - nhgisCode::String
-    - description::String
-    - universe::String
-    - sequence::Int64
-    - datasetName::String
-    - nVariables::Int64
+- `name::String` - **(Optional)** The unique identifier for the data table within its dataset.
+- `nhgisCode::String` - **(Optional)** The code for this data table that will appear in extract.
+- `description::String` - **(Optional)** A short description of the data table.
+- `universe::String` - **(Optional)** The statistical population (set of entities) measured by this data table (e.g., persons, families, occupied housing units, etc.).
+- `sequence::Int64` - **(Optional)** The order for which this data table will appear in the metadata API and extracts.
+- `datasetName::String` - **(Optional)** The name of the dataset from which the data are from
+- `nVariables::Int64` - **(Optional)** A list of variables within the table.
+
+# Returns
+
+This returns the name of the data, their nhgisCode, a description,their universe, a sequence, a dataset name and variables.
+
+# Examples
+
+```julia-repl
+
+julia> IPUMS.DataTableFull(name = "NT1",
+                           nhgisCode = "AAA",
+                           description = "Total Population",
+                           universe= "Persons",
+                           sequence = 1,
+                           datasetName = "1790_cPop",
+                           nVariables = [IPUMS.DataTableFullVariablesInner(name = "NT001",
+                                         nhgisCode = "AAA001")])
+
+# Output
+
+{
+  "name": "NT1",
+  "nhgisCode": "AAA",
+  "description": "Total Population",
+  "universe": "Persons",
+  "sequence": 1,
+  "datasetName": "1790_cPop",
+  "nVariables": [
+    {
+      "name": "NT001",
+      "nhgisCode": "AAA001"
+    }
+  ]
+}
+```
+# Reference
+
+To find out more about the DataTableFull visit the [IPUMS Developer Docs](https://developer.ipums.org/docs/v2/workflows/explore_metadata/nhgis/datasets/)
 """
 Base.@kwdef mutable struct DataTableFull <: OpenAPI.APIModel
     name::Union{Nothing, String} = nothing
