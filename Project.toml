@@ -1,7 +1,7 @@
 name = "IPUMS"
 uuid = "51d1f77e-d457-4c14-a89d-9ed71839f38d"
-authors = ["TheCedarPrince <jacobszelko@gmail.com> and Krishna Bhogaonker <cyclotomiq@gmail.com>"]
-version = "0.0.1"
+authors = ["TheCedarPrince <jacobszelko@gmail.com>, Krishna Bhogaonker <cyclotomiq@gmail.com>, Michela Rocchetti <michelaro.98@gmail.com>"]
+version = "0.1.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
