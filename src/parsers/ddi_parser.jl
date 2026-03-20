@@ -371,24 +371,39 @@ julia> df = load_ipums_extract(ddi, "my_extract.dat");
 """
 function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
 
-    # Check that the extract file exists and is a DAT file.
     _check_that_file_is_dat(extract_filepath)
     _check_that_file_exists(extract_filepath)
 
-    # Load ddi column-level metadata to local variables
-    name_vec = String[v.name for v in ddi.variable_info]
+    varinfo = ddi.variable_info
+    ncols = length(varinfo)
+    name_vec = String[v.name for v in varinfo]
     range_vec = UnitRange{Int64}[
-        (v.position_start):(v.position_end) for v in ddi.variable_info
+        (v.position_start):(v.position_end) for v in varinfo
     ]
-    dtype_vec = Vector[v.var_dtype[] for v in ddi.variable_info]
-    dcml_vec = Int64[v.dcml for v in ddi.variable_info]
 
-    # Create empty dataframe
+    lines = readlines(extract_filepath)
+    nrows = length(lines)
 
-    df = DataFrame(dtype_vec, name_vec)
+    columns = Vector{AbstractVector}(undef, ncols)
+    for j in 1:ncols
+        v = varinfo[j]
+        r = range_vec[j]
+        if v.var_dtype === Int64
+            col = Vector{Union{Missing, Int64}}(undef, nrows)
+            _parse_column_int!(col, lines, r)
+            columns[j] = col
+        elseif v.var_dtype === Float64
+            col = Vector{Union{Missing, Float64}}(undef, nrows)
+            _parse_column_float!(col, lines, r, v.dcml)
+            columns[j] = col
+        else
+            col = Vector{Union{Missing, String}}(undef, nrows)
+            _parse_column_string!(col, lines, r)
+            columns[j] = col
+        end
+    end
 
-    # Save extract level metadata to dataframe. This data applies to the entire
-    # file.
+    df = DataFrame(columns, name_vec; copycols=false)
 
     metadata!(df, "conditions", ddi.conditions; style=:note)
     metadata!(df, "citation", ddi.citation; style=:note)
@@ -396,7 +411,6 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
     metadata!(df, "extract_notes", ddi.extract_notes; style=:note)
     metadata!(df, "extract_date", ddi.extract_date; style=:note)
 
-    # Setup and write column level metadata to dataframe.
     fields = Dict(
         "label" => :labl,
         "description" => :desc,
@@ -406,142 +420,79 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
         "category labels" => :category_labels,
     )
 
-    # Iterate over each column in the dataset and save the corresponding metadata 
-    # dictionary for that column to the dataframe.
-    for i in eachindex(ddi.variable_info)
-        for (k, v) in fields
+    for i in eachindex(varinfo)
+        for (k, fld) in fields
             colmetadata!(
                 df,
-                ddi.variable_info[i].name,
+                varinfo[i].name,
                 k,
-                getfield(ddi.variable_info[i], v);
+                getfield(varinfo[i], fld);
                 style=:note,
             )
         end
     end
-
-    # Load extract data to the dataframe. The original ipums extract is a 
-    # fixed width file with no delimiters. The original file saves float-valued 
-    # variables as integers, hence we must to parse the file to correctly 
-    # extract the float values from corresponding integers. 
-    arr_dtype = DataType[eltype(a) for a in dtype_vec]
-    arr_dcml = Int64[d for d in dcml_vec]
-    arr_cache = Array{Union{Number, Missing}}(undef, length(name_vec))
-    arr_cache .= 0
-
-    _df_loader_inplace_svector!(
-        df, extract_filepath, arr_cache, range_vec, arr_dtype, arr_dcml
-    )
 
     return df
 end;
 
 
 """
-    _df_loader_inplace_svector!(df, extract_filepath, array_cache, range_vec, p_dtype, p_dcml)
+    _parse_column_int!(col, lines, r)
 
-    This is an internal function to support the parsing of the fixed width 
-    format of the IPUMS datafile. The file contains only numbers and absolutely
-    no text. This function determines--based upon DDI metadata--whether a 
-    specific text input is designated as an integer or floating point number,
-    and then parses that value accordingly.
-    
-### Arguments
-
-- `df::DataFrame` - An empty dataframe to hold the output of the parsing operation.
-- `extract_filepath::String` - The string path location for the IPUMS data file.
-- `array_cache::Array{Number}` - A cache array to hold the parsed data from a line of the data file. 
-- `range_vec::Array{UnitRange{Int64}}` - A vector of ranges that correspond to the variables in a line of the data file.
-- `p_dtype::Array{DataType}` - An array of datatypes for each variable in a line of the data file.
-- `p_dcml::Array{Int64}` - An array of integers corresponding to the number of decimal values in a parsed variable.
-
-### Returns
-
-    This function does not return any output. Instead this variable modifies the 
-    provided dataframe in-place.
-
+Internal function that parses a single integer column from all lines of a
+fixed-width IPUMS data file. Uses `SubString` views to avoid allocating
+new strings for each field, and writes directly into a pre-allocated column
+vector.
 """
-function _df_loader_inplace_svector!(
-    df, extract_filepath, array_cache, range_vec, p_dtype, p_dcml
+function _parse_column_int!(
+    col::Vector{Union{Missing, Int64}},
+    lines::Vector{String},
+    r::UnitRange{Int64}
 )
-    for line in eachline(extract_filepath)
-        lvec = SubString{String}[strip(line[r]) for r in range_vec]
-        map!((x, p, d) -> _parse_data(x, p, d), array_cache, lvec, p_dtype, p_dcml)
-        push!(df, array_cache, promote = true)
+    @inbounds for i in eachindex(lines)
+        s = strip(SubString(lines[i], first(r), last(r)))
+        col[i] = isempty(s) ? missing : parse(Int64, s)
     end
 end
 
 
 """
-    _parse_data(strnum::SubString{String}, dtype::Type{T}, decimals::Int64) where {T <: AbstractFloat}
+    _parse_column_float!(col, lines, r, dcml)
 
-    This is an internal function to support the parsing of the fixed width 
-    format of the IPUMS datafile. The file contains only numbers and absolutely
-    no text. This function determines--based upon DDI metadata--whether a 
-    specific text input is designated as an integer or floating point number,
-    and then parses that value accordingly.
-
-    This function is specialized to work on float values. Float values in this
-    file type are coded as integers. However, the DDI information also contains
-    the number of decimals for the float fields. This function will parse a 
-    float number from the integer string in the data file.
-
-### Arguments
-
-- `strnum::SubString{String}` - A string that may contain some numeric data encoded as text.
-- `dtype::Type{T}` - The datatype that should be applied in the parsing of string number.
-- `decimals::Int64` - The number of decimal values to include in a floating point number.
-
-### Returns
-
-    This function returns the parsed float number that corresponds to the input string.
-
+Internal function that parses a single floating-point column from all lines
+of a fixed-width IPUMS data file. Float values in IPUMS files are encoded as
+integers (e.g. "12345" with dcml=2 represents 123.45). This function avoids
+the string concatenation approach (`chop(...) * "." * last(...)`) by using
+integer arithmetic: `parse(Int64, s) / 10^dcml`.
 """
-function _parse_data(
-    strnum::SubString{String}, dtype::Type{T}, decimals::Int64
-) where {T<:AbstractFloat}
-    if isempty(strnum)
-        return missing
-    else
-        return @. parse(dtype, chop(strnum; tail=decimals) * "." * last(strnum, decimals))
+function _parse_column_float!(
+    col::Vector{Union{Missing, Float64}},
+    lines::Vector{String},
+    r::UnitRange{Int64},
+    dcml::Int64
+)
+    divisor = 10.0^dcml
+    @inbounds for i in eachindex(lines)
+        s = strip(SubString(lines[i], first(r), last(r)))
+        col[i] = isempty(s) ? missing : parse(Int64, s) / divisor
     end
 end
 
 
 """
-    _parse_data(strnum::SubString{String}, dtype::Type{T}, decimals::Int64) where {T <: Integer}
+    _parse_column_string!(col, lines, r)
 
-    This is an internal function to support the parsing of the fixed width 
-    format of the IPUMS datafile. The file contains only numbers and absolutely
-    no text. This function determines--based upon DDI metadata--whether a 
-    specific text input is designated as an integer or floating point number,
-    and then parses that value accordingly.
-
-    This function is specialized for integer values. As the fixed width data
-    format encodes both floats and integers as strings, the parsing function 
-    must first determine the datatype of each entry and parse that entry accordingly.
-    This function parses string values into their corresponding integer values.
-
-### Arguments
-
-- `strnum::SubString{String}` - A string that may contain some numeric data encoded as text.
-- `dtype::Type{T}` - The datatype that should be applied in the parsing of string number.
-- `decimals::Int64` - The number of decimal values to include in a floating point number.
-                        Integers do not have any decimal values, hence this field is 
-                        ignored for this function.
-
-### Returns
-
-    This function returns the parsed integer value that corresponds to the input string.
-
+Internal function that parses a single string column from all lines of a
+fixed-width IPUMS data file.
 """
-function _parse_data(
-    strnum::SubString{String}, dtype::Type{T}, decimals::Int64
-) where {T<:Integer}
-    if isempty(strnum)
-        return missing
-    else
-        return @. parse(dtype, strnum)
+function _parse_column_string!(
+    col::Vector{Union{Missing, String}},
+    lines::Vector{String},
+    r::UnitRange{Int64}
+)
+    @inbounds for i in eachindex(lines)
+        s = strip(SubString(lines[i], first(r), last(r)))
+        col[i] = isempty(s) ? missing : String(s)
     end
 end
 
