@@ -28,3 +28,9 @@ Manifest.toml
 
 # Ignore Visual Studio code files in the user's local directory.
 *.vscode/
+cps_large_extract.json
+pr_description.md
+Project.toml
+file_downloads/cps_00001.dat
+file_downloads/cps_00001.dat.gz
+file_downloads/cps_00001.xml

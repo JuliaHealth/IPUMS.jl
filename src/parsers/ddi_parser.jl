@@ -371,46 +371,56 @@ julia> df = load_ipums_extract(ddi, "my_extract.dat");
 """
 function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
 
+    # Check that the extract file exists and is a DAT file.
     _check_that_file_is_dat(extract_filepath)
     _check_that_file_exists(extract_filepath)
 
+    # Load variable metadata from the DDI object.
     varinfo = ddi.variable_info
     ncols = length(varinfo)
     name_vec = String[v.name for v in varinfo]
-    range_vec = UnitRange{Int64}[
-        (v.position_start):(v.position_end) for v in varinfo
-    ]
 
-    lines = readlines(extract_filepath)
-    nrows = length(lines)
+    # Memory-map the file as raw bytes and determine the line length.
+    # Fixed-width files have uniform line lengths so we can use arithmetic
+    # offsets to locate any field in the file without allocating Strings.
+    data = open(io -> Mmap.mmap(io), extract_filepath)
+    line_len = findfirst(==(UInt8('\n')), data)
+    nrows = count(==(UInt8('\n')), data)
+    if !isempty(data) && data[end] != UInt8('\n')
+        nrows += 1
+    end
 
+    # Pre-allocate typed column vectors and parse each column from the
+    # memory-mapped byte array using type-stable function barriers.
     columns = Vector{AbstractVector}(undef, ncols)
     for j in 1:ncols
         v = varinfo[j]
-        r = range_vec[j]
         if v.var_dtype === Int64
             col = Vector{Union{Missing, Int64}}(undef, nrows)
-            _parse_column_int!(col, lines, r)
+            _parse_column_int!(col, data, v.position_start, v.position_end, line_len)
             columns[j] = col
         elseif v.var_dtype === Float64
             col = Vector{Union{Missing, Float64}}(undef, nrows)
-            _parse_column_float!(col, lines, r, v.dcml)
+            _parse_column_float!(col, data, v.position_start, v.position_end, line_len, v.dcml)
             columns[j] = col
         else
             col = Vector{Union{Missing, String}}(undef, nrows)
-            _parse_column_string!(col, lines, r)
+            _parse_column_string!(col, data, v.position_start, v.position_end, line_len)
             columns[j] = col
         end
     end
 
+    # Build the DataFrame from pre-allocated columns without copying.
     df = DataFrame(columns, name_vec; copycols=false)
 
+    # Save extract level metadata to the dataframe.
     metadata!(df, "conditions", ddi.conditions; style=:note)
     metadata!(df, "citation", ddi.citation; style=:note)
     metadata!(df, "ipums_project", ddi.ipums_project; style=:note)
     metadata!(df, "extract_notes", ddi.extract_notes; style=:note)
     metadata!(df, "extract_date", ddi.extract_date; style=:note)
 
+    # Setup the column level metadata mapping.
     fields = Dict(
         "label" => :labl,
         "description" => :desc,
@@ -420,6 +430,8 @@ function load_ipums_extract(ddi::DDIInfo, extract_filepath::String)
         "category labels" => :category_labels,
     )
 
+    # Iterate over each column and save the corresponding metadata
+    # dictionary for that column to the dataframe.
     for i in eachindex(varinfo)
         for (k, fld) in fields
             colmetadata!(
@@ -437,62 +449,178 @@ end;
 
 
 """
-    _parse_column_int!(col, lines, r)
+    _parse_int_bytes(data, start, stop)
 
-Internal function that parses a single integer column from all lines of a
-fixed-width IPUMS data file. Uses `SubString` views to avoid allocating
-new strings for each field, and writes directly into a pre-allocated column
-vector.
+Internal function that parses an integer value directly from a range of
+bytes in a memory-mapped file. This avoids allocating any String or
+SubString objects during parsing.
+
+### Arguments
+
+- `data::Vector{UInt8}` - The memory-mapped file contents as a byte array.
+- `start::Int` - The starting byte position of the field.
+- `stop::Int` - The ending byte position of the field.
+
+### Returns
+
+Returns the parsed `Int64` value, or `missing` if the field contains
+only whitespace.
+"""
+function _parse_int_bytes(data::Vector{UInt8}, start::Int, stop::Int)
+    # Skip leading spaces.
+    i = start
+    j = stop
+    @inbounds while i <= j && data[i] == 0x20
+        i += 1
+    end
+    # Skip trailing spaces.
+    @inbounds while j >= i && data[j] == 0x20
+        j -= 1
+    end
+    # Return missing if the field is empty after stripping spaces.
+    if i > j
+        return missing
+    end
+    # Check for a negative sign.
+    neg = false
+    @inbounds if data[i] == 0x2d
+        neg = true
+        i += 1
+    end
+    # Accumulate digits into an integer.
+    result = Int64(0)
+    @inbounds while i <= j
+        result = result * 10 + Int64(data[i] - 0x30)
+        i += 1
+    end
+    return neg ? -result : result
+end
+
+
+"""
+    _parse_column_int!(col, data, col_start, col_end, line_len)
+
+Internal function that parses a single integer column from all rows of a
+memory-mapped fixed-width IPUMS data file. Each field is located using
+arithmetic byte offsets and parsed directly from the raw bytes.
+
+### Arguments
+
+- `col::Vector{Union{Missing, Int64}}` - A pre-allocated column vector to hold the parsed integer values.
+- `data::Vector{UInt8}` - The memory-mapped file contents as a byte array.
+- `col_start::Int` - The starting byte position of the field within a line.
+- `col_end::Int` - The ending byte position of the field within a line.
+- `line_len::Int` - The number of bytes per line (including the newline character).
+
+### Returns
+
+This function does not return any output. Instead it modifies the
+provided column vector in-place.
 """
 function _parse_column_int!(
     col::Vector{Union{Missing, Int64}},
-    lines::Vector{String},
-    r::UnitRange{Int64}
+    data::Vector{UInt8},
+    col_start::Int,
+    col_end::Int,
+    line_len::Int
 )
-    @inbounds for i in eachindex(lines)
-        s = strip(SubString(lines[i], first(r), last(r)))
-        col[i] = isempty(s) ? missing : parse(Int64, s)
+    # Parse each row by computing the byte offset for this field.
+    @inbounds for i in eachindex(col)
+        offset = (i - 1) * line_len
+        col[i] = _parse_int_bytes(data, offset + col_start, offset + col_end)
     end
 end
 
 
 """
-    _parse_column_float!(col, lines, r, dcml)
+    _parse_column_float!(col, data, col_start, col_end, line_len, decimals)
 
-Internal function that parses a single floating-point column from all lines
-of a fixed-width IPUMS data file. Float values in IPUMS files are encoded as
-integers (e.g. "12345" with dcml=2 represents 123.45). This function avoids
-the string concatenation approach (`chop(...) * "." * last(...)`) by using
-integer arithmetic: `parse(Int64, s) / 10^dcml`.
+Internal function that parses a single floating-point column from all rows
+of a memory-mapped fixed-width IPUMS data file. Float values in IPUMS files
+are encoded as integers (e.g. "12345" with decimals=2 represents 123.45).
+This function parses the integer from raw bytes and divides by 10^decimals
+to recover the float value.
+
+### Arguments
+
+- `col::Vector{Union{Missing, Float64}}` - A pre-allocated column vector to hold the parsed float values.
+- `data::Vector{UInt8}` - The memory-mapped file contents as a byte array.
+- `col_start::Int` - The starting byte position of the field within a line.
+- `col_end::Int` - The ending byte position of the field within a line.
+- `line_len::Int` - The number of bytes per line (including the newline character).
+- `decimals::Int` - The number of implied decimal places in the encoded integer.
+
+### Returns
+
+This function does not return any output. Instead it modifies the
+provided column vector in-place.
 """
 function _parse_column_float!(
     col::Vector{Union{Missing, Float64}},
-    lines::Vector{String},
-    r::UnitRange{Int64},
-    dcml::Int64
+    data::Vector{UInt8},
+    col_start::Int,
+    col_end::Int,
+    line_len::Int,
+    decimals::Int
 )
-    divisor = 10.0^dcml
-    @inbounds for i in eachindex(lines)
-        s = strip(SubString(lines[i], first(r), last(r)))
-        col[i] = isempty(s) ? missing : parse(Int64, s) / divisor
+    # Pre-compute the divisor to convert the integer to a float.
+    divisor = 10.0^decimals
+    # Parse each row and divide by the divisor to recover the float value.
+    @inbounds for i in eachindex(col)
+        offset = (i - 1) * line_len
+        val = _parse_int_bytes(data, offset + col_start, offset + col_end)
+        col[i] = val === missing ? missing : val / divisor
     end
 end
 
 
 """
-    _parse_column_string!(col, lines, r)
+    _parse_column_string!(col, data, col_start, col_end, line_len)
 
-Internal function that parses a single string column from all lines of a
-fixed-width IPUMS data file.
+Internal function that parses a single string column from all rows of a
+memory-mapped fixed-width IPUMS data file. Each field is located using
+arithmetic byte offsets, stripped of leading and trailing spaces, and
+converted to a Julia String.
+
+### Arguments
+
+- `col::Vector{Union{Missing, String}}` - A pre-allocated column vector to hold the parsed string values.
+- `data::Vector{UInt8}` - The memory-mapped file contents as a byte array.
+- `col_start::Int` - The starting byte position of the field within a line.
+- `col_end::Int` - The ending byte position of the field within a line.
+- `line_len::Int` - The number of bytes per line (including the newline character).
+
+### Returns
+
+This function does not return any output. Instead it modifies the
+provided column vector in-place.
 """
 function _parse_column_string!(
     col::Vector{Union{Missing, String}},
-    lines::Vector{String},
-    r::UnitRange{Int64}
+    data::Vector{UInt8},
+    col_start::Int,
+    col_end::Int,
+    line_len::Int
 )
-    @inbounds for i in eachindex(lines)
-        s = strip(SubString(lines[i], first(r), last(r)))
-        col[i] = isempty(s) ? missing : String(s)
+    # Parse each row by computing byte offsets and stripping spaces.
+    @inbounds for i in eachindex(col)
+        offset = (i - 1) * line_len
+        s_start = offset + col_start
+        s_end = offset + col_end
+        # Skip leading spaces.
+        while s_start <= s_end && data[s_start] == 0x20
+            s_start += 1
+        end
+        # Skip trailing spaces.
+        while s_end >= s_start && data[s_end] == 0x20
+            s_end -= 1
+        end
+        # Return missing if the field is empty after stripping.
+        if s_start > s_end
+            col[i] = missing
+        else
+            col[i] = String(data[s_start:s_end])
+        end
     end
 end
 

@@ -4,7 +4,8 @@ module IPUMS
         @kwdef
     import Downloads:
         download as dl
-    import OpenAPI.Clients: 
+    import Mmap
+    import OpenAPI.Clients:
         Client
 
     using DataFrames: 
