@@ -27,4 +27,4 @@ docs/site/
 Manifest.toml
 
 # Ignore Visual Studio code files in the user's local directory.
-*.vscode/
+file_downloads/
