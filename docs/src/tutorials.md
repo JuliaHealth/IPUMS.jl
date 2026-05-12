@@ -265,3 +265,35 @@ end
     Microdata extracts are removed from IPUMS servers **72 hours** after completion;
     NHGIS extracts after **2 weeks**. Download promptly or you'll need to resubmit.
 
+## Listing past extracts and downloading
+
+`extract_list` returns the most recent extracts for a collection:
+
+```julia
+extract_list(api, "cps")              # 10 most recent
+extract_list(api, "cps"; extracts=50) # up to 50
+```
+
+The result is a `Vector{DataExtract}` — each element exposes `.number`, `.status`,
+`.extractDefinition`, and `.downloadLinks`.
+
+!!! note "Pagination ceiling"
+    The current implementation requests one page sized to `extracts`; requesting more
+    than ~255 will error. Tracked in the package source as a TODO.
+
+Once an extract is `completed`, download its files with `extract_download`:
+
+```julia
+extract_download(api, res.number, "cps"; output_path = "downloads/")
+```
+
+| Keyword | Default | Effect |
+|---|---|---|
+| `output_path` | `pwd()` | Directory the files land in |
+| `codebook` | `true` | Download the codebook / DDI file |
+| `table_data` | `true` | Download the data file |
+| `gis_data` | `true` | Download GIS / shapefile (NHGIS only) |
+| `codebook_name` / `table_data_name` / `gis_data_name` | `nothing` | Override the default filenames |
+
+For microdata (USA, CPS, IPUMS International), `codebook` produces the DDI `.xml` and `table_data` produces a compressed `.dat.gz`. `gis_data` has no effect since microdata extracts don't carry shapefiles. The next section parses these two files into a `DataFrame`.
+
