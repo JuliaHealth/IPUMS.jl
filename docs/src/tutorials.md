@@ -36,3 +36,56 @@ The rest of this tutorial uses **IPUMS CPS** as the microdata example and **IPUM
     be downloaded manually from each project's website. Once those projects gain v2 API
     support, `IPUMS.jl` should be able to reach them with no code changes on your side.
 
+## Setting up your API key
+
+To use the IPUMS API you need two things: an IPUMS account on each project you'll
+extract data from, and a personal API key.
+
+1. **Register an account** with the IPUMS project(s) you want to use. Each project has
+   its own registration page — e.g. [IPUMS CPS](https://cps.ipums.org/cps/),
+   [IPUMS USA](https://usa.ipums.org/usa/), [IPUMS International](https://international.ipums.org/international/), [IPUMS NHGIS](https://www.nhgisorg/). Registration is free; usage is governed by each project's [terms of use](https://www.ipums.org/about/terms).
+
+2. **Generate an API key** at [account.ipums.org/api_keys](https://account.ipums.org/api_keys).
+   A single key works across every IPUMS project your account is registered with. Treat it like a password — anyone with the key can submit extract requests on your behalf.
+
+### Store the key in an environment variable
+
+Hard-coding the key in a script is the easiest way to inadvertently leak it. The conventional pattern is to put it in an environment variable named `IPUMS_API_KEY` and read it from `ENV` in Julia:
+
+```bash
+# in your shell profile (.zshrc, .bashrc, etc.)
+export IPUMS_API_KEY="paste-your-key-here"
+```
+
+```julia
+julia> ENV["IPUMS_API_KEY"]
+"paste-your-key-here"
+```
+
+For a one-off session you can set it directly at the Julia REPL:
+
+```julia
+ENV["IPUMS_API_KEY"] = "paste-your-key-here"
+```
+
+!!! warning "Don't commit your API key"
+    Never paste your key into a script, notebook, or `.jl` file that you commit to version control. If you accidentally do, [revoke it](https://account.ipums.org/api_keys) and generate a new one.
+
+### Construct the API client
+
+With your key in `ENV`, build an `IPUMSAPI` client. Every subsequent call in this
+tutorial — submitting extracts, checking status, downloading files — takes this client as its first argument.
+
+```julia
+using IPUMS
+
+api = IPUMSAPI(
+    "https://api.ipums.org/",
+    Dict("Authorization" => ENV["IPUMS_API_KEY"]),
+)
+```
+
+The first argument is the API base URL (always `"https://api.ipums.org/"` for the v2 API). The second is the request headers; the IPUMS API authenticates by reading the raw key out of the `Authorization` header — there is no `Bearer ` prefix.
+
+That's all the setup. The next section assumes you have obtained an API key and stored it in the IPUMS_API_KEY environment variable. 
+
