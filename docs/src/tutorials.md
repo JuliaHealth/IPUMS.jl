@@ -89,3 +89,159 @@ The first argument is the API base URL (always `"https://api.ipums.org/"` for th
 
 That's all the setup. The next section assumes you have obtained an API key and stored it in the IPUMS_API_KEY environment variable. 
 
+## Defining a microdata extract (IPUMS USA / CPS)
+
+An extract definition is a JSON document that tells the IPUMS API what samples and
+variables you want. Unlike in R, in Julia you write the JSON yourself — either by hand as a `.json` file, or by constructing a Julia `Dict` and serializing it with `JSON3`. `extract_submit` takes the path to that file.
+
+### Anatomy of a microdata extract
+
+The top-level keys for a microdata extract are:
+
+| Key | Required | What it specifies |
+|---|---|---|
+| `description` | yes | A human-readable label for your own bookkeeping |
+| `dataStructure` | yes | Whether the output is rectangular (one row per chosen unit) or hierarchical |
+| `dataFormat` | yes | File format — `"fixed_width"` for microdata |
+| `samples` | yes | Which samples (years/supplements) to draw from |
+| `variables` | yes | Which variables to include, plus per-variable options |
+
+`dataStructure` is itself an object. Rectangular layouts pick one record type via `on`
+(`"P"` for person-level, `"H"` for household-level); hierarchical layouts take no
+sub-fields:
+
+```json
+"dataStructure": { "rectangular": { "on": "P" } }
+```
+
+```json
+"dataStructure": { "hierarchical": {} }
+```
+
+`samples` and `variables` are both dictionaries keyed by the IPUMS code. Sample codes
+look like `cps2019_03s` (the CPS March 2019 ASEC supplement) or `us2019a` (IPUMS USA
+2019 ACS 1-year). You can look them up in each project's web portal — there is no API
+endpoint listing microdata samples programmatically.
+
+### A worked CPS example
+
+```json
+{
+  "description": "CPS ASEC 2018-2019: demographics and income",
+  "dataStructure": { "rectangular": { "on": "P" } },
+  "dataFormat": "fixed_width",
+  "samples": {
+    "cps2018_03s": {},
+    "cps2019_03s": {}
+  },
+  "variables": {
+    "AGE": {},
+    "SEX": {},
+    "STATEFIP": {},
+    "INCTOT": {},
+    "ASECWT": {}
+  }
+}
+```
+
+Save this as e.g. `cps_extract.json`. The next section shows how to submit it.
+
+### Weights are just variables
+
+The issue checklist for this tutorial mentions "selecting weights." In the IPUMS API
+weights are just regular variables whose values happen to encode sampling weights. The relevant ones depend on the collection:
+
+| Collection | Common weight variables |
+|---|---|
+| IPUMS USA | `PERWT` (person), `HHWT` (household) |
+| IPUMS CPS (basic monthly) | `WTFINL` (person), `HWTFINL` (household) |
+| IPUMS CPS (ASEC) | `ASECWT` (person), `ASECWTH` (household) |
+| IPUMS International | `PERWT`, `HHWT` |
+
+Add them to `variables` the same way you'd add any other variable.
+
+### Data quality flags ("quality scores")
+
+Many IPUMS variables have a companion variable that records whether the value was
+edited, imputed, or allocated by the source agency — IPUMS calls these **data quality
+flags**. To include the quality flag for a given variable, set `dataQualityFlags: true`
+on the variable entry:
+
+```json
+"variables": {
+  "INCTOT": { "dataQualityFlags": true },
+  "EDUC":   { "dataQualityFlags": true }
+}
+```
+
+Each variable with `dataQualityFlags: true` adds a companion column to the extract
+(e.g. `QINCTOT` next to `INCTOT`).
+
+### Per-variable options at a glance
+
+A few other per-variable options come up often enough to mention:
+
+- **`caseSelections`** — restrict the extract to specific category codes. The codes are
+  passed as **strings**, not integers:
+
+  ```json
+  "MARST": { "caseSelections": { "general": ["1", "2"] } }
+  ```
+
+- **`attachedCharacteristics`** — attach values from a related person to each record
+  (e.g. parents' education on each child's row):
+
+  ```json
+  "EDUC": { "attachedCharacteristics": ["mother", "father", "spouse"] }
+  ```
+
+- **`adjustMonetaryValues`** — for income variables, ask the API to convert dollars to a
+  common base year:
+
+  ```json
+  "INCTOT": { "adjustMonetaryValues": true }
+  ```
+
+A full list of per-variable options is in the
+[IPUMS API microdata reference](https://developer.ipums.org/docs/v2/workflows/create_extracts/microdata/).
+
+### Building the JSON from Julia instead of a file
+
+If you'd rather construct the extract in Julia, build a `Dict` and serialize it. Note
+that `extract_submit` always reads from a **file path on disk**, so you still need to
+write it out:
+
+```julia
+using JSON3
+
+extract = Dict(
+    "description"   => "CPS ASEC 2018-2019: demographics and income",
+    "dataStructure" => Dict("rectangular" => Dict("on" => "P")),
+    "dataFormat"    => "fixed_width",
+    "samples"       => Dict(
+        "cps2018_03s" => Dict(),
+        "cps2019_03s" => Dict(),
+    ),
+    "variables"     => Dict(
+        "AGE"      => Dict(),
+        "SEX"      => Dict(),
+        "STATEFIP" => Dict(),
+        "INCTOT"   => Dict("dataQualityFlags" => true),
+        "ASECWT"   => Dict(),
+    ),
+)
+
+open("cps_extract.json", "w") do io
+    JSON3.pretty(io, extract)
+end
+```
+
+Either form — hand-written `.json` or Julia-serialized — produces the same file on
+disk, which is what we'll feed to `extract_submit` next.
+
+!!! note "Sharing or revising an extract"
+    Because an IPUMS.jl extract definition is just a JSON file, *sharing* a definition
+    is the file itself — commit it to your repo or paste it into an email. *Revising*
+    an extract means editing the file and submitting it again, which produces a new
+    extract number. There is no `revise_extract` helper. 
+
