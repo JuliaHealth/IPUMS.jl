@@ -297,3 +297,51 @@ extract_download(api, res.number, "cps"; output_path = "downloads/")
 
 For microdata (USA, CPS, IPUMS International), `codebook` produces the DDI `.xml` and `table_data` produces a compressed `.dat.gz`. `gis_data` has no effect since microdata extracts don't carry shapefiles. The next section parses these two files into a `DataFrame`.
 
+## Reading microdata into a DataFrame
+
+Two functions cover the read step: `parse_ddi` parses the DDI XML codebook into a `DDIInfo` struct, and `load_ipums_extract` uses that struct to read the fixed-width data file into a `DataFrame`.
+
+The data file arrives as `.dat.gz` and needs to be decompressed first. CodecZlib handles it without leaving Julia:
+
+```julia
+using CodecZlib
+
+open(GzipDecompressorStream, "downloads/cps_00142.dat.gz") do io
+    write("downloads/cps_00142.dat", read(io))
+end
+```
+
+Then parse and load:
+
+```julia
+ddi = parse_ddi("downloads/cps_00142.xml")
+df  = load_ipums_extract(ddi, "downloads/cps_00142.dat")
+```
+
+Using the CPS fixture that ships with the package:
+
+```julia
+ddi = parse_ddi("test/testdata/cps_00157.xml")
+df  = load_ipums_extract(ddi, "test/testdata/cps_00157.dat")
+```
+
+```
+3×8 DataFrame
+ Row │ YEAR   SERIAL  MONTH  ASECWTH  STATEFIP  PERNUM  ASECWT   INCTOT
+     │ Int64  Int64   Int64  Float64  Int64     Int64   Float64  Int64
+─────┼─────────────────────────────────────────────────────────────────────
+   1 │  1962      80      3  1475.59        55       1  1475.59       4883
+   2 │  1962      80      3  1475.59        55       2  1470.72       5800
+   3 │  1962      80      3  1475.59        55       3  1578.75  999999998
+```
+
+Variable-level metadata (label, description, category mappings, coder instructions) is attached to each column via `DataFrames.colmetadata`:
+
+```julia
+using DataFrames
+colmetadata(df, :INCTOT, "label")        # "Total personal income"
+colmetadata(df, :INCTOT, "category_labels")  # value→label mappings for missing codes
+```
+
+Extract-level metadata (citation, conditions of use, project, extract date, notes) is attached at the DataFrame level via `DataFrames.metadata`.
+
