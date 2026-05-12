@@ -26,8 +26,7 @@ using IPUMS
 ipums_data_collections()
 ```
 
-The `code_for_api` column is the short identifier you'll pass to functions like
-`extract_submit` and `extract_download`. When the column is blank, the API code is the same as the lowercased project name (`"usa"`, `"cps"`, `"nhgis"`). When it's populated (e.g. `ipumsi` for IPUMS International), use that string instead.
+The `code_for_api` column is the short identifier you'll pass to functions like `extract_submit` and `extract_download`. When the column is blank, the API code is the same as the lowercased project name (`"usa"`, `"cps"`, `"nhgis"`). When it's populated (e.g. `ipumsi` for IPUMS International), use that string instead.
 
 The rest of this tutorial uses **IPUMS CPS** as the microdata example and **IPUMS NHGIS** as the aggregate-data example, but the same pattern works for IPUMS USA and IPUMS International.
 
@@ -73,8 +72,7 @@ ENV["IPUMS_API_KEY"] = "paste-your-key-here"
 
 ### Construct the API client
 
-With your key in `ENV`, build an `IPUMSAPI` client. Every subsequent call in this
-tutorial — submitting extracts, checking status, downloading files — takes this client as its first argument.
+With your key in `ENV`, build an `IPUMSAPI` client. Every subsequent call in this tutorial  takes this client as its first argument.
 
 ```julia
 using IPUMS
@@ -91,8 +89,7 @@ That's all the setup. The next section assumes you have obtained an API key and 
 
 ## Defining a microdata extract (IPUMS USA / CPS)
 
-An extract definition is a JSON document that tells the IPUMS API what samples and
-variables you want. Unlike in R, in Julia you write the JSON yourself — either by hand as a `.json` file, or by constructing a Julia `Dict` and serializing it with `JSON3`. `extract_submit` takes the path to that file.
+An extract definition is a JSON document that tells the IPUMS API what samples and variables you want. Unlike in R, in Julia you write the JSON yourself — either by hand as a `.json` file, or by constructing a Julia `Dict` and serializing it with `JSON3`. `extract_submit` takes the path to that file.
 
 ### Anatomy of a microdata extract
 
@@ -118,10 +115,7 @@ sub-fields:
 "dataStructure": { "hierarchical": {} }
 ```
 
-`samples` and `variables` are both dictionaries keyed by the IPUMS code. Sample codes
-look like `cps2019_03s` (the CPS March 2019 ASEC supplement) or `us2019a` (IPUMS USA
-2019 ACS 1-year). You can look them up in each project's web portal — there is no API
-endpoint listing microdata samples programmatically.
+`samples` and `variables` are both dictionaries keyed by the IPUMS code. Sample codes look like `cps2019_03s` (the CPS March 2019 ASEC supplement) or `us2019a` (IPUMS USA 2019 ACS 1-year). You can look them up in each project's web portal — there is no API endpoint listing microdata samples programmatically.
 
 ### A worked CPS example
 
@@ -148,8 +142,7 @@ Save this as e.g. `cps_extract.json`. The next section shows how to submit it.
 
 ### Weights are just variables
 
-The issue checklist for this tutorial mentions "selecting weights." In the IPUMS API
-weights are just regular variables whose values happen to encode sampling weights. The relevant ones depend on the collection:
+The issue checklist for this tutorial mentions "selecting weights." In the IPUMS API weights are just regular variables whose values happen to encode sampling weights. The relevant ones depend on the collection:
 
 | Collection | Common weight variables |
 |---|---|
@@ -163,9 +156,7 @@ Add them to `variables` the same way you'd add any other variable.
 ### Data quality flags ("quality scores")
 
 Many IPUMS variables have a companion variable that records whether the value was
-edited, imputed, or allocated by the source agency — IPUMS calls these **data quality
-flags**. To include the quality flag for a given variable, set `dataQualityFlags: true`
-on the variable entry:
+edited, imputed, or allocated by the source agency — IPUMS calls these **data quality flags**. To include the quality flag for a given variable, set `dataQualityFlags: true` on the variable entry:
 
 ```json
 "variables": {
@@ -207,9 +198,7 @@ A full list of per-variable options is in the
 
 ### Building the JSON from Julia instead of a file
 
-If you'd rather construct the extract in Julia, build a `Dict` and serialize it. Note
-that `extract_submit` always reads from a **file path on disk**, so you still need to
-write it out:
+If you'd rather construct the extract in Julia, build a `Dict` and serialize it. Note that `extract_submit` always reads from a **file path on disk**, so you still need to write it out:
 
 ```julia
 using JSON3
@@ -236,12 +225,43 @@ open("cps_extract.json", "w") do io
 end
 ```
 
-Either form — hand-written `.json` or Julia-serialized — produces the same file on
-disk, which is what we'll feed to `extract_submit` next.
+Either form — hand-written `.json` or Julia-serialized — produces the same file on disk, which is what we'll feed to `extract_submit` next.
 
 !!! note "Sharing or revising an extract"
     Because an IPUMS.jl extract definition is just a JSON file, *sharing* a definition
     is the file itself — commit it to your repo or paste it into an email. *Revising*
     an extract means editing the file and submitting it again, which produces a new
     extract number. There is no `revise_extract` helper. 
+
+## Submitting and waiting for completion
+
+`extract_submit` takes the JSON file path and returns a `DataExtractPostResponse` with the assigned extract number and an initial status:
+
+```julia
+res = extract_submit(api, "cps", "cps_extract.json")
+res.number   # e.g. 142
+res.status   # "queued"
+```
+
+Extracts run asynchronously on IPUMS servers. To poll, call `extract_info`, which returns a `(metadata, defn, msg)` tuple where `metadata["status"]` is the live status:
+
+```julia
+metadata, _, _ = extract_info(api, res.number, "cps")
+while metadata["status"] ∉ ("completed", "failed", "canceled")
+    sleep(30)
+    metadata, _, _ = extract_info(api, res.number, "cps")
+end
+```
+
+| Status | Meaning |
+|---|---|
+| `queued` | Accepted, not yet started |
+| `started` | Running |
+| `produced` | Files generated, finalizing |
+| `completed` | Ready to download |
+| `failed` / `canceled` | Terminal error states |
+
+!!! warning "Extracts expire"
+    Microdata extracts are removed from IPUMS servers **72 hours** after completion;
+    NHGIS extracts after **2 weeks**. Download promptly or you'll need to resubmit.
 
