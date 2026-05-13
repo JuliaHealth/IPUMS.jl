@@ -225,7 +225,7 @@ open("cps_extract.json", "w") do io
 end
 ```
 
-Either form — hand-written `.json` or Julia-serialized — produces the same file on disk, which is what we'll feed to `extract_submit` next.
+Either hand-written `.json` or Julia-serialized produces the same file on disk, which is what we'll feed to `extract_submit` next.
 
 !!! note "Sharing or revising an extract"
     Because an IPUMS.jl extract definition is just a JSON file, *sharing* a definition
@@ -345,3 +345,53 @@ colmetadata(df, :INCTOT, "category_labels")  # value→label mappings for missin
 
 Extract-level metadata (citation, conditions of use, project, extract date, notes) is attached at the DataFrame level via `DataFrames.metadata`.
 
+## Putting it all together
+
+The full microdata workflow, end to end:
+
+```julia
+using IPUMS, JSON3, CodecZlib
+
+# 1. Define the extract
+extract = Dict(
+    "description"   => "CPS ASEC 2018-2019: demographics and income",
+    "dataStructure" => Dict("rectangular" => Dict("on" => "P")),
+    "dataFormat"    => "fixed_width",
+    "samples"       => Dict("cps2018_03s" => Dict(), "cps2019_03s" => Dict()),
+    "variables"     => Dict(
+        "AGE"      => Dict(),
+        "SEX"      => Dict(),
+        "STATEFIP" => Dict(),
+        "INCTOT"   => Dict("dataQualityFlags" => true),
+        "ASECWT"   => Dict(),
+    ),
+)
+open(io -> JSON3.pretty(io, extract), "cps_extract.json", "w")
+
+# 2. Client
+api = IPUMSAPI("https://api.ipums.org/", Dict("Authorization" => ENV["IPUMS_API_KEY"]))
+
+# 3. Submit and wait
+res = extract_submit(api, "cps", "cps_extract.json")
+metadata, _, _ = extract_info(api, res.number, "cps")
+while metadata["status"] ∉ ("completed", "failed", "canceled")
+    sleep(30)
+    metadata, _, _ = extract_info(api, res.number, "cps")
+end
+
+# 4. Download
+extract_download(api, res.number, "cps"; output_path = "downloads/")
+
+# 5. Decompress and load
+dat_gz = filter(endswith(".dat.gz"), readdir("downloads"; join=true))[1]
+xml    = filter(endswith(".xml"),    readdir("downloads"; join=true))[1]
+dat    = replace(dat_gz, r"\.gz$" => "")
+open(GzipDecompressorStream, dat_gz) do io
+    write(dat, read(io))
+end
+
+ddi = parse_ddi(xml)
+df  = load_ipums_extract(ddi, dat)
+```
+
+`df` is a `DataFrame` carrying the extract's variables plus DDI-derived column and table metadata, ready for analysis.
