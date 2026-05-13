@@ -394,4 +394,20 @@ ddi = parse_ddi(xml)
 df  = load_ipums_extract(ddi, dat)
 ```
 
-`df` is a `DataFrame` carrying the extract's variables plus DDI-derived column and table metadata, ready for analysis.
+`df` is a `DataFrame` carrying the extract's variables plus DDI-derived column and table metadata, ready for analysis using your favorite Julia packages.
+
+## Limitations and roadmap
+
+`IPUMS.jl` covers the core extract loop but is younger than the R `ipumsr` package and has some gaps you'll notice if you've used the R version:
+
+- **No fluent extract-builder for microdata.** R's `define_extract_micro()` is, in
+  Julia, a hand-written JSON file (see [Defining a microdata extract](#defining-a-microdata-extract-ipums-usa-cps)).
+- **No `wait_for_extract` helper.** Polling is a manual `while` loop on `extract_info`.
+- **No `.dat.gz` auto-decompression.** `load_ipums_extract` reads `.dat`, so the gzip
+  step is on the user.
+- **Collections without API support.** ATUS, AHTUS, MTUS, DHS, PMA, MICS, NHIS, MEPS,
+  Higher Ed, and IHGIS are not yet reachable through `IPUMS.jl` (see the §1
+  collections table).
+- **`extract_list` pagination ceiling** of ~255 results.
+
+Contributions on any of these are very much welcomed. 
